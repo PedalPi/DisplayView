@@ -1,10 +1,10 @@
 package io.github.pedalpi.pedalpi_display.communication
 
 import android.util.Log
+import com.google.gson.JsonParser
 import io.github.pedalpi.pedalpi_display.communication.message.response.ResponseMessage
 import io.github.pedalpi.pedalpi_display.communication.message.response.ResponseVerb
 import org.json.JSONException
-import org.json.JSONObject
 
 object MessageBuilder {
     fun generate(message: String): ResponseMessage {
@@ -23,7 +23,7 @@ object MessageBuilder {
 
     private fun generateMessage(type: ResponseVerb, data: String): ResponseMessage {
         return try {
-            ResponseMessage(type, JSONObject(data))
+            ResponseMessage(type, JsonParser().parse(data))
         } catch (e: JSONException) {
             ResponseMessage(ResponseVerb.ERROR, "{'message': 'Invalid received message'}")
         }

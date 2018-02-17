@@ -4,7 +4,7 @@ import org.json.JSONObject
 import java.io.Serializable
 
 class RequestMessage(
-        private val type: RequestVerb,
+        val type: RequestVerb,
         private val path: String,
         private val content: JSONObject) : Serializable {
 

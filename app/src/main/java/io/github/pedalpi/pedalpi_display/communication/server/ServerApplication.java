@@ -9,11 +9,7 @@ public class ServerApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Runnable runnable = new Runnable() {
-            @Override public void run() {
-                runServer();
-            }
-        };
+        Runnable runnable = this::runServer;
 
         new Thread(runnable).start();
     }
