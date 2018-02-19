@@ -1,5 +1,6 @@
 package io.github.pedalpi.pedalpi_display
 
+import android.app.Instrumentation
 import android.content.Context
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -57,7 +58,14 @@ class MainActivity : AppCompatActivity() {
     private fun onMessage(message : ResponseMessage) {
         Log.i("OnMSG", message.toString())
 
-        if (message.type == ResponseVerb.RESPONSE && message.request == Messages.CURRENT_PEDALBOARD_DATA) {
+        // FIXME: Converter ResponseMessage.KEYBOARD_EVENT in key event
+        if (message.type == ResponseVerb.KEYBOARD_EVENT && message.content["code"].string == "DOWN") {
+            Log.i("KEY", message.content["number"].int.toString())
+
+            val inst = Instrumentation()
+            inst.sendKeyDownUpSync(message.content["number"].int)
+
+        } else if (message.type == ResponseVerb.RESPONSE && message.request == Messages.CURRENT_PEDALBOARD_DATA) {
             runOnUiThread({
                 val id = message.content["pedalboard"].int
 
