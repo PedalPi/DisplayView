@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import io.github.pedalpi.pedalpi_display.communication.Client;
+import io.github.pedalpi.pedalpi_display.communication.ResponseMessageProcessor;
 import io.github.pedalpi.pedalpi_display.communication.message.request.Messages;
 import io.github.pedalpi.pedalpi_display.communication.message.request.RequestMessage;
 import io.github.pedalpi.pedalpi_display.communication.message.request.SystemMessages;
@@ -26,7 +27,7 @@ public class Server {
     private ServerSocket connection;
     private List<Client> clients = new LinkedList<>();
 
-    private Client.OnMessageListener listener = message -> {};
+    private ResponseMessageProcessor listener = new ResponseMessageProcessor();
 
     public void start(int port) {
         try {
@@ -67,9 +68,6 @@ public class Server {
     }
 
     public void setListener(Client.OnMessageListener listener) {
-        this.listener = listener;
-
-        for (Client client: clients)
-            client.setOnMessageListener(listener);
+        this.listener.setListener(listener);
     }
 }
