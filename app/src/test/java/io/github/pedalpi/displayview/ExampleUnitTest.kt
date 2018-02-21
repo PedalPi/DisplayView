@@ -1,4 +1,4 @@
-package io.github.pedalpi.pedalpi_display
+package io.github.pedalpi.displayview
 
 import org.junit.Test
 

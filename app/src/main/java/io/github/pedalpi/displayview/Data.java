@@ -1,11 +1,16 @@
-package io.github.pedalpi.pedalpi_display;
+package io.github.pedalpi.displayview;
 
 import com.google.gson.JsonElement;
 
 public class Data {
+
     private static Data instance;
+
     private JsonElement currentPedalboard;
+
     private int number;
+
+    private JsonElement plugins;
 
     public static synchronized Data getInstance() {
         if (instance != null)
@@ -30,5 +35,13 @@ public class Data {
 
     public void setCurrentPedalboardPosition(int number) {
         this.number = number;
+    }
+
+    public JsonElement getPlugins() {
+        return plugins;
+    }
+
+    public void setPlugins(JsonElement plugins) {
+        this.plugins = plugins;
     }
 }

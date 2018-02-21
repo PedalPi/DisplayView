@@ -1,4 +1,4 @@
-package io.github.pedalpi.pedalpi_display
+package io.github.pedalpi.displayview
 
 import android.content.Context
 import android.content.Intent
@@ -9,13 +9,13 @@ import android.widget.Button
 import android.widget.TextView
 import com.github.salomonbrys.kotson.get
 import com.github.salomonbrys.kotson.string
-import io.github.pedalpi.pedalpi_display.communication.message.request.Messages
-import io.github.pedalpi.pedalpi_display.communication.message.response.EventMessage
-import io.github.pedalpi.pedalpi_display.communication.message.response.EventType
-import io.github.pedalpi.pedalpi_display.communication.message.response.ResponseMessage
-import io.github.pedalpi.pedalpi_display.communication.message.response.ResponseVerb
-import io.github.pedalpi.pedalpi_display.communication.server.Server
-import io.github.pedalpi.pedalpi_display.effects.EffectsActivity
+import io.github.pedalpi.displayview.communication.message.request.Messages
+import io.github.pedalpi.displayview.communication.message.response.EventMessage
+import io.github.pedalpi.displayview.communication.message.response.EventType
+import io.github.pedalpi.displayview.communication.message.response.ResponseMessage
+import io.github.pedalpi.displayview.communication.message.response.ResponseVerb
+import io.github.pedalpi.displayview.communication.server.Server
+import io.github.pedalpi.displayview.effects.EffectsActivity
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 
 
@@ -39,7 +39,8 @@ class MainActivity : AppCompatActivity() {
         name.text = "CONNECTING"
 
         Server.getInstance().setListener({ onMessage(it) })
-        Server.getInstance().sendBroadcast(Messages.CURRENT_PEDALBOARD_DATA)
+        //Server.getInstance().sendBroadcast(Messages.CURRENT_PEDALBOARD_DATA)
+        //Server.getInstance().sendBroadcast(Messages.PLUGINS)
 
         val button = findViewById(R.id.button) as Button
         button.setOnClickListener({goToEffectsList()})
@@ -50,7 +51,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onMessage(message : ResponseMessage) {
-        if (message.verb == ResponseVerb.RESPONSE && message.request == Messages.CURRENT_PEDALBOARD_DATA
+        if (message.request isEquivalentTo Messages.CURRENT_PEDALBOARD_DATA
          || message.verb == ResponseVerb.EVENT && EventMessage(message.content).type == EventType.CURRENT) {
             val id = Data.getInstance().currentPedalboardPosition
             val pedalboard = Data.getInstance().currentPedalboard

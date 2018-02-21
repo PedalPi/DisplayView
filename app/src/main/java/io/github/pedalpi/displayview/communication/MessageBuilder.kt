@@ -1,31 +1,37 @@
-package io.github.pedalpi.pedalpi_display.communication
+package io.github.pedalpi.displayview.communication
 
-import android.util.Log
 import com.google.gson.JsonParser
-import io.github.pedalpi.pedalpi_display.communication.message.response.ResponseMessage
-import io.github.pedalpi.pedalpi_display.communication.message.response.ResponseVerb
+import io.github.pedalpi.displayview.communication.message.Identifier
+import io.github.pedalpi.displayview.communication.message.request.RequestMessage
+import io.github.pedalpi.displayview.communication.message.response.ResponseMessage
+import io.github.pedalpi.displayview.communication.message.response.ResponseVerb
 import org.json.JSONException
+
 
 object MessageBuilder {
     fun generate(message: String): ResponseMessage {
-        val strings = message.split(" ".toRegex(), 2).toTypedArray()
+        val strings = message.split(" ".toRegex(), 3).toTypedArray()
 
-        Log.i(strings[0], strings[1])
+        val request = getRequestMessage(strings[0].toInt())
+        val type = searchType(strings[1])
+        val data = strings[2]
 
-        val type = searchType(strings[0])
-        return generateMessage(type, strings[1])
+        return generateMessage(request, type, data)
+    }
+
+    private fun getRequestMessage(identifier: Int) : RequestMessage {
+        return Identifier.instance.remove(identifier)
     }
 
     private fun searchType(word: String): ResponseVerb {
-        return ResponseVerb.values().firstOrNull { it.toString() == word }
-                ?: ResponseVerb.ERROR
+        return ResponseVerb.valueOf(word)
     }
 
-    private fun generateMessage(type: ResponseVerb, data: String): ResponseMessage {
+    private fun generateMessage(request: RequestMessage, type: ResponseVerb, data: String): ResponseMessage {
         return try {
-            ResponseMessage(type, JsonParser().parse(data))
+            ResponseMessage(type, JsonParser().parse(data), request)
         } catch (e: JSONException) {
-            ResponseMessage(ResponseVerb.ERROR, "{'message': 'Invalid received message'}")
+            ResponseMessage.error("Invalid received message", request)
         }
     }
 }

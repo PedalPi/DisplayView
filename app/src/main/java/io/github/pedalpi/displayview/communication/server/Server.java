@@ -1,4 +1,4 @@
-package io.github.pedalpi.pedalpi_display.communication.server;
+package io.github.pedalpi.displayview.communication.server;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -6,11 +6,12 @@ import java.net.Socket;
 import java.util.LinkedList;
 import java.util.List;
 
-import io.github.pedalpi.pedalpi_display.communication.Client;
-import io.github.pedalpi.pedalpi_display.communication.ResponseMessageProcessor;
-import io.github.pedalpi.pedalpi_display.communication.message.request.Messages;
-import io.github.pedalpi.pedalpi_display.communication.message.request.RequestMessage;
-import io.github.pedalpi.pedalpi_display.communication.message.request.SystemMessages;
+import io.github.pedalpi.displayview.communication.Client;
+import io.github.pedalpi.displayview.communication.ResponseMessageProcessor;
+import io.github.pedalpi.displayview.communication.message.Identifier;
+import io.github.pedalpi.displayview.communication.message.request.Messages;
+import io.github.pedalpi.displayview.communication.message.request.RequestMessage;
+import io.github.pedalpi.displayview.communication.message.request.SystemMessages;
 
 public class Server {
     private static Server instance;
@@ -58,13 +59,18 @@ public class Server {
 
         client.send(SystemMessages.CONNECTED);
         client.send(Messages.CURRENT_PEDALBOARD_DATA);
+        client.send(Messages.PLUGINS);
 
         this.clients.add(client);
     }
 
     public void sendBroadcast(RequestMessage message) {
-        for (Client clients : this.clients)
-            clients.send(message);
+        for (Client clients : this.clients) {
+            RequestMessage message_clone = message.clone();
+            message_clone.setIdentifier(Identifier.instance.next());
+
+            clients.send(message_clone);
+        }
     }
 
     public void setListener(Client.OnMessageListener listener) {

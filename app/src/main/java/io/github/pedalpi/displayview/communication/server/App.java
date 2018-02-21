@@ -1,4 +1,4 @@
-package io.github.pedalpi.pedalpi_display.communication.server;
+package io.github.pedalpi.displayview.communication.server;
 
 import android.app.Application;
 

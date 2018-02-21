@@ -1,4 +1,4 @@
-package io.github.pedalpi.pedalpi_display.communication.message.response
+package io.github.pedalpi.displayview.communication.message.response
 
 import com.github.salomonbrys.kotson.get
 import com.github.salomonbrys.kotson.string

@@ -1,77 +1,74 @@
-package io.github.pedalpi.pedalpi_display.params
+package io.github.pedalpi.displayview.params
 
-import android.annotation.TargetApi
-import android.content.Context
-import android.content.Intent
-import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.view.ContextThemeWrapper
-import android.util.Log
-import android.view.Gravity
-import android.view.View
-import android.widget.ArrayAdapter
-import android.widget.LinearLayout
-import android.widget.Spinner
-import android.widget.TextView
-import android.widget.ToggleButton
+import android.view.WindowManager
+import android.widget.ListView
 import com.github.salomonbrys.kotson.get
-import com.github.salomonbrys.kotson.string
 import com.google.gson.JsonElement
-
-import com.pedalpi.pedalpi.communication.Message
-import com.pedalpi.pedalpi.communication.MessageProcessor
-import com.pedalpi.pedalpi.communication.ProtocolType
-import com.pedalpi.pedalpi.communication.Server
-import com.pedalpi.pedalpi.component.ParamSeekbar
-import com.pedalpi.pedalpi.model.Effect
-import com.pedalpi.pedalpi.model.Parameter
-import com.pedalpi.pedalpi.model.Patch
-import io.github.pedalpi.pedalpi_display.Data
-
-import org.json.JSONException
-import org.json.JSONObject
-
-import java.util.LinkedList
-
-import io.github.pedalpi.pedalpi_display.R
-import io.github.pedalpi.pedalpi_display.communication.server.Server
-import io.github.pedalpi.pedalpi_display.effects.EffectsActivity
+import com.google.gson.JsonParser
+import io.github.pedalpi.displayview.Data
+import io.github.pedalpi.displayview.R
+import io.github.pedalpi.displayview.communication.message.response.ResponseMessage
+import io.github.pedalpi.displayview.communication.server.Server
+import io.github.pedalpi.displayview.effects.EffectsActivity
+import java.util.*
 
 
 class ParamsActivity : AppCompatActivity() {
 
     private var messageReceived = false
-
-    //internal var parametro1: Spinner
-    private var views: MutableList<Any>? = null
-
     private lateinit var effect: JsonElement
+
+    private lateinit var listView: ListView
+    private lateinit var adapter: ParamsListItemAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_params)
 
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         val index = intent.getIntExtra(EffectsActivity.EFFECT_INDEX, 0)
         this.effect = Data.getInstance().currentPedalboard["effects"][index]
-        
+
         title = title()
 
-        //val container = findViewById(R.id.paramsContainer) as LinearLayout
+        populateViews()
 
-        //this.views = LinkedList()
-
-        for (parameter in this.effect.getParameters())
-            views!!.add(generateParameter(container, parameter))
-
-        //Server.getInstance().setListener(this)
+        Server.getInstance().setListener({ onMessage(it) })
     }
 
     private fun title(): String {
         return this.effect.toString()
     }
 
+    private fun populateViews() {
+        this.listView = findViewById(R.id.paramsList) as ListView
+        this.adapter = ParamsListItemAdapter(this, generateData())
+
+        this.listView.adapter = adapter
+        this.adapter.notifyDataSetChanged()
+    }
+
+    private fun generateData(): List<ParamsListItemDTO> {
+        val elements = ArrayList<ParamsListItemDTO>()
+
+        /*
+        val pedalboard = Data.getInstance().currentPedalboard
+        if (pedalboard != null) { //Fixme REMOVE
+            pedalboard["effects"].array.mapIndexedTo(elements) { index, value -> EffectsListItemDTO(index, value) }
+        }
+        */
+
+        for (i in 0..9)
+            elements.add(ParamsListItemDTO(i, JsonParser().parse("{}")))
+
+        return elements
+    }
+
+    /*
     private fun generateParameter(container: LinearLayout, parameter: Parameter): Any {
         val linearLayout = LinearLayout(ContextThemeWrapper(container.context, LinearLayout.HORIZONTAL))
 
@@ -160,11 +157,10 @@ class ParamsActivity : AppCompatActivity() {
 
         setResult(0, intent)
         finish()
-    }
+    }*/
 
-    @Throws(JSONException::class)
-    fun onMessage(message: Message) {
-        Log.i("MESSAGE", message.getType().toString())
+    private fun onMessage(message: ResponseMessage) {
+        /*
         this.patch = MessageProcessor.process(message, this.patch)
 
         if (message.getType() === ProtocolType.PARAM) {
@@ -177,10 +173,10 @@ class ParamsActivity : AppCompatActivity() {
         } else if (message.getType() === ProtocolType.PATCH) {
             messageReceived = true
             onBackPressed()
-        }
-
+        }*/
     }
 
+    /*
     private fun updateParamView(parameter: Parameter, `object`: Any) {
         Log.i("adas", parameter.toString())
         runOnUiThread {
@@ -193,15 +189,15 @@ class ParamsActivity : AppCompatActivity() {
             seekbar.refreshView()
             //}
         }
+    }*/
 
-    }
-
-    fun onChange(parameter: Parameter) {
+    /*
+    private fun onChange(parameter: Parameter) {
         updateToServer(parameter)
     }
 
     private fun updateToServer(parameter: Parameter) {
         val message = MessageProcessor.generateUpdateParamValue(this.effect, parameter)
         Server.getInstance().send(message)
-    }
+    }*/
 }

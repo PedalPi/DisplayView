@@ -1,4 +1,4 @@
-package io.github.pedalpi.pedalpi_display.effects
+package io.github.pedalpi.displayview.effects
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,14 +10,15 @@ import android.widget.Toast
 import com.github.salomonbrys.kotson.array
 import com.github.salomonbrys.kotson.get
 import com.github.salomonbrys.kotson.string
-import io.github.pedalpi.pedalpi_display.Data
-import io.github.pedalpi.pedalpi_display.R
-import io.github.pedalpi.pedalpi_display.communication.message.response.EventMessage
-import io.github.pedalpi.pedalpi_display.communication.message.response.EventType
-import io.github.pedalpi.pedalpi_display.communication.message.response.ResponseMessage
-import io.github.pedalpi.pedalpi_display.communication.message.response.ResponseVerb
-import io.github.pedalpi.pedalpi_display.communication.server.Server
-import io.github.pedalpi.pedalpi_display.params.ParamsActivity
+import com.google.gson.JsonParser
+import io.github.pedalpi.displayview.Data
+import io.github.pedalpi.displayview.R
+import io.github.pedalpi.displayview.communication.message.response.EventMessage
+import io.github.pedalpi.displayview.communication.message.response.EventType
+import io.github.pedalpi.displayview.communication.message.response.ResponseMessage
+import io.github.pedalpi.displayview.communication.message.response.ResponseVerb
+import io.github.pedalpi.displayview.communication.server.Server
+import io.github.pedalpi.displayview.params.ParamsActivity
 import java.util.*
 
 
@@ -37,8 +38,7 @@ class EffectsActivity : AppCompatActivity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        if (Data.getInstance().currentPedalboard != null)//FIXME remove
-            title = title()
+        title = title()
 
         populateViews()
     }
@@ -62,12 +62,10 @@ class EffectsActivity : AppCompatActivity() {
         val elements = ArrayList<EffectsListItemDTO>()
 
         val pedalboard = Data.getInstance().currentPedalboard
-        if (pedalboard != null) { //Fixme REMOVE
-            pedalboard["effects"].array.mapIndexedTo(elements) { index, value -> EffectsListItemDTO(index, value) }
-        }
+        pedalboard["effects"].array.mapIndexedTo(elements) { index, value -> EffectsListItemDTO(index, value) }
 
         for (i in 0..9)
-            elements.add(EffectsListItemDTO(i, "{}", "Bett"+i, false))
+            elements.add(EffectsListItemDTO(i, JsonParser().parse("{'active': false}")))
 
         return elements
     }
