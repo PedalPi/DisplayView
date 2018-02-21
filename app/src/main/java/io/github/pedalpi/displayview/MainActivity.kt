@@ -10,6 +10,8 @@ import android.widget.TextView
 import com.github.salomonbrys.kotson.get
 import com.github.salomonbrys.kotson.string
 import io.github.pedalpi.pedalpi_display.communication.message.request.Messages
+import io.github.pedalpi.pedalpi_display.communication.message.response.EventMessage
+import io.github.pedalpi.pedalpi_display.communication.message.response.EventType
 import io.github.pedalpi.pedalpi_display.communication.message.response.ResponseMessage
 import io.github.pedalpi.pedalpi_display.communication.message.response.ResponseVerb
 import io.github.pedalpi.pedalpi_display.communication.server.Server
@@ -48,12 +50,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onMessage(message : ResponseMessage) {
-        if (message.type == ResponseVerb.RESPONSE && message.request == Messages.CURRENT_PEDALBOARD_DATA
-                || message.type == ResponseVerb.EVENT && message.content["type"].string == "CURRENT") {
-            runOnUiThread({
-                val id = Data.getInstance().currentPedalboardPosition
-                val pedalboard = Data.getInstance().currentPedalboard
+        if (message.verb == ResponseVerb.RESPONSE && message.request == Messages.CURRENT_PEDALBOARD_DATA
+         || message.verb == ResponseVerb.EVENT && EventMessage(message.content).type == EventType.CURRENT) {
+            val id = Data.getInstance().currentPedalboardPosition
+            val pedalboard = Data.getInstance().currentPedalboard
 
+            runOnUiThread({
                 number.text = if (id < 10) "0"+id else id.toString()
                 name.text = pedalboard["name"].string
             })
@@ -69,5 +71,6 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
 
         Server.getInstance().setListener({ onMessage(it) })
+        Server.getInstance().sendBroadcast(Messages.CURRENT_PEDALBOARD_DATA)
     }
 }

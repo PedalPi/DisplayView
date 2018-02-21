@@ -1,4 +1,4 @@
-package io.github.pedalpi.pedalpi_display.effects
+package io.github.pedalpi.displayview.effects
 
 import android.app.Activity
 import android.content.Context
@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.Button
 import android.widget.ToggleButton
-import io.github.pedalpi.pedalpi_display.R
+import io.github.pedalpi.displayview.R
 
 typealias ToggleStatusListener = (effect: EffectsListItemDTO) -> Unit
 typealias SelectEffectListener = (effect: EffectsListItemDTO) -> Unit

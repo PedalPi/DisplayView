@@ -57,7 +57,7 @@ public class Client {
                 return null;
 
             ResponseMessage message = MessageBuilder.INSTANCE.generate(data);
-            if (message.getType() == ResponseVerb.RESPONSE)
+            if (message.getVerb() == ResponseVerb.RESPONSE)
                 message.setRequest(requestMessages.pop());
 
             return message;

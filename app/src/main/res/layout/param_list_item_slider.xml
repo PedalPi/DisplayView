@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/paramsListItemName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Spinner
+        android:id="@+id/paramsListItemSpinner"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/paramsListItemBefore"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/paramsListItemName" />
+
+    <Button
+        android:id="@+id/paramsListItemBefore"
+        style="@android:style/Widget.Button"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginTop="8dp"
+        android:hint="Before"
+        android:text="◀"
+        app:layout_constraintBottom_toBottomOf="@+id/paramsListItemSpinner"
+        app:layout_constraintEnd_toStartOf="@+id/paramsListItemAfter"
+        app:layout_constraintTop_toTopOf="@+id/paramsListItemSpinner" />
+
+    <Button
+        android:id="@+id/paramsListItemAfter"
+        style="@android:style/Widget.Button"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="16dp"
+        android:hint="After"
+        android:text="▶"
+        app:layout_constraintBottom_toBottomOf="@+id/paramsListItemBefore"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/paramsListItemBefore"
+        android:layout_marginRight="16dp" />
+
+
+</android.support.constraint.ConstraintLayout>

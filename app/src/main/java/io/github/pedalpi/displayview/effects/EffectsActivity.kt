@@ -1,19 +1,31 @@
 package io.github.pedalpi.pedalpi_display.effects
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.view.WindowManager
 import android.widget.ListView
+import android.widget.Toast
 import com.github.salomonbrys.kotson.array
 import com.github.salomonbrys.kotson.get
 import com.github.salomonbrys.kotson.string
 import io.github.pedalpi.pedalpi_display.Data
 import io.github.pedalpi.pedalpi_display.R
+import io.github.pedalpi.pedalpi_display.communication.message.response.EventMessage
+import io.github.pedalpi.pedalpi_display.communication.message.response.EventType
+import io.github.pedalpi.pedalpi_display.communication.message.response.ResponseMessage
+import io.github.pedalpi.pedalpi_display.communication.message.response.ResponseVerb
 import io.github.pedalpi.pedalpi_display.communication.server.Server
+import io.github.pedalpi.pedalpi_display.params.ParamsActivity
 import java.util.*
 
 
 class EffectsActivity : AppCompatActivity() {
+
+    companion object {
+        @JvmField val EFFECT_INDEX = "EFFECT_INDEX"
+    }
 
     private lateinit var listView: ListView
     private lateinit var adapter: EffectsListItemAdapter
@@ -21,15 +33,14 @@ class EffectsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_effects)
+
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        if (Data.getInstance().currentPedalboard != null) {
+        if (Data.getInstance().currentPedalboard != null)//FIXME remove
             title = title()
-        }
 
         populateViews()
-
-        Server.getInstance().setListener({  }) //onMessage(it)
     }
 
     private fun title(): String {
@@ -40,8 +51,8 @@ class EffectsActivity : AppCompatActivity() {
         this.listView = findViewById(R.id.effectsList) as ListView
         this.adapter = EffectsListItemAdapter(this, generateData())
 
-        this.adapter.toggleStatusListener = { Log.i("TOGGLE", it.index.toString()) }
-        this.adapter.selectEffectListener = { Log.i("SELECT", it.name) }
+        this.adapter.toggleStatusListener = { toggleStatusEffect(it) }
+        this.adapter.selectEffectListener = { goToParamsList(it) }
 
         this.listView.adapter = adapter
         this.adapter.notifyDataSetChanged()
@@ -64,10 +75,7 @@ class EffectsActivity : AppCompatActivity() {
     public override fun onResume() {
         super.onResume()
 
-        //val container = findViewById(R.id.effectsList) as ListView
-        //container.removeAllViews()
-
-        //populateViews()
+        Server.getInstance().setListener({ onMessage(it) })
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -75,57 +83,27 @@ class EffectsActivity : AppCompatActivity() {
         return true
     }
 
-    /*
-    private fun createEffectButton(effect: Effect, container: LinearLayout, layoutParams: LinearLayout.LayoutParams): Button {
-        val button = Button(this)
-        button.setTextAppearance(applicationContext, R.style.Effect)
+    private fun goToParamsList(effect : EffectsListItemDTO) {
+        val intent = Intent(baseContext, ParamsActivity::class.java)
+        intent.putExtra(EffectsActivity.EFFECT_INDEX, effect.index)
 
-        button.setBackgroundColor(if (effect.isActive()) Color.rgb(60, 179, 113) else Color.rgb(178, 34, 34))
-        button.setText(effect.getName())
-        button.setOnClickListener {
-            toggleStatusEffect(effect, button)
-            updateEffectStatusToServer(effect)
-        }
-
-        button.setOnLongClickListener {
-            openScreenParamsList(effect)
-            true
-        }
-
-        container.addView(button, layoutParams)
-        return button
+        startActivityForResult(intent, 0)
     }
 
-    private fun toggleStatusEffect(effect: Effect, button: Button) {
-        Log.i("BOTAO", "Effect selected: " + effect)
-        effect.toggleStatus()
+    private fun toggleStatusEffect(effect: EffectsListItemDTO) {
+        //effect.toggleStatus()
         runOnUiThread {
-            button.setBackgroundColor(if (effect.isActive()) Color.rgb(60, 179, 113) else Color.rgb(178, 34, 34))
-            Toast.makeText(applicationContext, "efeito " + effect, Toast.LENGTH_SHORT).show()
+            Toast.makeText(applicationContext, "efeito " + effect.name, Toast.LENGTH_SHORT).show()
         }
     }
 
-
+    /*
     private fun updateEffectStatusToServer(effect: Effect) {
         val message = MessageProcessor.generateEffectStatusToggled(effect)
         Server.getInstance().send(message)
     }
 
-    private fun openScreenParamsList(effect: Effect) {
-        val intent = Intent(baseContext, ParamsActivity::class.java)
-        intent.putExtra(PatchActivity.PATCH, this.patch)
-        intent.putExtra(EffectsActivity.EFFECT_INDEX, effect.getIndex())
-        startActivityForResult(intent, 0)
-    }
-
-    override fun onBackPressed() {
-        val intent = Intent()
-        intent.putExtra(PatchActivity.PATCH, this.patch)
-
-        setResult(0, intent) // onActivityResult da tela anterior
-        finish()
-    }
-
+    // FIXME Voltou da tela anterior
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
         Server.getInstance().setListener(this)
         Log.i("MESSAGE", String.valueOf(this.patch!!.getEffects()))
@@ -133,30 +111,38 @@ class EffectsActivity : AppCompatActivity() {
         val settedCurrentPatch = data.getBooleanExtra(PatchActivity.SETTED_CURRENT_PATCH, false)
 
         if (settedCurrentPatch)
-            onBackPressed()
+            onSupportNavigateUp()
 
         super.onActivityResult(requestCode, resultCode, data)
 
     }
+    */
 
-    @Throws(JSONException::class)
-    fun onMessage(message: Message) {
-        Log.i("MESSAGE", message.getType().toString())
-        this.patch = MessageProcessor.process(message, this.patch)
+    private fun onMessage(message: ResponseMessage) {
+        Log.i("VERB", message.verb.toString())
 
-        if (message.getType() === ProtocolType.EFFECT) {
-            val indexEffect = message.getContent().getInt("index")
-            toggleStatusEffectView(this.patch!!.getEffects().get(indexEffect), buttons!![indexEffect])
-        } else if (message.getType() === ProtocolType.PATCH) {
-            onBackPressed()
+        if (message.verb == ResponseVerb.EVENT) {
+            val event = EventMessage(message.content)
+
+            Log.i("TYPE", event.type.toString())
+            if (event.type == EventType.CURRENT)
+                onSupportNavigateUp()
+
+            else if (event.type == EventType.EFFECT_TOGGLE)
+                //val indexEffect = message.getContent().getInt("index")
+                //toggleStatusEffectView(this.patch!!.getEffects().get(indexEffect), buttons!![indexEffect])
+                return
+            else
+                //se for de pedalboard ou de param, é bom pegar os dados da aplicação
+                return
         }
     }
 
+    /*
     private fun toggleStatusEffectView(effect: Effect, button: Button) {
         runOnUiThread {
             button.setBackgroundColor(if (effect.isActive()) Color.rgb(60, 179, 113) else Color.rgb(178, 34, 34))
             Toast.makeText(applicationContext, "efeito " + effect, Toast.LENGTH_SHORT).show()
         }
-    }
-    */
+    }*/
 }

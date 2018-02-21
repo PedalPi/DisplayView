@@ -18,19 +18,19 @@ class ResponseMessageProcessor : Client.OnMessageListener {
     override fun onMessage(message: ResponseMessage) {
         Log.i("OnMSG", message.toString())
 
-        if (message.type == ResponseVerb.KEYBOARD_EVENT && message.content["code"].string == "DOWN") {
+        if (message.verb == ResponseVerb.KEYBOARD_EVENT && message.content["code"].string == "DOWN") {
             Log.i("KEY", message.content["number"].int.toString())
 
             val inst = Instrumentation()
             inst.sendKeyDownUpSync(message.content["number"].int)
 
-        } else if (message.type == ResponseVerb.RESPONSE && message.request == Messages.CURRENT_PEDALBOARD_DATA) {
+        } else if (message.verb == ResponseVerb.RESPONSE && message.request == Messages.CURRENT_PEDALBOARD_DATA) {
             val index = message.content["pedalboard"].int
 
             Data.getInstance().currentPedalboardPosition = index
             Data.getInstance().currentPedalboard = message.content["bank"]["pedalboards"][index]
 
-        } else if (message.type == ResponseVerb.EVENT) {
+        } else if (message.verb == ResponseVerb.EVENT) {
             val event = EventMessage(message.content)
 
             if (event.type == EventType.CURRENT) {
