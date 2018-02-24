@@ -53,8 +53,8 @@ class MainActivity : AppCompatActivity() {
     private fun onMessage(message : ResponseMessage) {
         if (message.request isEquivalentTo Messages.CURRENT_PEDALBOARD_DATA
          || message.verb == ResponseVerb.EVENT && EventMessage(message.content).type == EventType.CURRENT) {
-            val id = Data.getInstance().currentPedalboardPosition
-            val pedalboard = Data.getInstance().currentPedalboard
+            val id = Data.currentPedalboardPosition
+            val pedalboard = Data.currentPedalboard
 
             runOnUiThread({
                 number.text = if (id < 10) "0"+id else id.toString()
@@ -65,6 +65,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun goToEffectsList() {
         val intent = Intent(baseContext, EffectsActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+
         startActivity(intent)
     }
 

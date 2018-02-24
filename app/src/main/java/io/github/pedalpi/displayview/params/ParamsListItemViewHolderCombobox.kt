@@ -22,7 +22,7 @@ class ParamsListItemViewHolderCombobox(private val adapter : ParamsListItemAdapt
     override fun update(param: ParamsListItemDTO) {
         dto = param
 
-        //name?.text = param.name
+        name.text = param.name
         //status?.isChecked = param.status
     }
 

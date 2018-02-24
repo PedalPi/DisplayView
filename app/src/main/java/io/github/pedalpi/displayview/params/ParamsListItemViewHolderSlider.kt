@@ -1,29 +1,47 @@
 package io.github.pedalpi.displayview.params
 
 import android.view.View
+import android.widget.SeekBar
 import android.widget.TextView
 import io.github.pedalpi.displayview.R
 
+/**
+ * https://github.com/p4x3c0/PedalPi-Display-View/blob/master/app/src/main/java/com/pedalpi/pedalpi/component/ParamSeekbar.java
+ */
 class ParamsListItemViewHolderSlider(private val adapter : ParamsListItemAdapter) : ParamsListItemAdapter.ParamsListItemViewHolder {
 
     private lateinit var name : TextView
+    private lateinit var value : TextView
+
+    private lateinit var slider : SeekBar
+
+    lateinit var dto: ParamsListItemDTO
 
     override var row: View? = null
         set(row) {
             field = row
-            name = row?.findViewById(R.id.paramsListItemName) as TextView
-            //name.setOnClickListener { adapter.selectEffectListener(dto) }
+            name   = row?.findViewById(R.id.paramsListItemName) as TextView
+            value  = row?.findViewById(R.id.paramsListItemValue) as TextView
 
-            //status.setOnClickListener { adapter.toggleStatusListener(dto) }
+            slider = row?.findViewById(R.id.paramsListItemSlider) as SeekBar
+            slider.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
+                override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+
+                override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+
+                override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                    if (fromUser)
+                        value.text = "${dto.calculatePercent(progress.toDouble())}%"
+                }
+            })
         }
-
-    lateinit var dto: ParamsListItemDTO
 
     override fun update(param: ParamsListItemDTO) {
         dto = param
 
         name.text = param.name
-        //status.isChecked = param.status
+        value.text = "${param.percent}%"
+        slider.progress = param.percent
     }
 
     override val layout: Int

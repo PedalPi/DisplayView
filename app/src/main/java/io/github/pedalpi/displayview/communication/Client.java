@@ -1,5 +1,7 @@
 package io.github.pedalpi.displayview.communication;
 
+import android.util.Log;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -71,9 +73,10 @@ public class Client {
     }
 
     public void send(RequestMessage message) {
-        if (message.getType() != RequestVerb.SYSTEM)
+        if (message.getType() != RequestVerb.SYSTEM && message.getType() != RequestVerb.NIL)
             Identifier.instance.register(message);
 
+        Log.i("OnMSG", "Request: " + message);
         out.print(message.toString());
     }
 

@@ -10,9 +10,9 @@ import android.widget.Toast
 import com.github.salomonbrys.kotson.array
 import com.github.salomonbrys.kotson.get
 import com.github.salomonbrys.kotson.string
-import com.google.gson.JsonParser
 import io.github.pedalpi.displayview.Data
 import io.github.pedalpi.displayview.R
+import io.github.pedalpi.displayview.communication.message.request.Messages
 import io.github.pedalpi.displayview.communication.message.response.EventMessage
 import io.github.pedalpi.displayview.communication.message.response.EventType
 import io.github.pedalpi.displayview.communication.message.response.ResponseMessage
@@ -44,7 +44,7 @@ class EffectsActivity : AppCompatActivity() {
     }
 
     private fun title(): String {
-        return "%02d - %s".format(Data.getInstance().currentPedalboardPosition, Data.getInstance().currentPedalboard["name"].string)
+        return "%02d - %s".format(Data.currentPedalboardPosition, Data.currentPedalboard["name"].string)
     }
 
     private fun populateViews() {
@@ -61,11 +61,8 @@ class EffectsActivity : AppCompatActivity() {
     private fun generateData(): List<EffectsListItemDTO> {
         val elements = ArrayList<EffectsListItemDTO>()
 
-        val pedalboard = Data.getInstance().currentPedalboard
+        val pedalboard = Data.currentPedalboard
         pedalboard["effects"].array.mapIndexedTo(elements) { index, value -> EffectsListItemDTO(index, value) }
-
-        for (i in 0..9)
-            elements.add(EffectsListItemDTO(i, JsonParser().parse("{'active': false}")))
 
         return elements
     }
@@ -83,15 +80,17 @@ class EffectsActivity : AppCompatActivity() {
 
     private fun goToParamsList(effect : EffectsListItemDTO) {
         val intent = Intent(baseContext, ParamsActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
         intent.putExtra(EffectsActivity.EFFECT_INDEX, effect.index)
 
         startActivityForResult(intent, 0)
     }
 
     private fun toggleStatusEffect(effect: EffectsListItemDTO) {
+        Server.getInstance().sendBroadcast(Messages.CURRENT_PEDALBOARD_TOGGLE_EFFECT(effect.index))
         //effect.toggleStatus()
         runOnUiThread {
-            Toast.makeText(applicationContext, "efeito " + effect.name, Toast.LENGTH_SHORT).show()
+            //Toast.makeText(applicationContext, "efeito " + effect.name, Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -118,6 +117,13 @@ class EffectsActivity : AppCompatActivity() {
 
     private fun onMessage(message: ResponseMessage) {
         Log.i("VERB", message.verb.toString())
+
+        if (message.verb == ResponseVerb.ERROR)
+            runOnUiThread({
+                Toast.makeText(applicationContext, message.content["message"].string, Toast.LENGTH_SHORT).show()
+            })
+
+        else
 
         if (message.verb == ResponseVerb.EVENT) {
             val event = EventMessage(message.content)

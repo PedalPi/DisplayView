@@ -2,9 +2,11 @@ package io.github.pedalpi.displayview.communication
 
 import android.app.Instrumentation
 import android.util.Log
+import com.github.salomonbrys.kotson.array
 import com.github.salomonbrys.kotson.get
 import com.github.salomonbrys.kotson.int
 import com.github.salomonbrys.kotson.string
+import com.google.gson.JsonElement
 import io.github.pedalpi.displayview.Data
 import io.github.pedalpi.displayview.communication.message.request.Messages
 import io.github.pedalpi.displayview.communication.message.response.EventMessage
@@ -16,7 +18,7 @@ class ResponseMessageProcessor : Client.OnMessageListener {
     var listener : Client.OnMessageListener = Client.OnMessageListener {}
 
     override fun onMessage(message: ResponseMessage) {
-        Log.i("OnMSG", message.toString())
+        Log.i("OnMSG", "${message.request.identifier} - ${message.verb}")
 
         if (message.verb == ResponseVerb.KEYBOARD_EVENT
          && message.content["code"].string == "DOWN")
@@ -42,11 +44,16 @@ class ResponseMessageProcessor : Client.OnMessageListener {
         if (message.request isEquivalentTo Messages.CURRENT_PEDALBOARD_DATA) {
             val index = message.content["pedalboard"].int
 
-            Data.getInstance().currentPedalboardPosition = index
-            Data.getInstance().currentPedalboard = message.content["bank"]["pedalboards"][index]
+            Data.currentPedalboardPosition = index
+            Data.currentPedalboard = message.content["bank"]["pedalboards"][index]
 
         } else if (message.request isEquivalentTo Messages.PLUGINS) {
-            Data.getInstance().plugins = message.content
+            val map = HashMap<String, JsonElement>()
+
+            for (plugin in message.content["plugins"].array)
+                map[plugin["uri"].string] = plugin
+
+            Data.plugins = map
         }
     }
 
@@ -56,8 +63,8 @@ class ResponseMessageProcessor : Client.OnMessageListener {
         if (event.type == EventType.CURRENT) {
             val id = event.content["pedalboard"].int
 
-            Data.getInstance().currentPedalboardPosition = id
-            Data.getInstance().currentPedalboard = event.content["value"]
+            Data.currentPedalboardPosition = id
+            Data.currentPedalboard = event.content["value"]
         }
     }
 }

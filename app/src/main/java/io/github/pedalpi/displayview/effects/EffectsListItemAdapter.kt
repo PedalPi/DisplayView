@@ -36,7 +36,7 @@ class EffectsListItemAdapter(private val activity: Activity, private val items: 
             dto = effect
 
             name.text = effect.name
-            status.isChecked = effect.status
+            status.isChecked = !effect.status
         }
     }
 
