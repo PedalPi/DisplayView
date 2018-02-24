@@ -10,6 +10,7 @@ import com.github.salomonbrys.kotson.string
 import com.google.gson.JsonElement
 import io.github.pedalpi.displayview.Data
 import io.github.pedalpi.displayview.R
+import io.github.pedalpi.displayview.communication.message.request.Messages
 import io.github.pedalpi.displayview.communication.message.response.ResponseMessage
 import io.github.pedalpi.displayview.communication.server.Server
 import io.github.pedalpi.displayview.effects.EffectsActivity
@@ -18,6 +19,8 @@ import io.github.pedalpi.displayview.effects.EffectsActivity
 class ParamsActivity : AppCompatActivity() {
 
     private var messageReceived = false
+
+    private var index: Int = 0
     private lateinit var effect: JsonElement
     private lateinit var plugin: JsonElement
 
@@ -31,7 +34,7 @@ class ParamsActivity : AppCompatActivity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val index = intent.getIntExtra(EffectsActivity.EFFECT_INDEX, 0)
+        this.index = intent.getIntExtra(EffectsActivity.EFFECT_INDEX, 0)
         this.effect = Data.currentPedalboard["effects"][index]
         this.plugin = Data.plugin(effect["plugin"].string)
 
@@ -39,7 +42,7 @@ class ParamsActivity : AppCompatActivity() {
 
         populateViews()
 
-        Server.getInstance().setListener({ onMessage(it) })
+        Server.setListener({ onMessage(it) })
     }
 
     private fun title(plugin: JsonElement): String {
@@ -49,6 +52,8 @@ class ParamsActivity : AppCompatActivity() {
     private fun populateViews() {
         this.listView = findViewById(R.id.paramsList) as ListView
         this.adapter = ParamsListItemAdapter(this, generateData(this.effect, this.plugin))
+
+        this.adapter.valueChangeListener = { requestChangeParamValue(it) }
 
         this.listView.adapter = adapter
         this.adapter.notifyDataSetChanged()
@@ -61,7 +66,7 @@ class ParamsActivity : AppCompatActivity() {
         val pluginControls = plugin["ports"]["control"]["input"].array
 
         for (i in (0 until params.array.size()))
-            data.add(ParamsListItemDTO(params[i], pluginControls[i]))
+            data.add(ParamsListItemDTO(i, params[i], pluginControls[i]))
 
         return data
     }
@@ -69,6 +74,10 @@ class ParamsActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         finish()
         return true
+    }
+
+    private fun requestChangeParamValue(param: ParamsListItemDTO) {
+        Server.sendBroadcast(Messages.Companion.PARAM_VALUE_CHANGE(this.index, param.index, param.value))
     }
 
     /*
@@ -87,13 +96,9 @@ class ParamsActivity : AppCompatActivity() {
         )
         val element: Any
 
-        //Log.i("CMBOBOX", String.valueOf(parameter.isCombobox()));
         //Log.i("TOGGLE", String.valueOf(parameter.isToggle()));
         //Log.i("KNOB", String.valueOf(parameter.isKnob()));
 
-        if (parameter.isCombobox()) {
-
-            element = createSpinner(linearLayout, parameter, layoutParams)
         } else if (parameter.isToggle()) {
 
             element = createButton(linearLayout, parameter, layoutParams) //createToggle();
@@ -131,17 +136,6 @@ class ParamsActivity : AppCompatActivity() {
 
         container.addView(toggleButton, layoutParams)
         return toggleButton
-    }
-
-    private fun createSpinner(container: LinearLayout, parameter: Parameter, layoutParams: LinearLayout.LayoutParams): View {
-        val context = container.context
-
-
-        parametro1 = findViewById(R.id.spinner) as Spinner
-        val adapter = ArrayAdapter.createFromResource(this, R.array.Parâmetro_1, android.R.layout.simple_spinner_dropdown_item)
-        parametro1.adapter = adapter
-
-        return parametro1
     }
 
     fun createSeekbar(container: LinearLayout, parameter: Parameter, layoutParams: LinearLayout.LayoutParams): ParamSeekbar {

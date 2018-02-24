@@ -1,15 +1,14 @@
 package io.github.pedalpi.displayview.communication.message.request
 
 import io.github.pedalpi.displayview.communication.message.Identifier
-import org.json.JSONObject
 
 class RequestMessage(
         val type: RequestVerb,
         private val path: String,
-        private val content: JSONObject) : Cloneable {
+        private val content: Any = "") : Cloneable {
 
     companion object {
-        @JvmField val NIL = RequestMessage(RequestVerb.NIL, "/", JSONObject("{}"))
+        @JvmField val NIL = RequestMessage(RequestVerb.NIL, "/")
     }
 
     var identifier: Int = Identifier.instance.next()

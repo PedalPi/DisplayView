@@ -14,25 +14,20 @@ import io.github.pedalpi.displayview.communication.message.request.RequestMessag
 import io.github.pedalpi.displayview.communication.message.request.SystemMessages;
 
 public class Server {
-    private static Server instance;
-
-    public static synchronized Server getInstance() {
-        if (instance != null)
-            return instance;
-
-        Server.instance = new Server();
-
-        return Server.instance;
-    }
+    private static final Server instance = new Server();
 
     private ServerSocket connection;
     private List<Client> clients = new LinkedList<>();
 
     private ResponseMessageProcessor listener = new ResponseMessageProcessor();
 
+    public static Server getInstance() {
+        return instance;
+    }
+
     public void start(int port) {
         try {
-            this.connection = new ServerSocket(port);
+            instance.connection = new ServerSocket(port);
         } catch (IOException e) {
             throw new RuntimeException(e);//e.printStackTrace();
         }
@@ -64,8 +59,8 @@ public class Server {
         this.clients.add(client);
     }
 
-    public void sendBroadcast(RequestMessage message) {
-        for (Client clients : this.clients) {
+    public static void sendBroadcast(RequestMessage message) {
+        for (Client clients : instance.clients) {
             RequestMessage message_clone = message.clone();
             message_clone.setIdentifier(Identifier.instance.next());
 
@@ -73,7 +68,7 @@ public class Server {
         }
     }
 
-    public void setListener(Client.OnMessageListener listener) {
-        this.listener.setListener(listener);
+    public static void setListener(Client.OnMessageListener listener) {
+        instance.listener.setListener(listener);
     }
 }

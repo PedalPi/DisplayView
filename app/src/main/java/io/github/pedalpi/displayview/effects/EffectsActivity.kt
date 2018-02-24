@@ -52,7 +52,7 @@ class EffectsActivity : AppCompatActivity() {
         this.listView = findViewById(R.id.effectsList) as ListView
         this.adapter = EffectsListItemAdapter(this, generateData())
 
-        this.adapter.toggleStatusListener = { toggleStatusEffect(it) }
+        this.adapter.toggleStatusListener = { requestToggleStatusEffect(it) }
         this.adapter.selectEffectListener = { goToParamsList(it) }
 
         this.listView.adapter = adapter
@@ -74,7 +74,7 @@ class EffectsActivity : AppCompatActivity() {
     public override fun onResume() {
         super.onResume()
 
-        Server.getInstance().setListener({ onMessage(it) })
+        Server.setListener({ onMessage(it) })
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -90,20 +90,11 @@ class EffectsActivity : AppCompatActivity() {
         startActivityForResult(intent, 0)
     }
 
-    private fun toggleStatusEffect(effect: EffectsListItemDTO) {
-        Server.getInstance().sendBroadcast(Messages.CURRENT_PEDALBOARD_TOGGLE_EFFECT(effect.index))
-        //effect.toggleStatus()
-        runOnUiThread {
-            //Toast.makeText(applicationContext, "efeito " + effect.name, Toast.LENGTH_SHORT).show()
-        }
+    private fun requestToggleStatusEffect(effect: EffectsListItemDTO) {
+        Server.sendBroadcast(Messages.CURRENT_PEDALBOARD_TOGGLE_EFFECT(effect.index))
     }
 
     /*
-    private fun updateEffectStatusToServer(effect: Effect) {
-        val message = MessageProcessor.generateEffectStatusToggled(effect)
-        Server.getInstance().send(message)
-    }
-
     // FIXME Voltou da tela anterior
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
         Server.getInstance().setListener(this)
@@ -137,7 +128,6 @@ class EffectsActivity : AppCompatActivity() {
                 // TODO Check if is the current pedalboard
                 val index = event.content["effect"].int
 
-                Log.i("UÉ", "Ué")
                 toggleStatusEffectView(this.adapter[index])
             } else {
                 //se for de pedalboard ou de param, é bom pegar os dados da aplicação

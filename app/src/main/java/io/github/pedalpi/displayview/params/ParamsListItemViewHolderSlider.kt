@@ -1,5 +1,6 @@
 package io.github.pedalpi.displayview.params
 
+import android.content.Context
 import android.view.View
 import android.widget.SeekBar
 import android.widget.TextView
@@ -36,7 +37,7 @@ class ParamsListItemViewHolderSlider(private val adapter : ParamsListItemAdapter
             })
         }
 
-    override fun update(param: ParamsListItemDTO) {
+    override fun update(context: Context, param: ParamsListItemDTO) {
         dto = param
 
         name.text = param.name
