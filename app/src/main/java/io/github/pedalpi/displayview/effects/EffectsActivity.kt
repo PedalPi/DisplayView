@@ -9,6 +9,7 @@ import android.widget.ListView
 import android.widget.Toast
 import com.github.salomonbrys.kotson.array
 import com.github.salomonbrys.kotson.get
+import com.github.salomonbrys.kotson.int
 import com.github.salomonbrys.kotson.string
 import io.github.pedalpi.displayview.Data
 import io.github.pedalpi.displayview.R
@@ -62,7 +63,10 @@ class EffectsActivity : AppCompatActivity() {
         val elements = ArrayList<EffectsListItemDTO>()
 
         val pedalboard = Data.currentPedalboard
-        pedalboard["effects"].array.mapIndexedTo(elements) { index, value -> EffectsListItemDTO(index, value) }
+
+        pedalboard["effects"].array.mapIndexedTo(elements) {
+            index, effectData -> EffectsListItemDTO(index, effectData, Data.plugin(effectData["plugin"].string))
+        }
 
         return elements
     }
@@ -123,30 +127,27 @@ class EffectsActivity : AppCompatActivity() {
                 Toast.makeText(applicationContext, message.content["message"].string, Toast.LENGTH_SHORT).show()
             })
 
-        else
-
-        if (message.verb == ResponseVerb.EVENT) {
+        else if (message.verb == ResponseVerb.EVENT) {
             val event = EventMessage(message.content)
 
-            Log.i("TYPE", event.type.toString())
             if (event.type == EventType.CURRENT)
                 onSupportNavigateUp()
 
-            else if (event.type == EventType.EFFECT_TOGGLE)
-                //val indexEffect = message.getContent().getInt("index")
-                //toggleStatusEffectView(this.patch!!.getEffects().get(indexEffect), buttons!![indexEffect])
-                return
-            else
+            else if (event.type == EventType.EFFECT_TOGGLE) {
+                // TODO Check if is the current pedalboard
+                val index = event.content["effect"].int
+
+                Log.i("UÉ", "Ué")
+                toggleStatusEffectView(this.adapter[index])
+            } else {
                 //se for de pedalboard ou de param, é bom pegar os dados da aplicação
-                return
+            }
         }
     }
 
-    /*
-    private fun toggleStatusEffectView(effect: Effect, button: Button) {
+    private fun toggleStatusEffectView(dto: EffectsListItemDTO) {
         runOnUiThread {
-            button.setBackgroundColor(if (effect.isActive()) Color.rgb(60, 179, 113) else Color.rgb(178, 34, 34))
-            Toast.makeText(applicationContext, "efeito " + effect, Toast.LENGTH_SHORT).show()
+            dto.viewHolder.update()
         }
-    }*/
+    }
 }

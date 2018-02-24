@@ -1,5 +1,6 @@
 package io.github.pedalpi.displayview
 
+import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -19,7 +20,11 @@ import io.github.pedalpi.displayview.effects.EffectsActivity
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 
 
+
+
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var progress: ProgressDialog
 
     private lateinit var number: TextView
     private lateinit var name: TextView
@@ -39,19 +44,31 @@ class MainActivity : AppCompatActivity() {
         name.text = "CONNECTING"
 
         Server.getInstance().setListener({ onMessage(it) })
-        //Server.getInstance().sendBroadcast(Messages.CURRENT_PEDALBOARD_DATA)
-        //Server.getInstance().sendBroadcast(Messages.PLUGINS)
 
         val button = findViewById(R.id.button) as Button
         button.setOnClickListener({goToEffectsList()})
+
+        showLoading()
     }
+
+    private fun showLoading() {
+        this.progress = ProgressDialog(this)
+        progress.setTitle("Connecting")
+        progress.setMessage("Wait plugins data")
+        progress.setCancelable(false)
+        progress.show()
+    }
+
 
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
     }
 
     private fun onMessage(message : ResponseMessage) {
-        if (message.request isEquivalentTo Messages.CURRENT_PEDALBOARD_DATA
+        if (message.request isEquivalentTo Messages.PLUGINS) {
+            progress.dismiss()
+
+        } else if (message.request isEquivalentTo Messages.CURRENT_PEDALBOARD_DATA
          || message.verb == ResponseVerb.EVENT && EventMessage(message.content).type == EventType.CURRENT) {
             val id = Data.currentPedalboardPosition
             val pedalboard = Data.currentPedalboard

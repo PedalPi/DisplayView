@@ -2,10 +2,7 @@ package io.github.pedalpi.displayview.communication
 
 import android.app.Instrumentation
 import android.util.Log
-import com.github.salomonbrys.kotson.array
-import com.github.salomonbrys.kotson.get
-import com.github.salomonbrys.kotson.int
-import com.github.salomonbrys.kotson.string
+import com.github.salomonbrys.kotson.*
 import com.google.gson.JsonElement
 import io.github.pedalpi.displayview.Data
 import io.github.pedalpi.displayview.communication.message.request.Messages
@@ -65,6 +62,13 @@ class ResponseMessageProcessor : Client.OnMessageListener {
 
             Data.currentPedalboardPosition = id
             Data.currentPedalboard = event.content["value"]
+
+        } else if (event.type == EventType.EFFECT_TOGGLE) {
+            // TODO Check if is the current pedalboard
+            val index = event.content["effect"].int
+
+            val effect = Data.currentPedalboard["effects"][index]
+            effect["active"] = !effect["active"].bool
         }
     }
 }

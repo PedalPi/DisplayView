@@ -12,7 +12,11 @@ enum class EventType(private val type : String) {
     EFFECT("EFFECT"),
     EFFECT_TOGGLE("EFFECT-TOGGLE"),
     PARAM("PARAM"),
-    CONNECTION("CONNECTION")
+    CONNECTION("CONNECTION");
+
+    companion object {
+        @JvmStatic fun valueOfGeneral(type: String) = EventType.valueOf(type.replace('-', '_'))
+    }
 }
 
 enum class UpdateType(private val type : String) {
@@ -28,5 +32,5 @@ class EventMessage(val type : EventType, val content : JsonElement) {
     val updateType : UpdateType?
         get() = UpdateType.valueOf(content["updateType"].string )
 
-    constructor(content: JsonElement) : this(EventType.valueOf(content["type"].string), content)
+    constructor(content: JsonElement) : this(EventType.valueOfGeneral(content["type"].string), content)
 }

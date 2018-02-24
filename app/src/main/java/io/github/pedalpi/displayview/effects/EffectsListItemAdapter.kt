@@ -21,7 +21,7 @@ class EffectsListItemAdapter(private val activity: Activity, private val items: 
     var toggleStatusListener : ToggleStatusListener = { }
     var selectEffectListener : SelectEffectListener = { }
 
-    private class ViewHolder(private val row: View, private val adapter : EffectsListItemAdapter) {
+    class ViewHolder(private val row: View, private val adapter : EffectsListItemAdapter) {
         val name = row.findViewById(R.id.effectsListItemName) as Button
         val status = row.findViewById(R.id.effectsListItemStatus) as ToggleButton
 
@@ -35,8 +35,12 @@ class EffectsListItemAdapter(private val activity: Activity, private val items: 
         fun update(effect : EffectsListItemDTO) {
             dto = effect
 
-            name.text = effect.name
-            status.isChecked = !effect.status
+            update()
+        }
+
+        fun update() {
+            name.text = dto.name
+            status.isChecked = !dto.status
         }
     }
 
@@ -55,6 +59,7 @@ class EffectsListItemAdapter(private val activity: Activity, private val items: 
             viewHolder = view.tag as ViewHolder
         }
 
+        items[position].viewHolder = viewHolder
         viewHolder.update(items[position])
 
         return view
@@ -70,5 +75,9 @@ class EffectsListItemAdapter(private val activity: Activity, private val items: 
 
     override fun getCount(): Int {
         return items.size
+    }
+
+    operator fun get(index: Int): EffectsListItemDTO {
+        return getItem(index)
     }
 }
