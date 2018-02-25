@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.WindowManager
 import android.widget.GridView
+import android.widget.TextView
 import io.github.pedalpi.displayview.Data
 import io.github.pedalpi.displayview.R
 import io.github.pedalpi.displayview.communication.message.request.Messages
@@ -41,7 +42,7 @@ class ResumeActivity : AppCompatActivity() {
         this.effectsView = EffectsView(this.applicationContext, findViewById(R.id.resumePedalboardEffects) as GridView)
         this.effectsView.update(Data.currentPedalboard)
 
-        this.paramsView = ParamsView(this.applicationContext, findViewById(R.id.resumeEffectParams) as GridView)
+        this.paramsView = ParamsView(this.applicationContext, findViewById(R.id.resumeEffectParams) as GridView, findViewById(R.id.resumeEffectName) as TextView)
         this.paramsView.updateWithPedalboard(Data.currentPedalboard)
 
         Server.setListener({ onMessage(it) })
@@ -66,8 +67,17 @@ class ResumeActivity : AppCompatActivity() {
         if (message.request isEquivalentTo Messages.PLUGINS) {
             progress.dismiss()
 
+            runOnUiThread({
+                this.title.update(Data.pedalboardIndex, Data.currentPedalboard)
+                this.effectsView.update(Data.currentPedalboard)
+                this.paramsView.updateWithPedalboard(Data.currentPedalboard)
+            })
+
         } else if (message.request isEquivalentTo Messages.CURRENT_PEDALBOARD_DATA
                 || message.verb == ResponseVerb.EVENT && EventMessage(message.content).type == EventType.CURRENT) {
+
+            if (progress.isShowing)
+                return
 
             runOnUiThread({
                 this.title.update(Data.pedalboardIndex, Data.currentPedalboard)

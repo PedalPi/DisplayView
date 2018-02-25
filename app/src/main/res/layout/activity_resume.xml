@@ -48,14 +48,14 @@
         android:horizontalSpacing="2dp"
         android:numColumns="auto_fit"
         android:verticalSpacing="2dp"
-        app:layout_constraintBottom_toTopOf="@+id/textView"
+        app:layout_constraintBottom_toTopOf="@+id/resumeEffectName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/resumePedalboardNumber"
         tools:listitem="@layout/resume_effects_grid_item" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/resumeEffectName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"

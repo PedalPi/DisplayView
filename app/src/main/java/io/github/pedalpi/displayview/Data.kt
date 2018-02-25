@@ -10,16 +10,7 @@ object Data {
             "ports": {
                 "audio": [],
                 "midi": [],
-                "control": {"input": [
-                    {"name": "Parameter", "properties":[], "scalePoints":[]},
-                    {"name": "Parameter", "properties":[], "scalePoints":[]},
-                    {"name": "Parameter", "properties":[], "scalePoints":[]},
-                    {"name": "Parameter", "properties":[], "scalePoints":[]},
-                    {"name": "Parameter", "properties":[], "scalePoints":[]},
-                    {"name": "Parameter", "properties":[], "scalePoints":[]},
-                    {"name": "Parameter", "properties":[], "scalePoints":[]},
-                    {"name": "Parameter", "properties":[], "scalePoints":[]}
-                ]}
+                "control": {"input": []}
             }
         }
     """)
@@ -29,24 +20,7 @@ object Data {
             "name": "Connecting",
             "connections": [],
             "data": {},
-            "effects": [
-                {"active": true, "plugin": "???", "params": [
-                    {"minimum": 0, "maximum": 10, "value":0},
-                    {"minimum": 0, "maximum": 10, "value":0},
-                    {"minimum": 0, "maximum": 10, "value":5},
-                    {"minimum": 0, "maximum": 10, "value":0},
-                    {"minimum": 0, "maximum": 10, "value":0},
-                    {"minimum": 0, "maximum": 10, "value":0},
-                    {"minimum": 0, "maximum": 10, "value":0},
-                    {"minimum": 0, "maximum": 10, "value":0}
-                ]},
-                {"active": true, "plugin": ""}, {"active": true, "plugin": ""},
-                {"active": true, "plugin": ""}, {"active": true, "plugin": ""},
-                {"active": true, "plugin": ""}, {"active": true, "plugin": ""},
-                {"active": true, "plugin": ""}, {"active": true, "plugin": ""},
-                {"active": true, "plugin": ""}, {"active": true, "plugin": ""},
-                {"active": true, "plugin": ""}, {"active": true, "plugin": ""}
-            ]
+            "effects": []
         }
     """)
 
