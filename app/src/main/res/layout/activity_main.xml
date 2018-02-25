@@ -15,6 +15,7 @@
 
         android:layout_marginTop="36dp"
         android:textSize="180sp"
+        android:text="00"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -28,6 +29,7 @@
 
         android:textAlignment="center"
         android:textSize="56sp"
+        android:text="Pedalboard Name"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

@@ -11,6 +11,7 @@
         <item name="colorPrimary">@color/textColorLight</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorButtonNormal">@color/colorAccent</item>
         <!--
         <item name="android:background">@color/colorBackgroundDark</item>
         -->

@@ -4,18 +4,46 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonParser
 
 object Data {
-    private val VOID_PLUGIN: JsonElement = JsonParser().parse("""
+    private val VOID_PLUGIN = JsonParser().parse("""
         {
-            "label": "Plugin not found",
+            "name": "Plugin not found",
             "ports": {
                 "audio": [],
                 "midi": [],
-                "control": []
+                "control": {"input": [
+                    {"name": "param1"},
+                    {"name": "param2"},
+                    {"name": "param3"},
+                    {"name": "param4"},
+                    {"name": "param5"},
+                    {"name": "param6"},
+                    {"name": "param7"},
+                    {"name": "param8"},
+                    {"name": "param9"},
+                    {"name": "param10"},
+                    {"name": "param11"},
+                    {"name": "param12"},
+                ]}
             }
         }
     """)
 
-    lateinit var currentPedalboard: JsonElement
+    var currentPedalboard = JsonParser().parse("""
+        {
+            "name": "Connecting",
+            "connections": [],
+            "data": {},
+            "effects": [
+                {"plugin": "???", "params": [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}]},
+                {"plugin": "!!!"}, {"plugin": "*****"},
+                {"plugin": "???"}, {"plugin": "!!!"}, {"plugin": "*****"},
+                {"plugin": "???"}, {"plugin": "!!!"}, {"plugin": "*****"},
+                {"plugin": "???"}, {"plugin": "!!!"}, {"plugin": "*****"},
+                {"plugin": "???"}, {"plugin": "!!!"}, {"plugin": "*****"},
+                {"plugin": "???"}, {"plugin": "!!!"}, {"plugin": "*****"}
+            ]
+        }
+    """)
 
     var pedalboardIndex: Int = 0
     var bankIndex: Int = 0
