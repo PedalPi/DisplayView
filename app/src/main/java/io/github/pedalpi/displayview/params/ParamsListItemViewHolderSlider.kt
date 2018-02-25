@@ -31,11 +31,19 @@ class ParamsListItemViewHolderSlider(private val adapter : ParamsListItemAdapter
                 override fun onStartTrackingTouch(seekBar: SeekBar?) {}
 
                 override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                    if (fromUser)
-                        value.text = "${dto.calculatePercent(progress.toDouble())}%"
+                    if (!fromUser)
+                        return
+
+                    value.text = "$progress%"
+                    dto.value = dto.calculateValue(progress)
+                    adapter.valueChangeListener(dto)
                 }
             })
         }
+
+    override fun update(context : Context) {
+        this.update(context, dto)
+    }
 
     override fun update(context: Context, param: ParamsListItemDTO) {
         dto = param

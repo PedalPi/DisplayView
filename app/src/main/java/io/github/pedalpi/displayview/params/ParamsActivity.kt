@@ -4,22 +4,25 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.WindowManager
 import android.widget.ListView
+import android.widget.Toast
 import com.github.salomonbrys.kotson.array
 import com.github.salomonbrys.kotson.get
+import com.github.salomonbrys.kotson.int
 import com.github.salomonbrys.kotson.string
 import com.google.gson.JsonElement
 import io.github.pedalpi.displayview.Data
 import io.github.pedalpi.displayview.R
 import io.github.pedalpi.displayview.communication.message.request.Messages
+import io.github.pedalpi.displayview.communication.message.response.EventMessage
+import io.github.pedalpi.displayview.communication.message.response.EventType
 import io.github.pedalpi.displayview.communication.message.response.ResponseMessage
+import io.github.pedalpi.displayview.communication.message.response.ResponseVerb
 import io.github.pedalpi.displayview.communication.server.Server
 import io.github.pedalpi.displayview.effects.EffectsActivity
+import io.github.pedalpi.displayview.popToRoot
 
 
 class ParamsActivity : AppCompatActivity() {
-
-    private var messageReceived = false
-
     private var index: Int = 0
     private lateinit var effect: JsonElement
     private lateinit var plugin: JsonElement
@@ -80,121 +83,30 @@ class ParamsActivity : AppCompatActivity() {
         Server.sendBroadcast(Messages.Companion.PARAM_VALUE_CHANGE(this.index, param.index, param.value))
     }
 
-    /*
-    private fun generateParameter(container: LinearLayout, parameter: Parameter): Any {
-        val linearLayout = LinearLayout(ContextThemeWrapper(container.context, LinearLayout.HORIZONTAL))
-
-        val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, Gravity.BOTTOM.toFloat())
-        params.setMargins(0, 20, 0, 0)
-
-        linearLayout.layoutParams = params
-        linearLayout.orientation = LinearLayout.VERTICAL
-
-        val layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        )
-        val element: Any
-
-        //Log.i("TOGGLE", String.valueOf(parameter.isToggle()));
-        //Log.i("KNOB", String.valueOf(parameter.isKnob()));
-
-        } else if (parameter.isToggle()) {
-
-            element = createButton(linearLayout, parameter, layoutParams) //createToggle();
-        } else {
-
-            element = createSeekbar(linearLayout, parameter, layoutParams)
-        }
-        container.addView(linearLayout)
-        return element
-    }
-
-    private fun createButton(container: LinearLayout, parameter: Parameter, layoutParams: LinearLayout.LayoutParams): View {
-        val context = container.context
-
-        val toggleButton = ToggleButton(context)
-        toggleButton.setText(parameter.getName())
-        toggleButton.gravity = Gravity.CENTER
-        toggleButton.setTextAppearance(context, R.style.ButtonParamToggle)
-
-        val isChecked = parameter.getValue() === 1
-        toggleButton.setBackgroundColor(if (isChecked) Color.rgb(60, 179, 113) else Color.rgb(178, 34, 34))
-
-        toggleButton.setOnClickListener {
-            val isChecked = parameter.getValue() === 1
-            val newChecked = !isChecked
-            val newValue = if (newChecked) 1 else 0
-
-            parameter.setValue(newValue)
-
-            toggleButton.setText(parameter.getName())
-            toggleButton.setBackgroundColor(if (newChecked) Color.rgb(60, 179, 113) else Color.rgb(178, 34, 34))
-
-            updateToServer(parameter)
-        }
-
-        container.addView(toggleButton, layoutParams)
-        return toggleButton
-    }
-
-    fun createSeekbar(container: LinearLayout, parameter: Parameter, layoutParams: LinearLayout.LayoutParams): ParamSeekbar {
-        val seekbar = ParamSeekbar(container, parameter, layoutParams)
-        seekbar.setListener(this)
-
-        return seekbar
-    }
-
-    override fun onBackPressed() {
-        val intent = Intent()
-        intent.putExtra(PatchActivity.PATCH, this.patch)
-        intent.putExtra(PatchActivity.SETTED_CURRENT_PATCH, this.messageReceived)
-
-        messageReceived = false
-
-        setResult(0, intent)
-        finish()
-    }*/
-
     private fun onMessage(message: ResponseMessage) {
-        /*
-        this.patch = MessageProcessor.process(message, this.patch)
+        if (message.verb == ResponseVerb.ERROR)
+            runOnUiThread({
+                Toast.makeText(applicationContext, message.content["message"].string, Toast.LENGTH_SHORT).show()
+            })
 
-        if (message.getType() === ProtocolType.PARAM) {
-            val data = message.getContent()
-            val effectIndex = message.getContent().getInt("effect")
-            val paramIndex = data.getInt("param")
+        else if (message.verb == ResponseVerb.EVENT) {
+            val event = EventMessage(message.content)
 
-            val parameter = this.patch.getEffects().get(effectIndex).getParameters().get(paramIndex)
-            updateParamView(parameter, this.views!![parameter.getIndex()])
-        } else if (message.getType() === ProtocolType.PATCH) {
-            messageReceived = true
-            onBackPressed()
-        }*/
-    }
+            if (event.type == EventType.CURRENT) {
+                this.popToRoot()
 
-    /*
-    private fun updateParamView(parameter: Parameter, `object`: Any) {
-        Log.i("adas", parameter.toString())
-        runOnUiThread {
-            /*if (parameter.isCombobox())
-                    updatesValue
-                else if (parameter.isToggle())
-                    parameter.setValue();
-                else {*/
-            val seekbar = `object` as ParamSeekbar
-            seekbar.refreshView()
-            //}
+            } else if (event.type == EventType.PARAM) {
+                if (event.content["effect"].int != index)
+                    return
+
+                updateParamValue(adapter[event.content["param"].int])
+            }
         }
-    }*/
-
-    /*
-    private fun onChange(parameter: Parameter) {
-        updateToServer(parameter)
     }
 
-    private fun updateToServer(parameter: Parameter) {
-        val message = MessageProcessor.generateUpdateParamValue(this.effect, parameter)
-        Server.getInstance().send(message)
-    }*/
+    private fun updateParamValue(dto: ParamsListItemDTO) {
+        runOnUiThread {
+            dto.viewHolder.update(applicationContext)
+        }
+    }
 }

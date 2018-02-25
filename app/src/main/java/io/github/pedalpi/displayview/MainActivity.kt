@@ -46,9 +46,10 @@ class MainActivity : AppCompatActivity() {
         Server.setListener({ onMessage(it) })
 
         val button = findViewById(R.id.button) as Button
-        button.setOnClickListener({goToEffectsList()})
+        button.setOnClickListener({ goToEffectsList() })
 
-        showLoading()
+        if (!Data.isDataLoaded())
+            showLoading()
     }
 
     private fun showLoading() {
@@ -70,7 +71,7 @@ class MainActivity : AppCompatActivity() {
 
         } else if (message.request isEquivalentTo Messages.CURRENT_PEDALBOARD_DATA
          || message.verb == ResponseVerb.EVENT && EventMessage(message.content).type == EventType.CURRENT) {
-            val id = Data.currentPedalboardPosition
+            val id = Data.pedalboardIndex
             val pedalboard = Data.currentPedalboard
 
             runOnUiThread({

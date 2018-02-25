@@ -17,11 +17,16 @@ object Data {
 
     lateinit var currentPedalboard: JsonElement
 
-    var currentPedalboardPosition: Int = 0
+    var pedalboardIndex: Int = 0
+    var bankIndex: Int = 0
 
-    lateinit var plugins: Map<String, JsonElement>
+    var plugins: Map<String, JsonElement>? = null
 
     fun plugin(uri: String): JsonElement {
-        return plugins[uri] ?: VOID_PLUGIN
+        return plugins?.get(uri) ?: VOID_PLUGIN
+    }
+
+    fun isDataLoaded(): Boolean {
+        return plugins != null
     }
 }

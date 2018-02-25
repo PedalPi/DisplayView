@@ -21,11 +21,11 @@ class EffectsListItemAdapter(private val activity: Activity, private val items: 
     var toggleStatusListener : ToggleStatusListener = { }
     var selectEffectListener : SelectEffectListener = { }
 
-    class ViewHolder(private val row: View, private val adapter : EffectsListItemAdapter) {
+    class ViewHolder(row: View, private val adapter : EffectsListItemAdapter) {
         val name = row.findViewById(R.id.effectsListItemName) as Button
-        val status = row.findViewById(R.id.effectsListItemStatus) as ToggleButton
+        private val status = row.findViewById(R.id.effectsListItemStatus) as ToggleButton
 
-        lateinit var dto: EffectsListItemDTO
+        private lateinit var dto: EffectsListItemDTO
 
         init {
             name.setOnClickListener { adapter.selectEffectListener(dto) }

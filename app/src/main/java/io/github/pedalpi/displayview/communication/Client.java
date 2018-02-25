@@ -76,7 +76,7 @@ public class Client {
         if (message.getType() != RequestVerb.SYSTEM && message.getType() != RequestVerb.NIL)
             Identifier.instance.register(message);
 
-        Log.i("OnMSG", "Request: " + message);
+        Log.i("Request", message.toString());
         out.print(message.toString());
     }
 

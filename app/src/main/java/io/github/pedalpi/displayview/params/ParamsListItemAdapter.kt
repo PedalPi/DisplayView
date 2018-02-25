@@ -17,9 +17,11 @@ class ParamsListItemAdapter(private val activity: Activity, private val items: L
     var valueChangeListener : ValueChangedListener = { }
 
     interface ParamsListItemViewHolder {
-        fun update(context: Context, param: ParamsListItemDTO)
         val layout: Int
         var row: View?
+
+        fun update(context: Context)
+        fun update(context: Context, param: ParamsListItemDTO)
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -41,6 +43,7 @@ class ParamsListItemAdapter(private val activity: Activity, private val items: L
             viewHolder = view.tag as ParamsListItemViewHolder
         }
 
+        items[position].viewHolder = viewHolder
         viewHolder.update(activity.applicationContext, items[position])
 
         return view
@@ -65,5 +68,9 @@ class ParamsListItemAdapter(private val activity: Activity, private val items: L
 
     override fun getCount(): Int {
         return items.size
+    }
+
+    operator fun get(i: Int): ParamsListItemDTO {
+        return getItem(i)
     }
 }

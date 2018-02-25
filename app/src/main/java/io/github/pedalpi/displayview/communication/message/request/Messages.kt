@@ -9,10 +9,10 @@ class Messages {
         @JvmField val CURRENT_PEDALBOARD = RequestMessage(RequestVerb.GET, "/v1/current")
         @JvmField val CURRENT_PEDALBOARD_DATA = RequestMessage(RequestVerb.GET, "/v1/current/data")
         @JvmStatic
-        fun CURRENT_PEDALBOARD_TOGGLE_EFFECT(indexEffect : Int) = RequestMessage(RequestVerb.PUT, "/v1/current/effect/$indexEffect")
+        fun CURRENT_PEDALBOARD_TOGGLE_EFFECT(indexEffect : Int) = RequestMessage(RequestVerb.PUT, "/v1/current/effect/$indexEffect", "{}")
 
         @JvmStatic
-        fun PARAM_VALUE_CHANGE(effectIndex: Int, paramIndex: Int, value: Number) = PARAM_VALUE_CHANGE(0, Data.currentPedalboardPosition, effectIndex, paramIndex, value)
+        fun PARAM_VALUE_CHANGE(effectIndex: Int, paramIndex: Int, value: Number) = PARAM_VALUE_CHANGE(0, Data.pedalboardIndex, effectIndex, paramIndex, value)
 
         @JvmStatic
         fun PARAM_VALUE_CHANGE(bankIndex: Int, pedalboardIndex: Int, effectIndex: Int, paramIndex: Int, value: Number) = RequestMessage(RequestVerb.PUT, "/v1/bank/$bankIndex/pedalboard/$pedalboardIndex/effect/$effectIndex/param/$paramIndex", value)

@@ -3,7 +3,6 @@ package io.github.pedalpi.displayview.effects
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.WindowManager
 import android.widget.ListView
 import android.widget.Toast
@@ -45,7 +44,7 @@ class EffectsActivity : AppCompatActivity() {
     }
 
     private fun title(): String {
-        return "%02d - %s".format(Data.currentPedalboardPosition, Data.currentPedalboard["name"].string)
+        return "%02d - %s".format(Data.pedalboardIndex, Data.currentPedalboard["name"].string)
     }
 
     private fun populateViews() {
@@ -94,25 +93,7 @@ class EffectsActivity : AppCompatActivity() {
         Server.sendBroadcast(Messages.CURRENT_PEDALBOARD_TOGGLE_EFFECT(effect.index))
     }
 
-    /*
-    // FIXME Voltou da tela anterior
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
-        Server.getInstance().setListener(this)
-        Log.i("MESSAGE", String.valueOf(this.patch!!.getEffects()))
-        this.patch = data.extras!!.getSerializable(PatchActivity.PATCH) as Patch
-        val settedCurrentPatch = data.getBooleanExtra(PatchActivity.SETTED_CURRENT_PATCH, false)
-
-        if (settedCurrentPatch)
-            onSupportNavigateUp()
-
-        super.onActivityResult(requestCode, resultCode, data)
-
-    }
-    */
-
     private fun onMessage(message: ResponseMessage) {
-        Log.i("VERB", message.verb.toString())
-
         if (message.verb == ResponseVerb.ERROR)
             runOnUiThread({
                 Toast.makeText(applicationContext, message.content["message"].string, Toast.LENGTH_SHORT).show()
@@ -125,7 +106,6 @@ class EffectsActivity : AppCompatActivity() {
                 onSupportNavigateUp()
 
             else if (event.type == EventType.EFFECT_TOGGLE) {
-                // TODO Check if is the current pedalboard
                 val index = event.content["effect"].int
 
                 toggleStatusEffectView(this.adapter[index])

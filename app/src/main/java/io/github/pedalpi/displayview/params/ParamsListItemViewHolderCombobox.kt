@@ -30,7 +30,11 @@ class ParamsListItemViewHolderCombobox(private val adapter : ParamsListItemAdapt
 
     override fun update(context : Context, param: ParamsListItemDTO) {
         dto = param
-        name.text = param.name
+        this.update(context)
+    }
+
+    override fun update(context : Context) {
+        name.text = dto.name
 
         combobox.adapter = generateAdapter(context)
         combobox.setSelection(dto.value.toInt())
