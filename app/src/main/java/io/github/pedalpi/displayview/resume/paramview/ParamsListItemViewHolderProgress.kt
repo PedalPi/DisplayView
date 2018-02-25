@@ -20,27 +20,27 @@ class ParamsListItemViewHolderProgress: ParamsGridItemAdapter.ParamsGridItemView
 
     override var row: View? = null
         set(row) {
-            /*
             field = row
             name   = row?.findViewById(R.id.paramsGridItemName) as TextView
             value  = row?.findViewById(R.id.paramsGridItemValue) as TextView
 
-            slider = row?.findViewById(R.id.paramsGridItemProgress) as SeekBar
-            slider.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
-                override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+            progress = row?.findViewById(R.id.paramsGridItemProgress) as ProgressBar
+            /*
+slider.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
+    override fun onStopTrackingTouch(seekBar: SeekBar?) {}
 
-                override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+    override fun onStartTrackingTouch(seekBar: SeekBar?) {}
 
-                override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                    if (!fromUser)
-                        return
+    override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+        if (!fromUser)
+            return
 
-                    value.text = "$progress%"
-                    dto.value = dto.calculateValue(progress)
-                    adapter.valueChangeListener(dto)
-                }
-            })
-            */
+        value.text = "$progress%"
+        dto.value = dto.calculateValue(progress)
+        adapter.valueChangeListener(dto)
+    }
+})
+*/
         }
 
     override fun update(context : Context) {
@@ -48,13 +48,11 @@ class ParamsListItemViewHolderProgress: ParamsGridItemAdapter.ParamsGridItemView
     }
 
     override fun update(context: Context, param: ParamsGridItemDTO) {
-        /*
         dto = param
 
         name.text = param.name
         value.text = "${param.percent}%"
-        slider.progress = param.percent
-        */
+        progress.progress = param.percent
     }
 
     override val layout: Int

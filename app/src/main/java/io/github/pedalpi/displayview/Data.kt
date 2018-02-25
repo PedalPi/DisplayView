@@ -11,18 +11,14 @@ object Data {
                 "audio": [],
                 "midi": [],
                 "control": {"input": [
-                    {"name": "param1"},
-                    {"name": "param2"},
-                    {"name": "param3"},
-                    {"name": "param4"},
-                    {"name": "param5"},
-                    {"name": "param6"},
-                    {"name": "param7"},
-                    {"name": "param8"},
-                    {"name": "param9"},
-                    {"name": "param10"},
-                    {"name": "param11"},
-                    {"name": "param12"},
+                    {"name": "Parameter", "properties":[], "scalePoints":[]},
+                    {"name": "Parameter", "properties":[], "scalePoints":[]},
+                    {"name": "Parameter", "properties":[], "scalePoints":[]},
+                    {"name": "Parameter", "properties":[], "scalePoints":[]},
+                    {"name": "Parameter", "properties":[], "scalePoints":[]},
+                    {"name": "Parameter", "properties":[], "scalePoints":[]},
+                    {"name": "Parameter", "properties":[], "scalePoints":[]},
+                    {"name": "Parameter", "properties":[], "scalePoints":[]}
                 ]}
             }
         }
@@ -34,13 +30,22 @@ object Data {
             "connections": [],
             "data": {},
             "effects": [
-                {"plugin": "???", "params": [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}]},
-                {"plugin": "!!!"}, {"plugin": "*****"},
-                {"plugin": "???"}, {"plugin": "!!!"}, {"plugin": "*****"},
-                {"plugin": "???"}, {"plugin": "!!!"}, {"plugin": "*****"},
-                {"plugin": "???"}, {"plugin": "!!!"}, {"plugin": "*****"},
-                {"plugin": "???"}, {"plugin": "!!!"}, {"plugin": "*****"},
-                {"plugin": "???"}, {"plugin": "!!!"}, {"plugin": "*****"}
+                {"active": true, "plugin": "???", "params": [
+                    {"minimum": 0, "maximum": 10, "value":0},
+                    {"minimum": 0, "maximum": 10, "value":0},
+                    {"minimum": 0, "maximum": 10, "value":5},
+                    {"minimum": 0, "maximum": 10, "value":0},
+                    {"minimum": 0, "maximum": 10, "value":0},
+                    {"minimum": 0, "maximum": 10, "value":0},
+                    {"minimum": 0, "maximum": 10, "value":0},
+                    {"minimum": 0, "maximum": 10, "value":0}
+                ]},
+                {"active": true, "plugin": ""}, {"active": true, "plugin": ""},
+                {"active": true, "plugin": ""}, {"active": true, "plugin": ""},
+                {"active": true, "plugin": ""}, {"active": true, "plugin": ""},
+                {"active": true, "plugin": ""}, {"active": true, "plugin": ""},
+                {"active": true, "plugin": ""}, {"active": true, "plugin": ""},
+                {"active": true, "plugin": ""}, {"active": true, "plugin": ""}
             ]
         }
     """)

@@ -12,11 +12,10 @@ import java.util.*
 
 class EffectsView(private val activity: Context, private val gridView: GridView) {
     private lateinit var pedalboard: JsonElement
-    private lateinit var selected: EffectsGridItemAdapter.ViewHolder
 
     private lateinit var adapter: EffectsGridItemAdapter
 
-    public fun update(pedalboard: JsonElement) {
+    fun update(pedalboard: JsonElement) {
         this.pedalboard = pedalboard
 
         populateViews()

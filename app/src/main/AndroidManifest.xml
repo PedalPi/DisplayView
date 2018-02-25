@@ -13,7 +13,9 @@
         android:theme="@style/AppTheme"
         android:name="io.github.pedalpi.displayview.communication.server.App">
         <!--<activity android:name="io.github.pedalpi.displayview.MainActivity">-->
-        <activity android:name="io.github.pedalpi.displayview.resume.ResumeActivity">
+        <activity android:name="io.github.pedalpi.displayview.resume.ResumeActivity"
+                  android:screenOrientation="landscape"
+                  android:configChanges="orientation|keyboardHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

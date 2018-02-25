@@ -8,4 +8,15 @@
     <color name="textColorDark">#FFF</color>
     <color name="colorBackgroundLight">#ECF0F1</color>
     <color name="colorBackgroundDark">#000</color>
+
+    <!--
+        https://material.io/guidelines/style/color.html#color-color-palette
+    -->
+    <color name="colorButtonActivePressed">#66BB6A</color>
+    <color name="colorButtonActiveFocus">#A5D6A7</color>
+    <color name="colorButtonActive">#C8E6C9</color>
+
+    <color name="colorButtonNotActivePressed">#EF5350</color>
+    <color name="colorButtonNotActiveFocus">#E57373</color>
+    <color name="colorButtonNotActive">#EF9A9A</color>
 </resources>

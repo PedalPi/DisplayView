@@ -20,8 +20,6 @@ import io.github.pedalpi.displayview.effects.EffectsActivity
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 
 
-
-
 class MainActivity : AppCompatActivity() {
 
     private lateinit var progress: ProgressDialog
@@ -59,7 +57,6 @@ class MainActivity : AppCompatActivity() {
         progress.setCancelable(false)
         progress.show()
     }
-
 
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))

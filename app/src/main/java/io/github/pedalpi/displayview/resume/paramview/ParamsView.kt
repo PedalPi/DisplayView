@@ -16,6 +16,14 @@ class ParamsView(private val context: Context, private val gridView: GridView) {
     private lateinit var plugin: JsonElement
     private lateinit var adapter: ParamsGridItemAdapter
 
+    fun updateWithPedalboard(currentPedalboard: JsonElement) {
+        if (Data.currentPedalboard["effects"].array.size() > 0)
+            this.update(Data.currentPedalboard["effects"][0])
+        else {
+            //TODO - Clear parameters
+        }
+    }
+
     fun update(effect: JsonElement) {
         this.effect = effect
         this.plugin = Data.plugin(effect["plugin"].string)

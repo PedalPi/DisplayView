@@ -4,16 +4,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v7.widget.AppCompatButton
+    <Button
         android:id="@+id/effectsGridItemName"
+        style="@style/Widget.AppCompat.Button"
         android:layout_width="0dp"
         android:layout_height="80dp"
         android:textSize="18sp"
+        android:textColor="@color/textColorLight"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:textColor="@color/colorPrimary"
-        app:backgroundTint="#555000" />
+        android:background="@drawable/button_effect_active" />
 
+    <!--
+    <android.support.v7.widget.AppCompatButton
+    style="@style/Widget.AppCompat.Button.Colored"
+        android:background="@drawable/button_active"
+        android:textColor="@color/textColorLight"
+        -->
 </android.support.constraint.ConstraintLayout>

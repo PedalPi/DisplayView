@@ -1,6 +1,9 @@
 package io.github.pedalpi.displayview.resume.effectview
 
 import android.content.Context
+import android.content.res.Resources
+import android.graphics.drawable.Drawable
+import android.support.v4.content.res.ResourcesCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,9 +18,8 @@ class EffectsGridItemAdapter(private val context: Context, private val items: Li
 
     var selectEffectListener: SelectEffectListener = { }
 
-    class ViewHolder(row: View, private val adapter : EffectsGridItemAdapter) {
+    class ViewHolder(row: View, private val adapter: EffectsGridItemAdapter, val resources: Resources) {
         val name = row.findViewById(R.id.effectsGridItemName) as Button
-        var selected : Boolean = false
 
         private lateinit var dto: EffectsGridItemDTO
 
@@ -28,6 +30,16 @@ class EffectsGridItemAdapter(private val context: Context, private val items: Li
         fun update(effect: EffectsGridItemDTO) {
             dto = effect
             name.text = dto.name
+
+            if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN)
+                name.setBackgroundDrawable(drawable(effect.active))
+            else
+                name.background = drawable(effect.active)
+        }
+
+        private fun drawable(active: Boolean): Drawable? {
+            val drawable = if (active) R.drawable.button_effect_active else R.drawable.button_effect_not_active
+            return ResourcesCompat.getDrawable(resources, drawable, null)
         }
     }
 
@@ -38,7 +50,7 @@ class EffectsGridItemAdapter(private val context: Context, private val items: Li
         if (convertView == null) {
             val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             view = inflater.inflate(R.layout.resume_effects_grid_item, null)
-            viewHolder = ViewHolder(view, this)
+            viewHolder = ViewHolder(view, this, context.resources)
             view.tag = viewHolder
 
         } else {
