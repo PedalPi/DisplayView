@@ -52,7 +52,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/resumePedalboardNumber"
-        tools:listitem="@layout/resume_effects_grid_item" />
+        tools:listitem="@layout/resume_effects_grid_item"
+        android:fadeScrollbars="false" />
 
     <TextView
         android:id="@+id/resumeEffectName"
@@ -81,6 +82,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:listitem="@layout/resume_params_grid_item" />
+        tools:listitem="@layout/resume_params_grid_item"
+        android:fadeScrollbars="false" />
 
 </android.support.constraint.ConstraintLayout>
