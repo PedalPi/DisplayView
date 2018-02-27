@@ -19,6 +19,7 @@ import io.github.pedalpi.displayview.communication.message.response.ResponseMess
 import io.github.pedalpi.displayview.communication.message.response.ResponseVerb
 import io.github.pedalpi.displayview.communication.server.Server
 import io.github.pedalpi.displayview.model.Data
+import io.github.pedalpi.displayview.model.Param
 import io.github.pedalpi.displayview.util.popToRoot
 
 
@@ -62,16 +63,15 @@ class ParamsActivity : AppCompatActivity() {
         this.adapter.notifyDataSetChanged()
     }
 
-    private fun generateData(effect: JsonElement, plugin: JsonElement): List<ParamsListItemDTO> {
-        val data = ArrayList<ParamsListItemDTO>()
+    private fun generateData(effect: JsonElement, plugin: JsonElement): List<ParamListItemDTO> {
+        val data = ArrayList<ParamListItemDTO>()
 
         val params = effect["params"].array
         val pluginControls = plugin["ports"]["control"]["input"].array
 
-        for (i in (0 until params.array.size()))
-            data.add(ParamsListItemDTO(i, params[i], pluginControls[i]))
-
-        return data
+        return (0 until params.array.size())
+                .map { Param(it, params[it], pluginControls[it]) }
+                .mapTo(data) { ParamListItemDTO(it) }
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -79,8 +79,8 @@ class ParamsActivity : AppCompatActivity() {
         return true
     }
 
-    private fun requestChangeParamValue(param: ParamsListItemDTO) {
-        Server.sendBroadcast(Messages.Companion.PARAM_VALUE_CHANGE(this.index, param.index, param.value))
+    private fun requestChangeParamValue(param: Param) {
+        Server.sendBroadcast(Messages.Companion.PARAM_VALUE_CHANGE(this.index, param))
     }
 
     private fun onMessage(message: ResponseMessage) {
@@ -104,7 +104,7 @@ class ParamsActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateParamValue(dto: ParamsListItemDTO) {
+    private fun updateParamValue(dto: ParamListItemDTO) {
         runOnUiThread {
             dto.viewHolder.update(applicationContext)
         }

@@ -2,18 +2,24 @@ package io.github.pedalpi.displayview.activity.params
 
 import android.content.Context
 import android.view.View
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.Button
+import android.widget.Spinner
+import android.widget.TextView
 import io.github.pedalpi.displayview.R
+import io.github.pedalpi.displayview.util.generateSpinnerDropdownAdapter
 
 
-class ParamsListItemViewHolderCombobox(private val changeable: ParamValueChangeable): ParamsListItemAdapter.ParamsListItemViewHolder {
+class ParamListItemViewHolderCombobox(private val changeable: ParamValueChangeable): ParamListItemViewHolder {
+
+    override val layout: Int = R.layout.param_list_item_combobox
 
     private lateinit var name: TextView
     private lateinit var combobox: Spinner
     private lateinit var next: Button
     private lateinit var previous: Button
 
-    lateinit var dto: ParamsListItemDTO
+    override lateinit var dto: ParamListItemDTO
 
     override var row: View? = null
         set(row) {
@@ -28,16 +34,16 @@ class ParamsListItemViewHolderCombobox(private val changeable: ParamValueChangea
             previous.setOnClickListener { previousValue() }
         }
 
-    override fun update(context : Context, param: ParamsListItemDTO) {
-        dto = param
+    override fun update(context : Context, dto: ParamListItemDTO) {
+        this.dto = dto
         this.update(context)
     }
 
     override fun update(context : Context) {
-        name.text = dto.name
+        name.text = dto.param.name
 
         combobox.adapter = generateAdapter(context)
-        combobox.setSelection(dto.value.toInt())
+        combobox.setSelection(dto.param.value.toInt())
 
         combobox.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
             /** Android call in the first time if any interaction */
@@ -53,19 +59,12 @@ class ParamsListItemViewHolderCombobox(private val changeable: ParamValueChangea
         }
     }
 
-    private fun generateAdapter(context: Context): ArrayAdapter<String> {
-        val adapter = ArrayAdapter(context, android.R.layout.simple_spinner_dropdown_item, dto.options)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
-        return adapter
-    }
-
-    override val layout: Int
-        get() = R.layout.param_list_item_combobox
+    private fun generateAdapter(context: Context)
+            = context.generateSpinnerDropdownAdapter(dto.param.options)
 
     private fun selected(position: Int) {
-        dto.value = position
-        changeable.onParamValueChange(dto)
+        dto.param.value = position
+        changeable.onParamValueChange(dto.param)
     }
 
     private fun nextValue() {

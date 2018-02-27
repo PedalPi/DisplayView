@@ -1,6 +1,7 @@
 package io.github.pedalpi.displayview.communication.message.request
 
 import io.github.pedalpi.displayview.model.Data
+import io.github.pedalpi.displayview.model.Param
 
 class Messages {
     companion object {
@@ -12,9 +13,9 @@ class Messages {
         fun CURRENT_PEDALBOARD_TOGGLE_EFFECT(indexEffect : Int) = RequestMessage(RequestVerb.PUT, "/v1/current/effect/$indexEffect", "{}")
 
         @JvmStatic
-        fun PARAM_VALUE_CHANGE(effectIndex: Int, paramIndex: Int, value: Number) = PARAM_VALUE_CHANGE(0, Data.pedalboardIndex, effectIndex, paramIndex, value)
+        fun PARAM_VALUE_CHANGE(effectIndex: Int, param: Param) = PARAM_VALUE_CHANGE(0, Data.pedalboardIndex, effectIndex, param)
 
         @JvmStatic
-        fun PARAM_VALUE_CHANGE(bankIndex: Int, pedalboardIndex: Int, effectIndex: Int, paramIndex: Int, value: Number) = RequestMessage(RequestVerb.PUT, "/v1/bank/$bankIndex/pedalboard/$pedalboardIndex/effect/$effectIndex/param/$paramIndex", value)
+        fun PARAM_VALUE_CHANGE(bankIndex: Int, pedalboardIndex: Int, effectIndex: Int, param: Param) = RequestMessage(RequestVerb.PUT, "/v1/bank/$bankIndex/pedalboard/$pedalboardIndex/effect/$effectIndex/param/${param.index}", param.value)
     }
 }

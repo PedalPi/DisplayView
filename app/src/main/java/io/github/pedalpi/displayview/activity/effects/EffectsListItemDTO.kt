@@ -12,5 +12,5 @@ class EffectsListItemDTO(val index : Int, private val effect: JsonElement, priva
 
     val name = "$index - ${plugin["name"].string}"
 
-    lateinit var viewHolder: EffectsListItemAdapter.ViewHolder
+    lateinit var viewHolder: EffectListItemViewHolder
 }

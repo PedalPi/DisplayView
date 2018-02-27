@@ -9,14 +9,16 @@ import io.github.pedalpi.displayview.R
 /**
  * https://github.com/p4x3c0/PedalPi-Display-View/blob/master/app/src/main/java/com/pedalpi/pedalpi/component/ParamSeekbar.java
  */
-class ParamsListItemViewHolderSlider(private val changeable: ParamValueChangeable) : ParamsListItemAdapter.ParamsListItemViewHolder {
+class ParamListItemViewHolderSlider(private val changeable: ParamValueChangeable) : ParamListItemViewHolder {
+
+    override val layout: Int = R.layout.param_list_item_slider
 
     private lateinit var name : TextView
     private lateinit var value : TextView
 
     private lateinit var slider : SeekBar
 
-    lateinit var dto: ParamsListItemDTO
+    override lateinit var dto: ParamListItemDTO
 
     override var row: View? = null
         set(row) {
@@ -35,8 +37,8 @@ class ParamsListItemViewHolderSlider(private val changeable: ParamValueChangeabl
                         return
 
                     value.text = "$progress%"
-                    dto.value = dto.calculateValue(progress)
-                    changeable.onParamValueChange(dto)
+                    dto.param.value = dto.param.calculateValueByPercent(progress)
+                    changeable.onParamValueChange(dto.param)
                 }
             })
         }
@@ -45,14 +47,11 @@ class ParamsListItemViewHolderSlider(private val changeable: ParamValueChangeabl
         this.update(context, dto)
     }
 
-    override fun update(context: Context, param: ParamsListItemDTO) {
-        dto = param
+    override fun update(context: Context, dto: ParamListItemDTO) {
+        this.dto = dto
 
-        name.text = param.name
-        value.text = "${param.percent}%"
-        slider.progress = param.percent
+        name.text = dto.param.name
+        value.text = "${dto.param.valueAsPercent}%"
+        slider.progress = dto.param.valueAsPercent
     }
-
-    override val layout: Int
-        get() = R.layout.param_list_item_slider
 }

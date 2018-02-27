@@ -25,6 +25,10 @@ class EffectGridItemViewHolder(private val selectable: EffectSelectable, val res
             name.setOnClickListener { selectable.onEffectSelected(dto.effect) }
         }
 
+    fun update() {
+        this.update(this.dto)
+    }
+
     fun update(effect: EffectGridItemDTO) {
         dto = effect
         name.text = dto.name

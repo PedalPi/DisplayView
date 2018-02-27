@@ -18,7 +18,7 @@ interface EffectSelectable {
 
 typealias SelectEffectListener = (effect: JsonElement) -> Unit
 
-class EffectsView(private val activity: Context, private val gridView: GridView) : EffectSelectable {
+class EffectsView(private val context: Context, private val gridView: GridView) : EffectSelectable {
 
     private lateinit var pedalboard: JsonElement
     private lateinit var adapter: EffectGridItemAdapter
@@ -32,7 +32,7 @@ class EffectsView(private val activity: Context, private val gridView: GridView)
     }
 
     private fun populateViews() {
-        this.adapter = EffectGridItemAdapter(this, activity, generateData())
+        this.adapter = EffectGridItemAdapter(this, context, generateData())
 
         this.gridView.adapter = adapter
         this.adapter.notifyDataSetChanged()
@@ -46,5 +46,9 @@ class EffectsView(private val activity: Context, private val gridView: GridView)
         }
 
         return elements
+    }
+
+    fun updateEffect(effectIndex: Int) {
+        this.adapter[effectIndex].viewHolder.update()
     }
 }

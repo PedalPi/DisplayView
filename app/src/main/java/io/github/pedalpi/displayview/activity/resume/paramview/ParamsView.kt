@@ -1,8 +1,6 @@
 package io.github.pedalpi.displayview.activity.resume.paramview
 
-import android.app.AlertDialog
 import android.content.Context
-import android.content.DialogInterface
 import android.util.Log
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.GridView
@@ -11,11 +9,13 @@ import com.github.salomonbrys.kotson.array
 import com.github.salomonbrys.kotson.get
 import com.github.salomonbrys.kotson.string
 import com.google.gson.JsonElement
+import io.github.pedalpi.displayview.activity.params.ParamListItemDTO
+import io.github.pedalpi.displayview.activity.params.ParamListItemViewHolderFactory
 import io.github.pedalpi.displayview.activity.params.ParamValueChangeable
-import io.github.pedalpi.displayview.activity.params.ParamsListItemViewHolderFactory
 import io.github.pedalpi.displayview.activity.params.ValueChangedListener
 import io.github.pedalpi.displayview.model.Data
 import io.github.pedalpi.displayview.model.Param
+import io.github.pedalpi.displayview.util.generateCustomDialog
 import io.github.pedalpi.displayview.util.inflate
 
 
@@ -31,7 +31,8 @@ class ParamsView(private val context: Context, private val gridView: GridView, p
 
     init {
         gridView.onItemClickListener = OnItemClickListener { parent, view, position, id ->
-            showDialog((view.tag as ParamGridItemViewHolder).dto)
+            val viewHolder = view.tag as ParamGridItemViewHolder
+            showDialog(ParamListItemDTO(viewHolder.dto.param))
         }
     }
 
@@ -72,21 +73,17 @@ class ParamsView(private val context: Context, private val gridView: GridView, p
         this.effectName.text = ""
     }
 
-    private fun showDialog(dto: ParamGridItemDTO) {
-        Log.i("PARAM", dto.param.name)
+    private fun showDialog(item: ParamListItemDTO) {
+        Log.i("PARAM", item.param.name)
 
-        val newdto = ParamsListItemViewHolderFactory.build(this, dto.param.type)
-        //newdto.update(context, dto.param)
+        val viewHolder = ParamListItemViewHolderFactory.build(this, item.param.type)
 
-        val builder = AlertDialog.Builder(context)
-        val view = context.inflate(newdto.layout)
+        val view = context.inflate(viewHolder.layout)
 
-        builder.setView(view)
-        val dialog = builder.create()
+        viewHolder.row = view
+        item.viewHolder = viewHolder
+        viewHolder.update(context, item)
 
-        dialog.setOnCancelListener(object : DialogInterface.OnCancelListener {
-            override fun onCancel(p0: DialogInterface?) {}
-        })
-        dialog.show()
+        context.generateCustomDialog(view).show()
     }
 }
