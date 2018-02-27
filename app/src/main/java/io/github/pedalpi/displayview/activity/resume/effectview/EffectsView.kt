@@ -10,10 +10,18 @@ import io.github.pedalpi.displayview.Data
 import java.util.*
 
 
-class EffectsView(private val activity: Context, private val gridView: GridView) {
-    private lateinit var pedalboard: JsonElement
+interface EffectSelectable {
+    var onEffectSelected: SelectEffectListener
+}
 
-    private lateinit var adapter: EffectsGridItemAdapter
+typealias SelectEffectListener = (effect: JsonElement) -> Unit
+
+class EffectsView(private val activity: Context, private val gridView: GridView) : EffectSelectable {
+
+    private lateinit var pedalboard: JsonElement
+    private lateinit var adapter: EffectGridItemAdapter
+
+    override var onEffectSelected: SelectEffectListener = { }
 
     fun update(pedalboard: JsonElement) {
         this.pedalboard = pedalboard
@@ -22,17 +30,17 @@ class EffectsView(private val activity: Context, private val gridView: GridView)
     }
 
     private fun populateViews() {
-        this.adapter = EffectsGridItemAdapter(activity, generateData())
+        this.adapter = EffectGridItemAdapter(this, activity, generateData())
 
         this.gridView.adapter = adapter
         this.adapter.notifyDataSetChanged()
     }
 
-    private fun generateData(): List<EffectsGridItemDTO> {
-        val elements = ArrayList<EffectsGridItemDTO>()
+    private fun generateData(): List<EffectGridItemDTO> {
+        val elements = ArrayList<EffectGridItemDTO>()
 
         pedalboard["effects"].array.mapIndexedTo(elements) {
-            index, effectData -> EffectsGridItemDTO(index, effectData, Data.plugin(effectData["plugin"].string))
+            index, effectData -> EffectGridItemDTO(index, effectData, Data.plugin(effectData["plugin"].string))
         }
 
         return elements

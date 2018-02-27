@@ -5,12 +5,13 @@ import com.github.salomonbrys.kotson.get
 import com.github.salomonbrys.kotson.string
 import com.google.gson.JsonElement
 
-class EffectsGridItemDTO(val index : Int, private val effect: JsonElement, private val plugin: JsonElement) {
+
+class EffectGridItemDTO(val index : Int, val effect: JsonElement, private val plugin: JsonElement) {
 
     val active: Boolean
         get() = effect["active"].bool
 
     val name = plugin["name"].string
 
-    lateinit var viewHolder: EffectsGridItemAdapter.ViewHolder
+    lateinit var viewHolder: EffectGridItemViewHolder
 }

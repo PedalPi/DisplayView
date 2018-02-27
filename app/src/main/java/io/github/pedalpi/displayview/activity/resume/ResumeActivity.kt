@@ -5,8 +5,6 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.WindowManager
-import android.widget.GridView
-import android.widget.TextView
 import io.github.pedalpi.displayview.Data
 import io.github.pedalpi.displayview.R
 import io.github.pedalpi.displayview.communication.message.request.Messages
@@ -17,6 +15,7 @@ import io.github.pedalpi.displayview.communication.message.response.ResponseVerb
 import io.github.pedalpi.displayview.communication.server.Server
 import io.github.pedalpi.displayview.resume.effectview.EffectsView
 import io.github.pedalpi.displayview.resume.paramview.ParamsView
+import kotlinx.android.synthetic.main.activity_resume.*
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 
 
@@ -36,14 +35,19 @@ class ResumeActivity : AppCompatActivity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         supportActionBar?.hide()
 
-        this.title = TitleView(this)
+        this.title = TitleView(resumePedalboardNumber, resumePedalboardName)
         this.title.update(Data.pedalboardIndex, Data.currentPedalboard)
 
-        this.effectsView = EffectsView(this.applicationContext, findViewById(R.id.resumePedalboardEffects) as GridView)
+        this.effectsView = EffectsView(this.applicationContext, resumePedalboardEffects)
         this.effectsView.update(Data.currentPedalboard)
 
-        this.paramsView = ParamsView(this.applicationContext, findViewById(R.id.resumeEffectParams) as GridView, findViewById(R.id.resumeEffectName) as TextView)
+        this.effectsView.onEffectSelected = { paramsView.update(it) }
+
+        this.paramsView = ParamsView(this.applicationContext, resumeEffectParams, resumeEffectName)
         this.paramsView.updateWithPedalboard(Data.currentPedalboard)
+
+        //this.paramsView.onParamSelect { updateParamValue(it) }
+        //this.paramsView.onEffectStatusToggle { requestChangeParamValue(it) }
 
         Server.setListener({ onMessage(it) })
 

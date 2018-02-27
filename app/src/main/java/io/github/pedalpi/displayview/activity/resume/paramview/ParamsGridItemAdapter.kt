@@ -12,19 +12,20 @@ typealias ValueChangedListener = (param: ParamsListItemDTO) -> Unit
 /**
  * Based in https://github.com/betranthanh/android-KotlinListView
  */
-class ParamsGridItemAdapter(private val context: Context, private val items: List<ParamsGridItemDTO>): BaseAdapter() {
+class ParamsGridItemAdapter(private val context: Context, private val items: List<ParamGridItemDTO>): BaseAdapter() {
 
-    interface ParamsGridItemViewHolder {
+    interface ParamGridItemViewHolder {
+        var dto: ParamGridItemDTO
         val layout: Int
         var row: View?
 
         fun update(context: Context)
-        fun update(context: Context, param: ParamsGridItemDTO)
+        fun update(context: Context, param: ParamGridItemDTO)
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val view: View
-        val viewHolder: ParamsGridItemViewHolder
+        val viewHolder: ParamGridItemViewHolder
 
         val originalViewHolder = ParamsListItemViewHolderProgress()
         //val originalViewHolder = ParamsListItemViewHolderFactory.build(this, items[position])
@@ -39,7 +40,7 @@ class ParamsGridItemAdapter(private val context: Context, private val items: Lis
 
         } else {
             view = convertView
-            viewHolder = view.tag as ParamsGridItemViewHolder
+            viewHolder = view.tag as ParamGridItemViewHolder
         }
 
         items[position].viewHolder = viewHolder
@@ -48,16 +49,16 @@ class ParamsGridItemAdapter(private val context: Context, private val items: Lis
         return view
     }
 
-    private fun isSameView(convertView: View, viewHolder: ParamsGridItemViewHolder): Boolean {
-        return viewHolder.layout == (convertView.tag as ParamsGridItemViewHolder).layout
+    private fun isSameView(convertView: View, viewHolder: ParamGridItemViewHolder): Boolean {
+        return viewHolder.layout == (convertView.tag as ParamGridItemViewHolder).layout
     }
 
-    private fun generateView(viewHolder: ParamsGridItemViewHolder): View {
+    private fun generateView(viewHolder: ParamGridItemViewHolder): View {
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         return inflater.inflate(viewHolder.layout, null)
     }
 
-    override fun getItem(i: Int): ParamsGridItemDTO {
+    override fun getItem(i: Int): ParamGridItemDTO {
         return items[i]
     }
 
@@ -69,7 +70,7 @@ class ParamsGridItemAdapter(private val context: Context, private val items: Lis
         return items.size
     }
 
-    operator fun get(i: Int): ParamsGridItemDTO {
+    operator fun get(i: Int): ParamGridItemDTO {
         return getItem(i)
     }
 }
