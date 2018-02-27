@@ -16,6 +16,7 @@ import io.github.pedalpi.displayview.communication.server.Server
 import io.github.pedalpi.displayview.model.Data
 import io.github.pedalpi.displayview.resume.effectview.EffectsView
 import kotlinx.android.synthetic.main.activity_resume.*
+
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 
 
@@ -38,15 +39,15 @@ class ResumeActivity : AppCompatActivity() {
         this.title = TitleView(resumePedalboardNumber, resumePedalboardName)
         this.title.update(Data.pedalboardIndex, Data.currentPedalboard)
 
-        this.effectsView = EffectsView(this.applicationContext, resumePedalboardEffects)
+        this.effectsView = EffectsView(this, resumePedalboardEffects)
         this.effectsView.update(Data.currentPedalboard)
 
         this.effectsView.onEffectSelected = { paramsView.update(it) }
 
-        this.paramsView = ParamsView(this.applicationContext, resumeEffectParams, resumeEffectName)
+        this.paramsView = ParamsView(this, resumeEffectParams, resumeEffectName)
         this.paramsView.updateWithPedalboard(Data.currentPedalboard)
 
-        //this.paramsView.onParamSelect { updateParamValue(it) }
+        //this.paramsView.onParamValueChange { updateParamValue(it) }
         //this.paramsView.onEffectStatusToggle { requestChangeParamValue(it) }
 
         Server.setListener({ onMessage(it) })

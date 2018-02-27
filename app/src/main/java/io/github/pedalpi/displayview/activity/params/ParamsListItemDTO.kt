@@ -2,14 +2,9 @@ package io.github.pedalpi.displayview.activity.params
 
 import com.github.salomonbrys.kotson.*
 import com.google.gson.JsonElement
+import io.github.pedalpi.displayview.model.ParamType
 
 class ParamsListItemDTO(val index : Int, val param: JsonElement, val plugin: JsonElement) {
-
-    enum class ParamType {
-        COMBOBOX,
-        KNOB,
-        TOGGLE
-    }
 
     lateinit var viewHolder: ParamsListItemAdapter.ParamsListItemViewHolder
 

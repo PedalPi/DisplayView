@@ -1,15 +1,16 @@
 package io.github.pedalpi.displayview.activity.params
 
+import io.github.pedalpi.displayview.model.ParamType
+
 
 class ParamsListItemViewHolderFactory {
     companion object {
-        @JvmStatic fun build(adapter : ParamsListItemAdapter, dto : ParamsListItemDTO): ParamsListItemAdapter.ParamsListItemViewHolder {
-            return if (dto.type == ParamsListItemDTO.ParamType.COMBOBOX)
-                ParamsListItemViewHolderCombobox(adapter)
-            else if (dto.type == ParamsListItemDTO.ParamType.TOGGLE)
-                ParamsListItemViewHolderToggle(adapter)
-            else
-                ParamsListItemViewHolderSlider(adapter)
+        @JvmStatic fun build(changable: ParamValueChangeable, type: ParamType): ParamsListItemAdapter.ParamsListItemViewHolder {
+            return when (type) {
+                ParamType.COMBOBOX -> ParamsListItemViewHolderCombobox(changable)
+                ParamType.TOGGLE -> ParamsListItemViewHolderToggle(changable)
+                else -> ParamsListItemViewHolderSlider(changable)
+            }
         }
     }
 }

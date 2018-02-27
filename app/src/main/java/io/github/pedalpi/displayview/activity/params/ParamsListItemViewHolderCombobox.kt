@@ -6,7 +6,7 @@ import android.widget.*
 import io.github.pedalpi.displayview.R
 
 
-class ParamsListItemViewHolderCombobox(private val adapter : ParamsListItemAdapter) : ParamsListItemAdapter.ParamsListItemViewHolder {
+class ParamsListItemViewHolderCombobox(private val changeable: ParamValueChangeable): ParamsListItemAdapter.ParamsListItemViewHolder {
 
     private lateinit var name: TextView
     private lateinit var combobox: Spinner
@@ -65,7 +65,7 @@ class ParamsListItemViewHolderCombobox(private val adapter : ParamsListItemAdapt
 
     private fun selected(position: Int) {
         dto.value = position
-        adapter.valueChangeListener(dto)
+        changeable.onParamValueChange(dto)
     }
 
     private fun nextValue() {

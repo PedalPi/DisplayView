@@ -1,7 +1,6 @@
 package io.github.pedalpi.displayview.util
 
 import android.content.Context
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
@@ -51,8 +50,7 @@ abstract class GenericAdapter<DTO, ViewHolder: GenericViewHolder<DTO>>(private v
     }
 
     private fun generateView(viewHolder: ViewHolder): View {
-        val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        return inflater.inflate(viewHolder.layout, null)
+        return context.inflate(viewHolder.layout)
     }
 
     override fun getItem(i: Int): DTO {

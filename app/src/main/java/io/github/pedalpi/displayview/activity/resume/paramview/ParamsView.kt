@@ -1,6 +1,9 @@
 package io.github.pedalpi.displayview.activity.resume.paramview
 
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
+import android.util.Log
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.GridView
 import android.widget.TextView
@@ -8,24 +11,27 @@ import com.github.salomonbrys.kotson.array
 import com.github.salomonbrys.kotson.get
 import com.github.salomonbrys.kotson.string
 import com.google.gson.JsonElement
+import io.github.pedalpi.displayview.activity.params.ParamValueChangeable
+import io.github.pedalpi.displayview.activity.params.ParamsListItemViewHolderFactory
+import io.github.pedalpi.displayview.activity.params.ValueChangedListener
 import io.github.pedalpi.displayview.model.Data
 import io.github.pedalpi.displayview.model.Param
+import io.github.pedalpi.displayview.util.inflate
 
 
-typealias SelectParamListener = (param: Param) -> Unit
+class ParamsView(private val context: Context, private val gridView: GridView, private val effectName: TextView): ParamValueChangeable {
 
-
-class ParamsView(private val context: Context, private val gridView: GridView, private val effectName: TextView) {
+    override var onParamValueChange: ValueChangedListener = {
+        Log.i("O LOCO MEU", "${it.name} - ${it.value}")
+    }
 
     private lateinit var effect: JsonElement
     private lateinit var plugin: JsonElement
     private lateinit var adapter: ParamsGridItemAdapter
 
-    var selectParamListener: SelectParamListener = { }
-
     init {
         gridView.onItemClickListener = OnItemClickListener { parent, view, position, id ->
-            selectParamListener((view.tag as ParamGridItemViewHolder).dto.param)
+            showDialog((view.tag as ParamGridItemViewHolder).dto)
         }
     }
 
@@ -64,5 +70,23 @@ class ParamsView(private val context: Context, private val gridView: GridView, p
     private fun clear() {
         this.gridView.adapter = null
         this.effectName.text = ""
+    }
+
+    private fun showDialog(dto: ParamGridItemDTO) {
+        Log.i("PARAM", dto.param.name)
+
+        val newdto = ParamsListItemViewHolderFactory.build(this, dto.param.type)
+        //newdto.update(context, dto.param)
+
+        val builder = AlertDialog.Builder(context)
+        val view = context.inflate(newdto.layout)
+
+        builder.setView(view)
+        val dialog = builder.create()
+
+        dialog.setOnCancelListener(object : DialogInterface.OnCancelListener {
+            override fun onCancel(p0: DialogInterface?) {}
+        })
+        dialog.show()
     }
 }

@@ -9,10 +9,14 @@ import android.widget.BaseAdapter
 
 typealias ValueChangedListener = (param: ParamsListItemDTO) -> Unit
 
+interface ParamValueChangeable {
+    var onParamValueChange: ValueChangedListener
+}
 
-class ParamsListItemAdapter(private val activity: Activity, private val items: List<ParamsListItemDTO>): BaseAdapter() {
 
-    var valueChangeListener : ValueChangedListener = { }
+class ParamsListItemAdapter(private val activity: Activity, private val items: List<ParamsListItemDTO>): BaseAdapter(), ParamValueChangeable {
+
+    override var onParamValueChange: ValueChangedListener = { }
 
     interface ParamsListItemViewHolder {
         val layout: Int
@@ -26,7 +30,7 @@ class ParamsListItemAdapter(private val activity: Activity, private val items: L
         val view: View
         val viewHolder: ParamsListItemViewHolder
 
-        val originalViewHolder = ParamsListItemViewHolderFactory.build(this, items[position])
+        val originalViewHolder = ParamsListItemViewHolderFactory.build(this, items[position].type)
 
         if (convertView == null || !isSameView(convertView, originalViewHolder)) {
             viewHolder = originalViewHolder

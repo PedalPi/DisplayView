@@ -2,12 +2,8 @@ package io.github.pedalpi.displayview.activity.resume.paramview
 
 import android.content.Context
 import android.view.View
-import io.github.pedalpi.displayview.activity.params.ParamsListItemDTO
 import io.github.pedalpi.displayview.util.GenericAdapter
 import io.github.pedalpi.displayview.util.GenericViewHolder
-
-
-typealias ValueChangedListener = (param: ParamsListItemDTO) -> Unit
 
 
 interface ParamGridItemViewHolder: GenericViewHolder<ParamGridItemDTO> {
@@ -17,7 +13,6 @@ interface ParamGridItemViewHolder: GenericViewHolder<ParamGridItemDTO> {
 
     fun update(paramDTO: ParamGridItemDTO)
 }
-
 
 class ParamsGridItemAdapter(context: Context, items: List<ParamGridItemDTO>)
     : GenericAdapter<ParamGridItemDTO, ParamGridItemViewHolder>(context, items) {

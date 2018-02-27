@@ -56,7 +56,7 @@ class ParamsActivity : AppCompatActivity() {
         this.listView = findViewById(R.id.paramsList) as ListView
         this.adapter = ParamsListItemAdapter(this, generateData(this.effect, this.plugin))
 
-        this.adapter.valueChangeListener = { requestChangeParamValue(it) }
+        this.adapter.onParamValueChange = { requestChangeParamValue(it) }
 
         this.listView.adapter = adapter
         this.adapter.notifyDataSetChanged()
