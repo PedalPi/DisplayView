@@ -4,12 +4,12 @@ import android.app.Instrumentation
 import android.util.Log
 import com.github.salomonbrys.kotson.*
 import com.google.gson.JsonElement
-import io.github.pedalpi.displayview.model.Data
 import io.github.pedalpi.displayview.communication.message.request.Messages
 import io.github.pedalpi.displayview.communication.message.response.EventMessage
 import io.github.pedalpi.displayview.communication.message.response.EventType
 import io.github.pedalpi.displayview.communication.message.response.ResponseMessage
 import io.github.pedalpi.displayview.communication.message.response.ResponseVerb
+import io.github.pedalpi.displayview.model.Data
 
 class ResponseMessageProcessor : Client.OnMessageListener {
     var listener : Client.OnMessageListener = Client.OnMessageListener {}
@@ -75,19 +75,13 @@ class ResponseMessageProcessor : Client.OnMessageListener {
             if (!isCurrentBank(event))
                 return false
 
-            //FIXME
-
         } else if (event.type == EventType.PEDALBOARD) {
             if (!isCurrentPedalboard(event))
                 return false
 
-            //FIXME
-
         } else if (event.type == EventType.EFFECT) {
             if (!isCurrentPedalboard(event))
                 return false
-
-            //FIXME
 
         } else if (event.type == EventType.EFFECT_TOGGLE) {
             if (!isCurrentPedalboard(event))

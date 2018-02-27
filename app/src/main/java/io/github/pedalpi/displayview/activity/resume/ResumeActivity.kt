@@ -102,6 +102,15 @@ class ResumeActivity : AppCompatActivity() {
                     && !progress.isShowing) {
                 update()
 
+            } else if (event.type == EventType.BANK) {
+                Server.sendBroadcast(Messages.CURRENT_PEDALBOARD_DATA)
+
+            } else if (event.type == EventType.PEDALBOARD) {
+                Server.sendBroadcast(Messages.CURRENT_PEDALBOARD_DATA)
+
+            } else if (event.type == EventType.EFFECT) {
+                Server.sendBroadcast(Messages.CURRENT_PEDALBOARD_DATA)
+
             } else if (event.type == EventType.EFFECT_TOGGLE) {
                 val index = event.content["effect"].int
                 runOnUiThread { this.effectsView.updateEffectView(index) }
@@ -109,7 +118,6 @@ class ResumeActivity : AppCompatActivity() {
             } else if (event.type == EventType.PARAM) {
                 val index = event.content["param"].int
                 runOnUiThread { this.paramsView.updateParamView(index) }
-            }
         }
     }
 }
