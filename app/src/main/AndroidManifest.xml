@@ -12,8 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:name="io.github.pedalpi.displayview.communication.server.App">
-        <!--<activity android:name="io.github.pedalpi.displayview.MainActivity">-->
-        <activity android:name="io.github.pedalpi.displayview.resume.ResumeActivity"
+        <!--<activity android:naio.github.pedalpi.displayview.activity.MainActivityvity">-->
+        <activity android:name="io.github.pedalpi.displayview.activity.resume.ResumeActivity"
                   android:screenOrientation="landscape"
                   android:configChanges="orientation|keyboardHidden">
             <intent-filter>
@@ -22,10 +22,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="io.github.pedalpi.displayview.effects.EffectsActivity" />
-        <activity android:name=".params.ParamsActivity" />
+        <activity android:name="io.github.pedalpi.displayview.activity.effects.EffectsActivity" />
+        <activity android:name=".activity.params.ParamsActivity" />
         <!--<activity android:name=".resume.ResumeActivity" />-->
-        <activity android:name=".MainActivity" />
+        <activity android:name=".activity.MainActivity" />
     </application>
 
 </manifest>

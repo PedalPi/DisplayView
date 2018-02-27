@@ -1,4 +1,4 @@
-package io.github.pedalpi.displayview.params
+package io.github.pedalpi.displayview.activity.params
 
 import android.content.Context
 import android.view.View

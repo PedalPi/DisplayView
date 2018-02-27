@@ -1,4 +1,4 @@
-package io.github.pedalpi.displayview.resume.paramview
+package io.github.pedalpi.displayview.activity.resume.paramview
 
 import android.content.Context
 import android.widget.AdapterView.OnItemClickListener
@@ -8,9 +8,8 @@ import com.github.salomonbrys.kotson.array
 import com.github.salomonbrys.kotson.get
 import com.github.salomonbrys.kotson.string
 import com.google.gson.JsonElement
-import io.github.pedalpi.displayview.Data
+import io.github.pedalpi.displayview.model.Data
 import io.github.pedalpi.displayview.model.Param
-import java.util.*
 
 
 typealias SelectParamListener = (param: Param) -> Unit
@@ -26,7 +25,7 @@ class ParamsView(private val context: Context, private val gridView: GridView, p
 
     init {
         gridView.onItemClickListener = OnItemClickListener { parent, view, position, id ->
-            selectParamListener((view.tag as ParamsGridItemAdapter.ParamGridItemViewHolder).dto.param)
+            selectParamListener((view.tag as ParamGridItemViewHolder).dto.param)
         }
     }
 
@@ -53,17 +52,13 @@ class ParamsView(private val context: Context, private val gridView: GridView, p
     }
 
     private fun generateData(effect: JsonElement, plugin: JsonElement): List<ParamGridItemDTO> {
-        val data = ArrayList<ParamGridItemDTO>()
-
+        // TODO Create effect model and moves it
         val params = effect["params"].array
         val pluginControls = plugin["ports"]["control"]["input"].array
 
-        for (i in (0 until params.array.size())) {
-            val param = Param(params[i], pluginControls[i])
-            data.add(ParamGridItemDTO(i, param))
-        }
-
-        return data
+        return (0 until params.array.size())
+                .map { Param(it, params[it], pluginControls[it]) }
+                .map { ParamGridItemDTO(it) }
     }
 
     private fun clear() {

@@ -1,24 +1,20 @@
 package io.github.pedalpi.displayview.activity.resume.paramview
 
-import android.content.Context
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
 import io.github.pedalpi.displayview.R
-import io.github.pedalpi.displayview.activity.params.ParamsListItemAdapter
-import io.github.pedalpi.displayview.activity.params.ParamsListItemDTO
 
-/**
- * https://github.com/p4x3c0/PedalPi-Display-View/blob/master/app/src/main/java/com/pedalpi/pedalpi/component/ParamSeekbar.java
- */
-class ParamsListItemViewHolderProgress: ParamsListItemAdapter.ParamsListItemViewHolder {
 
-    private lateinit var name : TextView
-    private lateinit var value : TextView
+class ParamGridItemViewHolderProgress : ParamGridItemViewHolder {
 
+    override val layout: Int = R.layout.resume_params_grid_item
+
+    private lateinit var name: TextView
+    private lateinit var value: TextView
     private lateinit var progress : ProgressBar
 
-    lateinit var dto: ParamsListItemDTO
+    override lateinit var dto: ParamGridItemDTO
 
     override var row: View? = null
         set(row) {
@@ -29,18 +25,11 @@ class ParamsListItemViewHolderProgress: ParamsListItemAdapter.ParamsListItemView
             progress = row?.findViewById(R.id.paramsGridItemProgress) as ProgressBar
         }
 
-    override fun update(context : Context) {
-        this.update(context, dto)
+    override fun update(paramDTO: ParamGridItemDTO) {
+        this.dto = paramDTO
+
+        name.text = paramDTO.param.name
+        value.text = "${paramDTO.param.valueAsPercent}%"
+        progress.progress = paramDTO.param.valueAsPercent
     }
-
-    override fun update(context: Context, param: ParamsListItemDTO) {
-        dto = param
-
-        name.text = param.name
-        value.text = "${param.percent}%"
-        progress.progress = param.percent
-    }
-
-    override val layout: Int
-        get() = R.layout.resume_params_grid_item
 }

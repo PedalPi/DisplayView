@@ -6,7 +6,9 @@ import com.github.salomonbrys.kotson.array
 import com.github.salomonbrys.kotson.get
 import com.github.salomonbrys.kotson.string
 import com.google.gson.JsonElement
-import io.github.pedalpi.displayview.Data
+import io.github.pedalpi.displayview.activity.resume.effectview.EffectGridItemAdapter
+import io.github.pedalpi.displayview.activity.resume.effectview.EffectGridItemDTO
+import io.github.pedalpi.displayview.model.Data
 import java.util.*
 
 

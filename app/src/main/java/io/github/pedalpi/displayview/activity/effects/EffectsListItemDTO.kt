@@ -1,4 +1,4 @@
-package io.github.pedalpi.displayview.effects
+package io.github.pedalpi.displayview.activity.effects
 
 import com.github.salomonbrys.kotson.bool
 import com.github.salomonbrys.kotson.get

@@ -1,4 +1,4 @@
-package io.github.pedalpi.displayview
+package io.github.pedalpi.displayview.model
 
 import com.google.gson.JsonElement
 import com.google.gson.JsonParser

@@ -1,4 +1,4 @@
-package io.github.pedalpi.displayview.effects
+package io.github.pedalpi.displayview.activity.effects
 
 import android.app.Activity
 import android.content.Context
@@ -13,9 +13,7 @@ import io.github.pedalpi.displayview.R
 typealias ToggleStatusListener = (effect: EffectsListItemDTO) -> Unit
 typealias SelectEffectListener = (effect: EffectsListItemDTO) -> Unit
 
-/**
- * Based in https://github.com/betranthanh/android-KotlinListView
- */
+
 class EffectsListItemAdapter(private val activity: Activity, private val items: List<EffectsListItemDTO>): BaseAdapter() {
 
     var toggleStatusListener : ToggleStatusListener = { }

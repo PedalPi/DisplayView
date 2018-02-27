@@ -1,6 +1,6 @@
 package io.github.pedalpi.displayview.communication.message.request
 
-import io.github.pedalpi.displayview.Data
+import io.github.pedalpi.displayview.model.Data
 
 class Messages {
     companion object {

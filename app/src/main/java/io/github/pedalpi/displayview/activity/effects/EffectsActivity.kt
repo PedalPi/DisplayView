@@ -1,4 +1,4 @@
-package io.github.pedalpi.displayview.effects
+package io.github.pedalpi.displayview.activity.effects
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,15 +10,15 @@ import com.github.salomonbrys.kotson.array
 import com.github.salomonbrys.kotson.get
 import com.github.salomonbrys.kotson.int
 import com.github.salomonbrys.kotson.string
-import io.github.pedalpi.displayview.Data
 import io.github.pedalpi.displayview.R
+import io.github.pedalpi.displayview.activity.params.ParamsActivity
 import io.github.pedalpi.displayview.communication.message.request.Messages
 import io.github.pedalpi.displayview.communication.message.response.EventMessage
 import io.github.pedalpi.displayview.communication.message.response.EventType
 import io.github.pedalpi.displayview.communication.message.response.ResponseMessage
 import io.github.pedalpi.displayview.communication.message.response.ResponseVerb
 import io.github.pedalpi.displayview.communication.server.Server
-import io.github.pedalpi.displayview.params.ParamsActivity
+import io.github.pedalpi.displayview.model.Data
 import java.util.*
 
 

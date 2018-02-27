@@ -1,4 +1,4 @@
-package io.github.pedalpi.displayview.params
+package io.github.pedalpi.displayview.activity.params
 
 import com.github.salomonbrys.kotson.*
 import com.google.gson.JsonElement

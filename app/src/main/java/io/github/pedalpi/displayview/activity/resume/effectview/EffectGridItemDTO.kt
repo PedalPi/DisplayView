@@ -1,4 +1,4 @@
-package io.github.pedalpi.displayview.resume.effectview
+package io.github.pedalpi.displayview.activity.resume.effectview
 
 import com.github.salomonbrys.kotson.bool
 import com.github.salomonbrys.kotson.get

@@ -1,4 +1,4 @@
-package io.github.pedalpi.displayview.resume
+package io.github.pedalpi.displayview.activity.resume
 
 import android.widget.TextView
 import com.github.salomonbrys.kotson.get

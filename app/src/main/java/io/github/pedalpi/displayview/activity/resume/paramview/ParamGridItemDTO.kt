@@ -1,8 +1,8 @@
-package io.github.pedalpi.displayview.resume.paramview
+package io.github.pedalpi.displayview.activity.resume.paramview
 
 import io.github.pedalpi.displayview.model.Param
 
 
-class ParamGridItemDTO(val index : Int, val param: Param) {
-    lateinit var viewHolder: ParamsGridItemAdapter.ParamGridItemViewHolder
+class ParamGridItemDTO(val param: Param) {
+    lateinit var viewHolder: ParamGridItemViewHolder
 }

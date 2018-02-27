@@ -1,4 +1,4 @@
-package io.github.pedalpi.displayview.params
+package io.github.pedalpi.displayview.activity.params
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -10,16 +10,16 @@ import com.github.salomonbrys.kotson.get
 import com.github.salomonbrys.kotson.int
 import com.github.salomonbrys.kotson.string
 import com.google.gson.JsonElement
-import io.github.pedalpi.displayview.Data
 import io.github.pedalpi.displayview.R
+import io.github.pedalpi.displayview.activity.effects.EffectsActivity
 import io.github.pedalpi.displayview.communication.message.request.Messages
 import io.github.pedalpi.displayview.communication.message.response.EventMessage
 import io.github.pedalpi.displayview.communication.message.response.EventType
 import io.github.pedalpi.displayview.communication.message.response.ResponseMessage
 import io.github.pedalpi.displayview.communication.message.response.ResponseVerb
 import io.github.pedalpi.displayview.communication.server.Server
-import io.github.pedalpi.displayview.effects.EffectsActivity
-import io.github.pedalpi.displayview.popToRoot
+import io.github.pedalpi.displayview.model.Data
+import io.github.pedalpi.displayview.util.popToRoot
 
 
 class ParamsActivity : AppCompatActivity() {

@@ -4,7 +4,7 @@ import android.app.Instrumentation
 import android.util.Log
 import com.github.salomonbrys.kotson.*
 import com.google.gson.JsonElement
-import io.github.pedalpi.displayview.Data
+import io.github.pedalpi.displayview.model.Data
 import io.github.pedalpi.displayview.communication.message.request.Messages
 import io.github.pedalpi.displayview.communication.message.response.EventMessage
 import io.github.pedalpi.displayview.communication.message.response.EventType

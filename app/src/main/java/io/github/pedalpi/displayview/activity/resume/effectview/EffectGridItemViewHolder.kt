@@ -1,4 +1,4 @@
-package io.github.pedalpi.displayview.resume.effectview
+package io.github.pedalpi.displayview.activity.resume.effectview
 
 import android.content.res.Resources
 import android.graphics.drawable.Drawable
@@ -6,17 +6,24 @@ import android.support.v4.content.res.ResourcesCompat
 import android.view.View
 import android.widget.Button
 import io.github.pedalpi.displayview.R
+import io.github.pedalpi.displayview.resume.effectview.EffectSelectable
+import io.github.pedalpi.displayview.util.GenericViewHolder
 
 
-class EffectGridItemViewHolder(row: View, private val selectable: EffectSelectable, val resources: Resources) {
+class EffectGridItemViewHolder(private val selectable: EffectSelectable, val resources: Resources): GenericViewHolder<EffectGridItemDTO> {
 
-    val name = row.findViewById(R.id.effectsGridItemName) as Button
+    override val layout: Int = R.layout.resume_effects_grid_item
 
-    private lateinit var dto: EffectGridItemDTO
+    private lateinit var name: Button
 
-    init {
-        name.setOnClickListener { selectable.onEffectSelected(dto.effect) }
-    }
+    override lateinit var dto: EffectGridItemDTO
+
+    override var row: View? = null
+        set(row) {
+            field = row
+            name = row?.findViewById(R.id.effectsGridItemName) as Button
+            name.setOnClickListener { selectable.onEffectSelected(dto.effect) }
+        }
 
     fun update(effect: EffectGridItemDTO) {
         dto = effect

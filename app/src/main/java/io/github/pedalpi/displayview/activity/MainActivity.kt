@@ -1,4 +1,4 @@
-package io.github.pedalpi.displayview
+package io.github.pedalpi.displayview.activity
 
 import android.app.ProgressDialog
 import android.content.Context
@@ -10,13 +10,15 @@ import android.widget.Button
 import android.widget.TextView
 import com.github.salomonbrys.kotson.get
 import com.github.salomonbrys.kotson.string
+import io.github.pedalpi.displayview.R
+import io.github.pedalpi.displayview.activity.effects.EffectsActivity
 import io.github.pedalpi.displayview.communication.message.request.Messages
 import io.github.pedalpi.displayview.communication.message.response.EventMessage
 import io.github.pedalpi.displayview.communication.message.response.EventType
 import io.github.pedalpi.displayview.communication.message.response.ResponseMessage
 import io.github.pedalpi.displayview.communication.message.response.ResponseVerb
 import io.github.pedalpi.displayview.communication.server.Server
-import io.github.pedalpi.displayview.effects.EffectsActivity
+import io.github.pedalpi.displayview.model.Data
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 
 

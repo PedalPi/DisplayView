@@ -1,4 +1,4 @@
-package io.github.pedalpi.displayview.params
+package io.github.pedalpi.displayview.activity.params
 
 import android.app.Activity
 import android.content.Context
@@ -9,9 +9,7 @@ import android.widget.BaseAdapter
 
 typealias ValueChangedListener = (param: ParamsListItemDTO) -> Unit
 
-/**
- * Based in https://github.com/betranthanh/android-KotlinListView
- */
+
 class ParamsListItemAdapter(private val activity: Activity, private val items: List<ParamsListItemDTO>): BaseAdapter() {
 
     var valueChangeListener : ValueChangedListener = { }

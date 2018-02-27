@@ -1,20 +1,20 @@
-package io.github.pedalpi.displayview.resume
+package io.github.pedalpi.displayview.activity.resume
 
 import android.app.ProgressDialog
 import android.content.Context
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.WindowManager
-import io.github.pedalpi.displayview.Data
 import io.github.pedalpi.displayview.R
+import io.github.pedalpi.displayview.activity.resume.paramview.ParamsView
 import io.github.pedalpi.displayview.communication.message.request.Messages
 import io.github.pedalpi.displayview.communication.message.response.EventMessage
 import io.github.pedalpi.displayview.communication.message.response.EventType
 import io.github.pedalpi.displayview.communication.message.response.ResponseMessage
 import io.github.pedalpi.displayview.communication.message.response.ResponseVerb
 import io.github.pedalpi.displayview.communication.server.Server
+import io.github.pedalpi.displayview.model.Data
 import io.github.pedalpi.displayview.resume.effectview.EffectsView
-import io.github.pedalpi.displayview.resume.paramview.ParamsView
 import kotlinx.android.synthetic.main.activity_resume.*
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 
