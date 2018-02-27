@@ -19,11 +19,16 @@ import io.github.pedalpi.displayview.util.generateCustomDialog
 import io.github.pedalpi.displayview.util.inflate
 
 
-class ParamsView(private val context: Context, private val gridView: GridView, private val effectName: TextView): ParamValueChangeable {
+class OnDialogParamValueChange(private val paramsView: ParamsView): ParamValueChangeable {
+    override var onParamValueChange: ValueChangedListener
+        get() = {
+            paramsView.updateParamView(it.index)
+            paramsView.onParamValueChange(it)
+        }
+        set(value) {}
+}
 
-    override var onParamValueChange: ValueChangedListener = {
-        Log.i("O LOCO MEU", "${it.name} - ${it.value}")
-    }
+class ParamsView(private val context: Context, private val gridView: GridView, private val effectName: TextView) {
 
     private lateinit var effect: JsonElement
     private lateinit var plugin: JsonElement
@@ -35,6 +40,10 @@ class ParamsView(private val context: Context, private val gridView: GridView, p
             showDialog(ParamListItemDTO(viewHolder.dto.param))
         }
     }
+
+    private val onValueChangeDialog = OnDialogParamValueChange(this)
+
+    var onParamValueChange: ValueChangedListener = {}
 
     fun updateWithPedalboard(pedalboard: JsonElement) {
         if (pedalboard["effects"].array.size() > 0)
@@ -63,9 +72,16 @@ class ParamsView(private val context: Context, private val gridView: GridView, p
         val params = effect["params"].array
         val pluginControls = plugin["ports"]["control"]["input"].array
 
-        return (0 until params.array.size())
-                .map { Param(it, params[it], pluginControls[it]) }
-                .map { ParamGridItemDTO(it) }
+        try {
+            return (0 until params.array.size())
+                    .map { Param(it, params[it], pluginControls[it]) }
+                    .map { ParamGridItemDTO(it) }
+        } catch (e: IndexOutOfBoundsException) {
+            Log.wtf("ERRO", "Params: ${effect["params"].array.size()}")
+            Log.wtf("ERRO", "PluginParams: ${plugin["ports"]["control"]["input"].array.size()}")
+
+            throw e
+        }
     }
 
     private fun clear() {
@@ -76,7 +92,7 @@ class ParamsView(private val context: Context, private val gridView: GridView, p
     private fun showDialog(item: ParamListItemDTO) {
         Log.i("PARAM", item.param.name)
 
-        val viewHolder = ParamListItemViewHolderFactory.build(this, item.param.type)
+        val viewHolder = ParamListItemViewHolderFactory.build(onValueChangeDialog, item.param.type)
 
         val view = context.inflate(viewHolder.layout)
 
@@ -85,5 +101,9 @@ class ParamsView(private val context: Context, private val gridView: GridView, p
         viewHolder.update(context, item)
 
         context.generateCustomDialog(view).show()
+    }
+
+    fun updateParamView(paramIndex: Int) {
+        adapter.update(paramIndex)
     }
 }

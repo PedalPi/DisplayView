@@ -48,7 +48,7 @@ class EffectsView(private val context: Context, private val gridView: GridView) 
         return elements
     }
 
-    fun updateEffect(effectIndex: Int) {
+    fun updateEffectView(effectIndex: Int) {
         this.adapter[effectIndex].viewHolder.update()
     }
 }

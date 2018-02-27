@@ -25,4 +25,8 @@ class ParamsGridItemAdapter(context: Context, items: List<ParamGridItemDTO>)
         item.viewHolder = viewHolder
         viewHolder.update(item)
     }
+
+    fun update(paramIndex: Int) {
+        this.notifyDataSetChanged()
+    }
 }

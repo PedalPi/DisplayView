@@ -18,6 +18,7 @@ import io.github.pedalpi.displayview.communication.message.response.ResponseMess
 import io.github.pedalpi.displayview.communication.message.response.ResponseVerb
 import io.github.pedalpi.displayview.communication.server.Server
 import io.github.pedalpi.displayview.model.Data
+import io.github.pedalpi.displayview.model.Param
 import io.github.pedalpi.displayview.resume.effectview.EffectsView
 import kotlinx.android.synthetic.main.activity_resume.*
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
@@ -45,8 +46,8 @@ class ResumeActivity : AppCompatActivity() {
 
         this.paramsView = ParamsView(this, resumeEffectParams, resumeEffectName)
 
-        //this.paramsView.onParamValueChange { updateParamValue(it) }
-        //this.paramsView.onEffectStatusToggle { requestChangeParamValue(it) }
+        this.paramsView.onParamValueChange = { requestChangeParamValue(it) }
+        //this.paramsView.onEffectStatusToggle = { requestChangeParamValue(it) }
 
         Server.setListener({ onMessage(it) })
         this.update()
@@ -75,6 +76,10 @@ class ResumeActivity : AppCompatActivity() {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
     }
 
+    private fun requestChangeParamValue(param: Param) {
+        Server.sendBroadcast(Messages.Companion.PARAM_VALUE_CHANGE(param.index, param))
+    }
+
     private fun onMessage(message : ResponseMessage) {
         if (message.verb == ResponseVerb.ERROR) {
             runOnUiThread({
@@ -99,7 +104,11 @@ class ResumeActivity : AppCompatActivity() {
 
             } else if (event.type == EventType.EFFECT_TOGGLE) {
                 val index = event.content["effect"].int
-                runOnUiThread { this.effectsView.updateEffect(index) }
+                runOnUiThread { this.effectsView.updateEffectView(index) }
+
+            } else if (event.type == EventType.PARAM) {
+                val index = event.content["param"].int
+                runOnUiThread { this.paramsView.updateParamView(index) }
             }
         }
     }
