@@ -1,7 +1,6 @@
-package io.github.pedalpi.displayview.activity.resume.effectview
+package io.github.pedalpi.displayview.activity.resume.effectsview
 
 import android.content.Context
-import io.github.pedalpi.displayview.resume.effectview.EffectSelectable
 import io.github.pedalpi.displayview.util.GenericAdapter
 
 

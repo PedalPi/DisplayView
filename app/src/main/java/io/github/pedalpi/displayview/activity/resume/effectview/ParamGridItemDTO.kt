@@ -1,4 +1,4 @@
-package io.github.pedalpi.displayview.activity.resume.paramview
+package io.github.pedalpi.displayview.activity.resume.effectview
 
 import io.github.pedalpi.displayview.model.Param
 

@@ -8,8 +8,6 @@ import android.support.v7.app.AppCompatActivity
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.TextView
-import com.github.salomonbrys.kotson.get
-import com.github.salomonbrys.kotson.string
 import io.github.pedalpi.displayview.R
 import io.github.pedalpi.displayview.activity.effects.EffectsActivity
 import io.github.pedalpi.displayview.communication.message.request.Messages
@@ -70,12 +68,12 @@ class MainActivity : AppCompatActivity() {
 
         } else if (message.request isEquivalentTo Messages.CURRENT_PEDALBOARD_DATA
          || message.verb == ResponseVerb.EVENT && EventMessage(message.content).type == EventType.CURRENT) {
-            val id = Data.pedalboardIndex
+            val id = Data.currentPedalboard.index
             val pedalboard = Data.currentPedalboard
 
             runOnUiThread({
                 number.text = if (id < 10) "0"+id else id.toString()
-                name.text = pedalboard["name"].string
+                name.text = pedalboard.name
             })
         }
     }

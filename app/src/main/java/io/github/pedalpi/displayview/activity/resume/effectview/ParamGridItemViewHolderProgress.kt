@@ -1,4 +1,4 @@
-package io.github.pedalpi.displayview.activity.resume.paramview
+package io.github.pedalpi.displayview.activity.resume.effectview
 
 import android.view.View
 import android.widget.ProgressBar
@@ -8,7 +8,7 @@ import io.github.pedalpi.displayview.R
 
 class ParamGridItemViewHolderProgress : ParamGridItemViewHolder {
 
-    override val layout: Int = R.layout.resume_params_grid_item
+    override val layout: Int = R.layout.resume_param_grid_item
 
     private lateinit var name: TextView
     private lateinit var value: TextView

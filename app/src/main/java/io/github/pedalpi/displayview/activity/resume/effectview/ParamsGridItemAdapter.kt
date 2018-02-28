@@ -1,4 +1,4 @@
-package io.github.pedalpi.displayview.activity.resume.paramview
+package io.github.pedalpi.displayview.activity.resume.effectview
 
 import android.content.Context
 import android.view.View

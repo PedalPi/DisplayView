@@ -10,6 +10,7 @@ import io.github.pedalpi.displayview.communication.message.response.EventType
 import io.github.pedalpi.displayview.communication.message.response.ResponseMessage
 import io.github.pedalpi.displayview.communication.message.response.ResponseVerb
 import io.github.pedalpi.displayview.model.Data
+import io.github.pedalpi.displayview.model.Pedalboard
 
 class ResponseMessageProcessor : Client.OnMessageListener {
     var listener : Client.OnMessageListener = Client.OnMessageListener {}
@@ -25,6 +26,9 @@ class ResponseMessageProcessor : Client.OnMessageListener {
             onResponseMessage(message)
 
         else if (message.verb == ResponseVerb.EVENT)
+            onEventMessage(message)
+
+        else if (message.verb == ResponseVerb.ERROR)
             onEventMessage(message)
 
         else
@@ -48,8 +52,7 @@ class ResponseMessageProcessor : Client.OnMessageListener {
             val pedalboardIndex = message.content["pedalboard"].int
 
             Data.bankIndex = message.content["bank"]["index"].int
-            Data.pedalboardIndex = pedalboardIndex
-            Data.currentPedalboard = message.content["bank"]["pedalboards"][pedalboardIndex]
+            Data.currentPedalboard = Pedalboard(pedalboardIndex, message.content["bank"]["pedalboards"][pedalboardIndex])
 
         } else if (message.request isEquivalentTo Messages.PLUGINS) {
             val map = HashMap<String, JsonElement>()
@@ -68,8 +71,8 @@ class ResponseMessageProcessor : Client.OnMessageListener {
 
         if (event.type == EventType.CURRENT) {
             Data.bankIndex = event.content["bank"].int
-            Data.pedalboardIndex = event.content["pedalboard"].int
-            Data.currentPedalboard = event.content["value"]
+            val pedalboardIndex = event.content["pedalboard"].int
+            Data.currentPedalboard = Pedalboard(pedalboardIndex, event.content["value"])
 
         } else if (event.type == EventType.BANK) {
             if (!isCurrentBank(event))
@@ -89,8 +92,8 @@ class ResponseMessageProcessor : Client.OnMessageListener {
 
             val index = event.content["effect"].int
 
-            val effect = Data.currentPedalboard["effects"][index]
-            effect["active"] = !effect["active"].bool
+            val effect = Data.currentPedalboard.effects[index]
+            effect.active = !effect.active
 
         } else if (event.type == EventType.PARAM) {
             if (!isCurrentPedalboard(event))
@@ -99,8 +102,8 @@ class ResponseMessageProcessor : Client.OnMessageListener {
             val effectIndex = event.content["effect"].int
             val paramIndex = event.content["param"].int
 
-            val effect = Data.currentPedalboard["effects"][effectIndex]
-            effect["params"][paramIndex]["value"] = event.content["value"]
+            val effect = Data.currentPedalboard.effects[effectIndex]
+            effect.params[paramIndex].value = event.content["value"].number
 
         } else if (event.type == EventType.CONNECTION) {
             return false
@@ -111,7 +114,7 @@ class ResponseMessageProcessor : Client.OnMessageListener {
 
     private fun isCurrentPedalboard(event: EventMessage): Boolean {
         return isCurrentBank(event)
-            && event.content["pedalboard"].int == Data.pedalboardIndex
+            && event.content["pedalboard"].int == Data.currentPedalboard.index
     }
 
     private fun isCurrentBank(event: EventMessage) =

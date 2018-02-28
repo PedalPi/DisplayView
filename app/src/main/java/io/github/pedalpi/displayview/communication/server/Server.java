@@ -53,7 +53,6 @@ public class Server {
         new Thread(client.lissen()).start();
 
         client.send(SystemMessages.CONNECTED);
-        client.send(Messages.CURRENT_PEDALBOARD_DATA);
         client.send(Messages.PLUGINS);
 
         this.clients.add(client);

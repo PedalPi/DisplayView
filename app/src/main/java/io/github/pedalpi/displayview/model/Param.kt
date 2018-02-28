@@ -11,9 +11,9 @@ enum class ParamType {
 }
 
 
-class Param(val index: Int, val param: JsonElement, val plugin: JsonElement) {
+class Param(val index: Int, val effect: Effect, val param: JsonElement, val data: JsonElement) {
 
-    val name: String = plugin["name"].string
+    val name: String = data["name"].string
     var value: Number
         get() = param["value"].number
         set(value) {
@@ -23,8 +23,8 @@ class Param(val index: Int, val param: JsonElement, val plugin: JsonElement) {
     val minimum: Double = param["minimum"].double
     val maximum: Double = param["maximum"].double
 
-    val options: List<String> = plugin["scalePoints"].array.map { data -> data["label"].string }
-    private val properties = plugin["properties"].array.map { value -> value.string }
+    val options: List<String> = data["scalePoints"].array.map { data -> data["label"].string }
+    private val properties = data["properties"].array.map { value -> value.string }
 
     val type : ParamType = when {
         properties.contains("enumeration") -> ParamType.COMBOBOX

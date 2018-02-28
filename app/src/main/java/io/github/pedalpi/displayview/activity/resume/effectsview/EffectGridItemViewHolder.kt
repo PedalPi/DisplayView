@@ -1,4 +1,4 @@
-package io.github.pedalpi.displayview.activity.resume.effectview
+package io.github.pedalpi.displayview.activity.resume.effectsview
 
 import android.content.res.Resources
 import android.graphics.drawable.Drawable
@@ -6,13 +6,12 @@ import android.support.v4.content.res.ResourcesCompat
 import android.view.View
 import android.widget.Button
 import io.github.pedalpi.displayview.R
-import io.github.pedalpi.displayview.resume.effectview.EffectSelectable
 import io.github.pedalpi.displayview.util.GenericViewHolder
 
 
 class EffectGridItemViewHolder(private val selectable: EffectSelectable, val resources: Resources): GenericViewHolder<EffectGridItemDTO> {
 
-    override val layout: Int = R.layout.resume_effects_grid_item
+    override val layout: Int = R.layout.resume_effect_grid_item
 
     private lateinit var name: Button
 
@@ -31,12 +30,12 @@ class EffectGridItemViewHolder(private val selectable: EffectSelectable, val res
 
     fun update(effect: EffectGridItemDTO) {
         dto = effect
-        name.text = dto.name
+        name.text = dto.effect.name
 
         if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN)
-            name.setBackgroundDrawable(drawable(effect.active))
+            name.setBackgroundDrawable(drawable(effect.effect.active))
         else
-            name.background = drawable(effect.active)
+            name.background = drawable(effect.effect.active)
     }
 
     private fun drawable(active: Boolean): Drawable? {

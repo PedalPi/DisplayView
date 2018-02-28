@@ -1,14 +1,12 @@
 package io.github.pedalpi.displayview.activity.resume
 
 import android.widget.TextView
-import com.github.salomonbrys.kotson.get
-import com.github.salomonbrys.kotson.string
-import com.google.gson.JsonElement
+import io.github.pedalpi.displayview.model.Pedalboard
 
 
 class TitleView(private var number: TextView, private var name: TextView) {
-    fun update(index: Int, pedalboard: JsonElement) {
-        number.text = if (index < 10) "0$index" else "$index"
-        name.text = pedalboard["name"].string
+    fun update(pedalboard: Pedalboard) {
+        number.text = if (pedalboard.index < 10) "0${pedalboard.index}" else "${pedalboard.index}"
+        name.text = pedalboard.name
     }
 }

@@ -10,7 +10,8 @@ import com.github.salomonbrys.kotson.get
 import com.github.salomonbrys.kotson.int
 import com.github.salomonbrys.kotson.string
 import io.github.pedalpi.displayview.R
-import io.github.pedalpi.displayview.activity.resume.paramview.ParamsView
+import io.github.pedalpi.displayview.activity.resume.effectsview.EffectsView
+import io.github.pedalpi.displayview.activity.resume.effectview.EffectView
 import io.github.pedalpi.displayview.communication.message.request.Messages
 import io.github.pedalpi.displayview.communication.message.response.EventMessage
 import io.github.pedalpi.displayview.communication.message.response.EventType
@@ -18,8 +19,8 @@ import io.github.pedalpi.displayview.communication.message.response.ResponseMess
 import io.github.pedalpi.displayview.communication.message.response.ResponseVerb
 import io.github.pedalpi.displayview.communication.server.Server
 import io.github.pedalpi.displayview.model.Data
+import io.github.pedalpi.displayview.model.Effect
 import io.github.pedalpi.displayview.model.Param
-import io.github.pedalpi.displayview.resume.effectview.EffectsView
 import kotlinx.android.synthetic.main.activity_resume.*
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 
@@ -28,7 +29,7 @@ class ResumeActivity : AppCompatActivity() {
 
     private lateinit var title: TitleView
     private lateinit var effectsView: EffectsView
-    private lateinit var paramsView: ParamsView
+    private lateinit var effectView: EffectView
 
     private lateinit var progress: ProgressDialog
 
@@ -42,12 +43,12 @@ class ResumeActivity : AppCompatActivity() {
 
         this.title = TitleView(resumePedalboardNumber, resumePedalboardName)
         this.effectsView = EffectsView(this, resumePedalboardEffects)
-        this.effectsView.onEffectSelected = { paramsView.update(it) }
+        this.effectsView.onEffectSelected = { effectView.update(it) }
 
-        this.paramsView = ParamsView(this, resumeEffectParams, resumeEffectName)
+        this.effectView = EffectView(this, resumeEffectParams, resumeEffectName, resumeEffectStatus)
 
-        this.paramsView.onParamValueChange = { requestChangeParamValue(it) }
-        //this.paramsView.onEffectStatusToggle = { requestChangeParamValue(it) }
+        this.effectView.onParamValueChange = { requestChangeParamValue(it) }
+        this.effectView.onEffectToggleStatus = { onEffectChangeStatus(it) }
 
         Server.setListener({ onMessage(it) })
         this.update()
@@ -58,14 +59,14 @@ class ResumeActivity : AppCompatActivity() {
 
     private fun update() {
         runOnUiThread({
-            this.title.update(Data.pedalboardIndex, Data.currentPedalboard)
+            this.title.update(Data.currentPedalboard)
             this.effectsView.update(Data.currentPedalboard)
-            this.paramsView.updateWithPedalboard(Data.currentPedalboard)
+            this.effectView.updateWithPedalboard(Data.currentPedalboard)
         })
     }
 
     private fun showLoading() {
-        this.progress = ProgressDialog(this)
+        progress = ProgressDialog(this)
         progress.setTitle("Connecting")
         progress.setMessage("Reading plugins data")
         progress.setCancelable(false)
@@ -76,8 +77,17 @@ class ResumeActivity : AppCompatActivity() {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
     }
 
+    private fun onEffectChangeStatus(effect: Effect) {
+        runOnUiThread { this.effectsView.updateEffectView(effect) }
+        requestToggleEffectStatus(effect)
+    }
+
+    private fun requestToggleEffectStatus(effect: Effect) {
+        Server.sendBroadcast(Messages.CURRENT_PEDALBOARD_TOGGLE_EFFECT(effect))
+    }
+
     private fun requestChangeParamValue(param: Param) {
-        Server.sendBroadcast(Messages.Companion.PARAM_VALUE_CHANGE(param.index, param))
+        Server.sendBroadcast(Messages.PARAM_VALUE_CHANGE(param.effect.index, param))
     }
 
     private fun onMessage(message : ResponseMessage) {
@@ -87,19 +97,21 @@ class ResumeActivity : AppCompatActivity() {
             })
 
         } else if (message.request isEquivalentTo Messages.PLUGINS) {
-            progress.dismiss()
-            update()
+            Server.sendBroadcast(Messages.CURRENT_PEDALBOARD_DATA)
+            runOnUiThread({
+                progress.setMessage("Reading current pedalboard data")
+            })
 
         } else if (message.request isEquivalentTo Messages.CURRENT_PEDALBOARD_DATA) {
             if (progress.isShowing)
-                return
+                progress.dismiss()
+
             update()
 
         } else if (message.verb == ResponseVerb.EVENT) {
             val event = EventMessage(message.content)
 
-            if (event.type == EventType.CURRENT
-                    && !progress.isShowing) {
+            if (event.type == EventType.CURRENT) {
                 update()
 
             } else if (event.type == EventType.BANK) {
@@ -112,12 +124,20 @@ class ResumeActivity : AppCompatActivity() {
                 Server.sendBroadcast(Messages.CURRENT_PEDALBOARD_DATA)
 
             } else if (event.type == EventType.EFFECT_TOGGLE) {
-                val index = event.content["effect"].int
-                runOnUiThread { this.effectsView.updateEffectView(index) }
+                this.updateEffectStatus(event.content["effect"].int)
 
             } else if (event.type == EventType.PARAM) {
                 val index = event.content["param"].int
-                runOnUiThread { this.paramsView.updateParamView(index) }
+                runOnUiThread { this.effectView.updateParamView(index) }
+            }
         }
+    }
+
+    private fun updateEffectStatus(index: Int) {
+        val effect = Data.currentPedalboard.effects[index]
+
+        runOnUiThread { this.effectsView.updateEffectView(effect) }
+        if (this.effectView.effect == effect)
+            runOnUiThread { this.effectView.updateEffectStatusView() }
     }
 }

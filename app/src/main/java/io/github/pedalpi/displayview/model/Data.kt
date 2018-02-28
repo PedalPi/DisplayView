@@ -15,16 +15,15 @@ object Data {
         }
     """)
 
-    var currentPedalboard = JsonParser().parse("""
+    var currentPedalboard = Pedalboard(0, JsonParser().parse("""
         {
             "name": "Connecting",
             "connections": [],
             "data": {},
             "effects": []
         }
-    """)
+    """))
 
-    var pedalboardIndex: Int = 0
     var bankIndex: Int = 0
 
     var plugins: Map<String, JsonElement>? = null

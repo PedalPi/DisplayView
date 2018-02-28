@@ -1,16 +1,14 @@
 package io.github.pedalpi.displayview.activity.effects
 
-import com.github.salomonbrys.kotson.bool
-import com.github.salomonbrys.kotson.get
-import com.github.salomonbrys.kotson.string
-import com.google.gson.JsonElement
+import io.github.pedalpi.displayview.model.Effect
 
-class EffectsListItemDTO(val index : Int, private val effect: JsonElement, private val plugin: JsonElement) {
+class EffectsListItemDTO(val effect: Effect) {
 
+    @Deprecated("Use effect.active instead", ReplaceWith("effect.active"))
     val status: Boolean
-        get() = effect["active"].bool
+        get() = effect.active
 
-    val name = "$index - ${plugin["name"].string}"
+    val name = "${effect.index} - ${effect.name}"
 
     lateinit var viewHolder: EffectListItemViewHolder
 }
