@@ -9,7 +9,7 @@ import io.github.pedalpi.displayview.R
 /**
  * https://github.com/p4x3c0/PedalPi-Display-View/blob/master/app/src/main/java/com/pedalpi/pedalpi/component/ParamSeekbar.java
  */
-class ParamListItemViewHolderSlider(private val changeable: ParamValueChangeable) : ParamListItemViewHolder {
+class ParamListItemViewHolderSlider(private val notifier: ParamValueChangeNotifier) : ParamListItemViewHolder {
 
     override val layout: Int = R.layout.param_list_item_slider
 
@@ -20,7 +20,7 @@ class ParamListItemViewHolderSlider(private val changeable: ParamValueChangeable
 
     override lateinit var dto: ParamListItemDTO
 
-    override var row: View? = null
+    override var view: View? = null
         set(row) {
             field = row
             name   = row?.findViewById(R.id.paramsListItemName) as TextView
@@ -38,7 +38,7 @@ class ParamListItemViewHolderSlider(private val changeable: ParamValueChangeable
 
                     value.text = "$progress%"
                     dto.param.value = dto.param.calculateValueByPercent(progress)
-                    changeable.onParamValueChange(dto.param)
+                    notifier.onParamValueChange(dto.param)
                 }
             })
         }

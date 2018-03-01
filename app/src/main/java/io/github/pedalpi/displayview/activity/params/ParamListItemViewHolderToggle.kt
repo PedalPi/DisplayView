@@ -9,7 +9,7 @@ import io.github.pedalpi.displayview.R
 /**
  * https://github.com/p4x3c0/PedalPi-Display-View/blob/master/app/src/main/java/com/pedalpi/pedalpi/component/ParamSeekbar.java
  */
-class ParamListItemViewHolderToggle(private val changeable: ParamValueChangeable) : ParamListItemViewHolder {
+class ParamListItemViewHolderToggle(private val notifier: ParamValueChangeNotifier) : ParamListItemViewHolder {
 
     override val layout: Int = R.layout.param_list_item_toggle
 
@@ -18,7 +18,7 @@ class ParamListItemViewHolderToggle(private val changeable: ParamValueChangeable
 
     override lateinit var dto: ParamListItemDTO
 
-    override var row: View? = null
+    override var view: View? = null
         set(row) {
             field = row
             name   = row?.findViewById(R.id.paramsListItemName) as TextView
@@ -26,7 +26,7 @@ class ParamListItemViewHolderToggle(private val changeable: ParamValueChangeable
 
             toggle.setOnClickListener {
                 dto.param.value = if (toggle.isChecked) 1 else 0
-                changeable.onParamValueChange(dto.param)
+                notifier.onParamValueChange(dto.param)
             }
         }
 

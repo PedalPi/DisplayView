@@ -20,6 +20,9 @@ class Param(val index: Int, val effect: Effect, val param: JsonElement, val data
             param["value"] = value
         }
 
+    val optionValue: String
+        get() = options[this.value.toInt()]
+
     val minimum: Double = param["minimum"].double
     val maximum: Double = param["maximum"].double
 

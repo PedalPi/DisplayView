@@ -7,7 +7,7 @@ import io.github.pedalpi.displayview.util.GenericViewHolder
 
 typealias ValueChangedListener = (param: Param) -> Unit
 
-interface ParamValueChangeable {
+interface ParamValueChangeNotifier {
     var onParamValueChange: ValueChangedListener
 }
 
@@ -19,7 +19,7 @@ interface ParamListItemViewHolder : GenericViewHolder<ParamListItemDTO> {
 
 class ParamsListItemAdapter(private val context: Context, items: List<ParamListItemDTO>)
     : GenericAdapter<ParamListItemDTO, ParamListItemViewHolder>(context, items),
-        ParamValueChangeable {
+        ParamValueChangeNotifier {
 
     override var onParamValueChange: ValueChangedListener = { }
 

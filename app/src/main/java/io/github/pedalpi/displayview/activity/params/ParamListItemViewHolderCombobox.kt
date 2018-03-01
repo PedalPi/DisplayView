@@ -10,7 +10,7 @@ import io.github.pedalpi.displayview.R
 import io.github.pedalpi.displayview.util.generateSpinnerDropdownAdapter
 
 
-class ParamListItemViewHolderCombobox(private val changeable: ParamValueChangeable): ParamListItemViewHolder {
+class ParamListItemViewHolderCombobox(private val notifier: ParamValueChangeNotifier): ParamListItemViewHolder {
 
     override val layout: Int = R.layout.param_list_item_combobox
 
@@ -21,7 +21,7 @@ class ParamListItemViewHolderCombobox(private val changeable: ParamValueChangeab
 
     override lateinit var dto: ParamListItemDTO
 
-    override var row: View? = null
+    override var view: View? = null
         set(row) {
             field = row
             name = row?.findViewById(R.id.paramsListItemName) as TextView
@@ -64,7 +64,7 @@ class ParamListItemViewHolderCombobox(private val changeable: ParamValueChangeab
 
     private fun selected(position: Int) {
         dto.param.value = position
-        changeable.onParamValueChange(dto.param)
+        notifier.onParamValueChange(dto.param)
     }
 
     private fun nextValue() {

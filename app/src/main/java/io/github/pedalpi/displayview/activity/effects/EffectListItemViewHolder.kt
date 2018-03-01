@@ -16,11 +16,11 @@ class EffectListItemViewHolder(private val adapter : EffectsListItemAdapter): Ge
 
     override lateinit var dto: EffectsListItemDTO
 
-    override var row: View? = null
+    override var view: View? = null
         set(value) {
-            field = row
-            name = row?.findViewById(R.id.effectsListItemName) as Button
-            status = row?.findViewById(R.id.effectsListItemStatus) as ToggleButton
+            field = view
+            name = view?.findViewById(R.id.effectsListItemName) as Button
+            status = view?.findViewById(R.id.effectsListItemStatus) as ToggleButton
 
             name.setOnClickListener { adapter.selectEffectListener(dto) }
             status.setOnClickListener { adapter.toggleStatusListener(dto) }

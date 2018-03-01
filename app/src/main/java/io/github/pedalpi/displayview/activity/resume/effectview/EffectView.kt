@@ -1,25 +1,20 @@
 package io.github.pedalpi.displayview.activity.resume.effectview
 
 import android.content.Context
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.GridView
 import android.widget.TextView
 import android.widget.ToggleButton
-import io.github.pedalpi.displayview.activity.params.ParamListItemDTO
-import io.github.pedalpi.displayview.activity.params.ParamListItemViewHolderFactory
-import io.github.pedalpi.displayview.activity.params.ParamValueChangeable
+import io.github.pedalpi.displayview.activity.params.ParamValueChangeNotifier
 import io.github.pedalpi.displayview.activity.params.ValueChangedListener
 import io.github.pedalpi.displayview.model.Effect
 import io.github.pedalpi.displayview.model.Pedalboard
-import io.github.pedalpi.displayview.util.generateCustomDialog
-import io.github.pedalpi.displayview.util.inflate
 
 
 typealias EffectToggleStatusListener = (effect: Effect) -> Unit
 
-class OnDialogParamValueChange(private val paramsView: EffectView): ParamValueChangeable {
+class EffectViewParamValueChangeNotifier(private val paramsView: EffectView): ParamValueChangeNotifier {
     override var onParamValueChange: ValueChangedListener
         get() = {
             paramsView.updateParamView(it.index)
@@ -38,12 +33,18 @@ class EffectView(
     var effect: Effect? = null
     private lateinit var adapter: ParamsGridItemAdapter
 
+    private val valueChangeNotifier = EffectViewParamValueChangeNotifier(this)
+
+    var onParamValueChange: ValueChangedListener = {}
+    var onEffectToggleStatus: EffectToggleStatusListener = {}
+    val paramDialog = ParamDialog(context, valueChangeNotifier)
+
     init {
         clear()
 
         gridView.onItemClickListener = OnItemClickListener { parent, view, position, id ->
             val viewHolder = view.tag as ParamGridItemViewHolder
-            showDialog(ParamListItemDTO(viewHolder.dto.param))
+            this.paramDialog.show(viewHolder.dto.param)
         }
 
         effectStatus.setOnClickListener {
@@ -51,11 +52,6 @@ class EffectView(
             onEffectToggleStatus(effect!!)
         }
     }
-
-    private val onValueChangeDialog = OnDialogParamValueChange(this)
-
-    var onParamValueChange: ValueChangedListener = {}
-    var onEffectToggleStatus: EffectToggleStatusListener = {}
 
     /**
      * Change the view for the first effect of the pedalboard
@@ -81,7 +77,7 @@ class EffectView(
     }
 
     private fun populateViews(effect: Effect) {
-        this.adapter = ParamsGridItemAdapter(context, generateData(effect))
+        this.adapter = ParamsGridItemAdapter(context, valueChangeNotifier, generateData(effect))
 
         this.gridView.adapter = adapter
         this.adapter.notifyDataSetChanged()
@@ -97,25 +93,12 @@ class EffectView(
         this.update(null)
     }
 
-    private fun showDialog(item: ParamListItemDTO) {
-        Log.i("PARAM", item.param.name)
-
-        val viewHolder = ParamListItemViewHolderFactory.build(onValueChangeDialog, item.param.type)
-
-        val view = context.inflate(viewHolder.layout)
-
-        viewHolder.row = view
-        item.viewHolder = viewHolder
-        viewHolder.update(context, item)
-
-        context.generateCustomDialog(view).show()
-    }
-
     /**
      * Update the param view
      */
     fun updateParamView(paramIndex: Int) {
         adapter.update(paramIndex)
+        paramDialog.update()
     }
 
     /**

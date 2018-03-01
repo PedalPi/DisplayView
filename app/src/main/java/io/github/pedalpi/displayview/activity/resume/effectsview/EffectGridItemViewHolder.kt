@@ -17,7 +17,7 @@ class EffectGridItemViewHolder(private val selectable: EffectSelectable, val res
 
     override lateinit var dto: EffectGridItemDTO
 
-    override var row: View? = null
+    override var view: View? = null
         set(row) {
             field = row
             name = row?.findViewById(R.id.effectsGridItemName) as Button

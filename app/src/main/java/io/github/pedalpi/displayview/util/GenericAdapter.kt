@@ -9,7 +9,7 @@ import android.widget.BaseAdapter
 interface GenericViewHolder<DTO> {
     var dto: DTO
     val layout: Int
-    var row: View?
+    var view: View?
 }
 
 /**
@@ -29,7 +29,7 @@ abstract class GenericAdapter<DTO, ViewHolder: GenericViewHolder<DTO>>(private v
             view = generateView(viewHolder)
 
             view.tag = viewHolder
-            viewHolder.row = view
+            viewHolder.view = view
 
         } else {
             view = convertView

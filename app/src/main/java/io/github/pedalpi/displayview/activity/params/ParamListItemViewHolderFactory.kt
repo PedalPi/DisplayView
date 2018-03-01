@@ -5,11 +5,11 @@ import io.github.pedalpi.displayview.model.ParamType
 
 class ParamListItemViewHolderFactory {
     companion object {
-        @JvmStatic fun build(changable: ParamValueChangeable, type: ParamType): ParamListItemViewHolder {
+        @JvmStatic fun build(notifier: ParamValueChangeNotifier, type: ParamType): ParamListItemViewHolder {
             return when (type) {
-                ParamType.COMBOBOX -> ParamListItemViewHolderCombobox(changable)
-                ParamType.TOGGLE -> ParamListItemViewHolderToggle(changable)
-                else -> ParamListItemViewHolderSlider(changable)
+                ParamType.COMBOBOX -> ParamListItemViewHolderCombobox(notifier)
+                ParamType.TOGGLE -> ParamListItemViewHolderToggle(notifier)
+                else -> ParamListItemViewHolderSlider(notifier)
             }
         }
     }

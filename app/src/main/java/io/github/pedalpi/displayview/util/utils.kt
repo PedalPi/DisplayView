@@ -1,6 +1,7 @@
 package io.github.pedalpi.displayview.util
 
 import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
@@ -26,7 +27,7 @@ fun Context.generateSpinnerDropdownAdapter(options: List<String>): ArrayAdapter<
     return adapter
 }
 
-fun Context.generateCustomDialog(view: View): AlertDialog {
+fun Context.generateCustomDialog(view: View): Dialog {
     val builder = AlertDialog.Builder(this)
     builder.setView(view)
     builder.setCancelable(true)

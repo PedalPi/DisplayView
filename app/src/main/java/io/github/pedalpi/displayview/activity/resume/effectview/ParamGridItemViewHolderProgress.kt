@@ -4,6 +4,7 @@ import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
 import io.github.pedalpi.displayview.R
+import io.github.pedalpi.displayview.model.ParamType
 
 
 class ParamGridItemViewHolderProgress : ParamGridItemViewHolder {
@@ -16,7 +17,7 @@ class ParamGridItemViewHolderProgress : ParamGridItemViewHolder {
 
     override lateinit var dto: ParamGridItemDTO
 
-    override var row: View? = null
+    override var view: View? = null
         set(row) {
             field = row
             name   = row?.findViewById(R.id.paramsGridItemName) as TextView
@@ -29,7 +30,15 @@ class ParamGridItemViewHolderProgress : ParamGridItemViewHolder {
         this.dto = paramDTO
 
         name.text = paramDTO.param.name
-        value.text = "${paramDTO.param.valueAsPercent}%"
+        value.text = this.valueText
         progress.progress = paramDTO.param.valueAsPercent
     }
+
+    private val valueText: String
+        get() {
+            return when {
+                dto.param.type == ParamType.COMBOBOX -> dto.param.optionValue
+                else -> "${dto.param.valueAsPercent}%"
+            }
+        }
 }
