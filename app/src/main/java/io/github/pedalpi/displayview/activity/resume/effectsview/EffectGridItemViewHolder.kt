@@ -1,15 +1,15 @@
 package io.github.pedalpi.displayview.activity.resume.effectsview
 
-import android.content.res.Resources
-import android.graphics.drawable.Drawable
-import android.support.v4.content.res.ResourcesCompat
 import android.view.View
 import android.widget.Button
 import io.github.pedalpi.displayview.R
+import io.github.pedalpi.displayview.util.EffectColorUtil
 import io.github.pedalpi.displayview.util.GenericViewHolder
+import io.github.pedalpi.displayview.util.setBackgroundTintListCompat
+import io.github.pedalpi.displayview.util.setTextColorCompat
 
 
-class EffectGridItemViewHolder(private val selectable: EffectSelectable, val resources: Resources): GenericViewHolder<EffectGridItemDTO> {
+class EffectGridItemViewHolder(private val notifier: EffectSelectNotifier): GenericViewHolder<EffectGridItemDTO> {
 
     override val layout: Int = R.layout.resume_effect_grid_item
 
@@ -21,25 +21,37 @@ class EffectGridItemViewHolder(private val selectable: EffectSelectable, val res
         set(row) {
             field = row
             name = row?.findViewById(R.id.effectsGridItemName) as Button
-            name.setOnClickListener { selectable.onEffectSelected(dto.effect) }
+            name.setOnClickListener {
+                notifier.onEffectSelected(dto.effect)
+            }
         }
 
     fun update() {
         this.update(this.dto)
     }
 
-    fun update(effect: EffectGridItemDTO) {
-        dto = effect
+    fun update(dto: EffectGridItemDTO) {
+        this.dto = dto
         name.text = dto.effect.name
 
-        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN)
-            name.setBackgroundDrawable(drawable(effect.effect.active))
-        else
-            name.background = drawable(effect.effect.active)
+        updateColor()
     }
 
-    private fun drawable(active: Boolean): Drawable? {
-        val drawable = if (active) R.drawable.button_effect_active else R.drawable.button_effect_not_active
-        return ResourcesCompat.getDrawable(resources, drawable, null)
+    var isSelected: Boolean = false
+        set(value) {
+            field = value
+            updateColor()
+        }
+
+    private fun updateColor() {
+        val color = dto.effect.active.toString()
+        if (isSelected) {
+            name.setTextColorCompat(R.color.yellow)
+            //name.setBackgroundColorCompat(EffectColorUtil.unselectableColor[color]!!)
+            name.setBackgroundTintListCompat(EffectColorUtil.unselectableColor[color]!!)
+        } else {
+            name.setTextColorCompat(R.color.textColorDark)
+            name.setBackgroundTintListCompat(EffectColorUtil.selectableColor[color]!!)
+        }
     }
 }

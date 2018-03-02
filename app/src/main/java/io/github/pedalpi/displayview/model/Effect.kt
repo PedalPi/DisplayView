@@ -33,8 +33,8 @@ class Effect(val index: Int, val effect: JsonElement) {
                     .map { Param(it, this, params[it], pluginControls[it]) }
 
         } catch (e: IndexOutOfBoundsException) {
-            Log.wtf("ERRO", "Params: ${params.array.size()}")
-            Log.wtf("ERRO", "PluginParams: ${pluginControls.array.size()}")
+            Log.wtf("ERROR", "Params: ${params.array.size()}")
+            Log.wtf("ERROR", "PluginParams: ${pluginControls.array.size()}")
 
             throw e
         }

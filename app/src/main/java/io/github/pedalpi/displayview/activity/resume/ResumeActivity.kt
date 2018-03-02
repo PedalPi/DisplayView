@@ -61,7 +61,8 @@ class ResumeActivity : AppCompatActivity() {
         runOnUiThread({
             this.title.update(Data.currentPedalboard)
             this.effectsView.update(Data.currentPedalboard)
-            this.effectView.updateWithPedalboard(Data.currentPedalboard)
+            this.effectView.clear()
+            //this.effectView.updateWithPedalboard(Data.currentPedalboard)
         })
     }
 

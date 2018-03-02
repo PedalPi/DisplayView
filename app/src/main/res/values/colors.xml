@@ -9,14 +9,11 @@
     <color name="colorBackgroundLight">#ECF0F1</color>
     <color name="colorBackgroundDark">#000</color>
 
-    <!--
-        https://material.io/guidelines/style/color.html#color-color-palette
-    -->
-    <color name="colorButtonActivePressed">#66BB6A</color>
-    <color name="colorButtonActiveFocus">#A5D6A7</color>
-    <color name="colorButtonActive">#C8E6C9</color>
+    <color name="yellow">#FFEE58</color>
 
-    <color name="colorButtonNotActivePressed">#EF5350</color>
-    <color name="colorButtonNotActiveFocus">#E57373</color>
-    <color name="colorButtonNotActive">#EF9A9A</color>
+    <!-- https://material.io/color -->
+    <color name="buttonGreen">#1B5E20</color>
+    <color name="buttonGreenDark">#003300</color>
+    <color name="buttonRed">#B71C1C</color>
+    <color name="buttonRedDark">#7f0000</color>
 </resources>

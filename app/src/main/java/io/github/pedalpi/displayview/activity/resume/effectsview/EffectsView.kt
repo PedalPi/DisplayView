@@ -6,13 +6,13 @@ import io.github.pedalpi.displayview.model.Effect
 import io.github.pedalpi.displayview.model.Pedalboard
 
 
-interface EffectSelectable {
+interface EffectSelectNotifier {
     var onEffectSelected: SelectEffectListener
 }
 
 typealias SelectEffectListener = (effect: Effect) -> Unit
 
-class EffectsView(private val context: Context, private val gridView: GridView) : EffectSelectable {
+class EffectsView(private val context: Context, private val gridView: GridView) : EffectSelectNotifier {
 
     private lateinit var pedalboard: Pedalboard
     private lateinit var adapter: EffectGridItemAdapter
@@ -21,7 +21,6 @@ class EffectsView(private val context: Context, private val gridView: GridView) 
 
     fun update(pedalboard: Pedalboard) {
         this.pedalboard = pedalboard
-
         populateViews()
     }
 

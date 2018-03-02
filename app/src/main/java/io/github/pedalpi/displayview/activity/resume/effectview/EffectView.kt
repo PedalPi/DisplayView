@@ -87,7 +87,7 @@ class EffectView(
         return effect.params.map { ParamGridItemDTO(it) }
     }
 
-    private fun clear() {
+    fun clear() {
         this.gridView.adapter = null
 
         this.update(null)
