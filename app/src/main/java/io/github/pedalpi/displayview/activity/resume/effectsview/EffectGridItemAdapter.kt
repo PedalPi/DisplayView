@@ -12,6 +12,7 @@ class EffectGridItemAdapter(private val notifier: EffectSelectNotifier, private 
     private val selectedNotifier = object: EffectSelectNotifier {
         override var onEffectSelected: SelectEffectListener = {
             select(it.index)
+            notifyDataSetChanged()
             notifier.onEffectSelected(it)
         }
     }

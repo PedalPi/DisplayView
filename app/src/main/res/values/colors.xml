@@ -13,7 +13,5 @@
 
     <!-- https://material.io/color -->
     <color name="buttonGreen">#1B5E20</color>
-    <color name="buttonGreenDark">#003300</color>
     <color name="buttonRed">#B71C1C</color>
-    <color name="buttonRedDark">#7f0000</color>
 </resources>

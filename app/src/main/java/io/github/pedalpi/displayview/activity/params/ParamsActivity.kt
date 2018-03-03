@@ -43,7 +43,7 @@ class ParamsActivity : AppCompatActivity() {
 
         populateViews()
 
-        Server.setListener({ onMessage(it) })
+        Server.setOnMessageListener({ onMessage(it) })
     }
 
     private fun populateViews() {

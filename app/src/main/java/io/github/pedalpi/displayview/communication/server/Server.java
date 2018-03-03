@@ -14,12 +14,14 @@ import io.github.pedalpi.displayview.communication.message.request.RequestMessag
 import io.github.pedalpi.displayview.communication.message.request.SystemMessages;
 
 public class Server {
+
     private static final Server instance = new Server();
 
     private ServerSocket connection;
     private List<Client> clients = new LinkedList<>();
 
     private ResponseMessageProcessor listener = new ResponseMessageProcessor();
+    private Client.OnConnectedListener onConnectedListener = () -> {};
 
     public static Server getInstance() {
         return instance;
@@ -56,6 +58,8 @@ public class Server {
         client.send(Messages.PLUGINS);
 
         this.clients.add(client);
+
+        onConnectedListener.onConnected();
     }
 
     public static void sendBroadcast(RequestMessage message) {
@@ -67,7 +71,11 @@ public class Server {
         }
     }
 
-    public static void setListener(Client.OnMessageListener listener) {
+    public static void setOnMessageListener(Client.OnMessageListener listener) {
         instance.listener.setListener(listener);
+    }
+
+    public static void setOnConnectedListener(Client.OnConnectedListener onConnectedListener) {
+        instance.onConnectedListener = onConnectedListener;
     }
 }

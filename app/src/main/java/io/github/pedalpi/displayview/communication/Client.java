@@ -19,6 +19,10 @@ public class Client {
         void onMessage(ResponseMessage message);
     }
 
+    public interface OnConnectedListener {
+        void onConnected();
+    }
+
     private boolean open = false;
 
     private Socket connection;

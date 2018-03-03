@@ -23,7 +23,8 @@ class ParamGridItemViewHolderToggle(private val notifier: ParamValueChangeNotifi
             toggle = row?.findViewById(R.id.paramGridItemToggle) as ToggleButton
 
             toggle.setOnClickListener {
-                this.dto.param.value = if (this.dto.param.value == 1) 0 else 1
+                this.dto.param.value = if (this.dto.param.value.toInt() == 1) 0 else 1
+
                 notifier.onParamValueChange(this.dto.param)
             }
         }

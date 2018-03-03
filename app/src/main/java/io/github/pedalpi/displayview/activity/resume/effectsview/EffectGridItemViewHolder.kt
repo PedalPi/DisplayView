@@ -44,14 +44,10 @@ class EffectGridItemViewHolder(private val notifier: EffectSelectNotifier): Gene
         }
 
     private fun updateColor() {
-        val color = dto.effect.active.toString()
-        if (isSelected) {
-            name.setTextColorCompat(R.color.yellow)
-            //name.setBackgroundColorCompat(EffectColorUtil.unselectableColor[color]!!)
-            name.setBackgroundTintListCompat(EffectColorUtil.unselectableColor[color]!!)
-        } else {
-            name.setTextColorCompat(R.color.textColorDark)
-            name.setBackgroundTintListCompat(EffectColorUtil.selectableColor[color]!!)
-        }
+        val colorIdentifier = dto.effect.active.toString()
+
+        name.setTextColorCompat(if (isSelected) R.color.yellow else R.color.textColorDark)
+        name.isEnabled = !isSelected
+        name.setBackgroundTintListCompat(EffectColorUtil.selectableColor[colorIdentifier]!!)
     }
 }

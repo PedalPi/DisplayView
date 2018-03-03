@@ -40,7 +40,7 @@ public final class BackgroundTints {
         int i = 0;
 
         states[i] = DISABLED_STATE_SET;
-        colors[i] = getDisabledButtonBackgroundColor(context);
+        colors[i] = getDisabledButtonBackgroundColor(context, backgroundColor);
         i++;
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
@@ -63,9 +63,10 @@ public final class BackgroundTints {
 
     /**
      * Returns the theme-dependent ARGB background color to use for disabled buttons.
+     * Adapted to use the backgroundColor instead the default button color theme
      */
     @ColorInt
-    private static int getDisabledButtonBackgroundColor(Context context) {
+    private static int getDisabledButtonBackgroundColor(Context context, int backgroundColor) {
         // Extract the disabled alpha to apply to the button using the context's theme.
         // (0.26f for light themes and 0.30f for dark themes).
         final TypedValue tv = new TypedValue();
@@ -74,10 +75,8 @@ public final class BackgroundTints {
 
         // Use the disabled alpha factor and the button's default normal color
         // to generate the button's disabled background color.
-        final int colorButtonNormal = getThemeAttrColor(context, R.attr.colorButtonNormal);
-        final int originalAlpha = Color.alpha(colorButtonNormal);
-        return ColorUtils.setAlphaComponent(
-                colorButtonNormal, Math.round(originalAlpha * disabledAlpha));
+        final int originalAlpha = Color.alpha(backgroundColor);
+        return ColorUtils.setAlphaComponent(backgroundColor, Math.round(originalAlpha * disabledAlpha));
     }
 
     /**

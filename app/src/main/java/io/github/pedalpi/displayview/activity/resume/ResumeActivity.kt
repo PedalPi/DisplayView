@@ -50,7 +50,8 @@ class ResumeActivity : AppCompatActivity() {
         this.effectView.onParamValueChange = { requestChangeParamValue(it) }
         this.effectView.onEffectToggleStatus = { onEffectChangeStatus(it) }
 
-        Server.setListener({ onMessage(it) })
+        Server.setOnMessageListener { onMessage(it) }
+        Server.setOnConnectedListener { runOnUiThread { progress.setMessage("Reading plugins data") } }
         this.update()
 
         if (!Data.isDataLoaded())
@@ -69,7 +70,7 @@ class ResumeActivity : AppCompatActivity() {
     private fun showLoading() {
         progress = ProgressDialog(this)
         progress.setTitle("Connecting")
-        progress.setMessage("Reading plugins data")
+        progress.setMessage("Waiting connection")
         progress.setCancelable(false)
         progress.show()
     }

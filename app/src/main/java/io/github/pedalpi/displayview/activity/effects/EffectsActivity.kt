@@ -65,7 +65,7 @@ class EffectsActivity : AppCompatActivity() {
     public override fun onResume() {
         super.onResume()
 
-        Server.setListener({ onMessage(it) })
+        Server.setOnMessageListener({ onMessage(it) })
     }
 
     override fun onSupportNavigateUp(): Boolean {

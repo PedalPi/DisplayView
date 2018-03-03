@@ -54,8 +54,12 @@ fun View.setBackgroundColorCompat(@ColorInt color: Int) {
     this.setBackgroundColor(this.context.getColorCompat(color))
 }
 
+/**
+ * Set the background of a view based in the color defined
+ *
+ */
 fun View.setBackgroundTintListCompat(@ColorRes color: Int) {
-    val colorInt = ContextCompat.getColor(this.context, color)
+    val colorInt = this.context.getColorCompat(color)
     val backgroundTintList = BackgroundTints.forColoredButton(this.context, colorInt)
 
     ViewCompat.setBackgroundTintList(this, backgroundTintList)

@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         number.text = "--"
         name.text = "CONNECTING"
 
-        Server.setListener({ onMessage(it) })
+        Server.setOnMessageListener({ onMessage(it) })
 
         val button = findViewById(R.id.button) as Button
         button.setOnClickListener({ goToEffectsList() })
@@ -88,7 +88,7 @@ class MainActivity : AppCompatActivity() {
     public override fun onResume() {
         super.onResume()
 
-        Server.setListener({ onMessage(it) })
+        Server.setOnMessageListener({ onMessage(it) })
         Server.sendBroadcast(Messages.CURRENT_PEDALBOARD_DATA)
     }
 }
