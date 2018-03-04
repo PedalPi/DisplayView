@@ -15,8 +15,9 @@
         android:name="io.github.pedalpi.displayview.communication.server.App">
         <!--<activity android:naio.github.pedalpi.displayview.activity.MainActivityvity">-->
         <activity android:name="io.github.pedalpi.displayview.activity.resume.ResumeActivity"
-                  ><!-- android:screenOrientation="landscape"
-                  android:configChanges="orientation|keyboardHidden" -->
+            android:screenOrientation="sensorLandscape"
+            android:configChanges="orientation|keyboardHidden">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
