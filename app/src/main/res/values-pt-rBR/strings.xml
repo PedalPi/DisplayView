@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="configureHelperTitle">Estamos quase lá!</string>
+    <string name="configureHelperJustification">Para que este dispositivo receba os dados de um Pedal Pi através da USB, é necessário que o modo de depuração USB em ferramentas do desenvolvedor esteja habilitado.</string>
+    <string name="configureHelperWarning">Aviso: Esta configuração é uma ferramenta utilizada no desenvolvimento de aplicativos, por isso permite acesso amplo aos dados e configurações de seu equipamento. Certifique-se de não conectar este equipamento em algum computador desconhecido com a opção habilitada.</string>
+</resources>

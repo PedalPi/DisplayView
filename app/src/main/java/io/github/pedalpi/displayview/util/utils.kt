@@ -1,10 +1,12 @@
 package io.github.pedalpi.displayview.util
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Drawable
+import android.provider.Settings
 import android.support.annotation.ColorInt
 import android.support.annotation.ColorRes
 import android.support.annotation.DrawableRes
@@ -79,3 +81,13 @@ private fun View.getDrawable(@DrawableRes drawable: Int): Drawable? {
 fun TextView.setTextColorCompat(@ColorInt color: Int) {
     this.setTextColor(this.context.getColorCompat(color))
 }
+
+val Activity.isDebugActive: Boolean
+    get() {
+        val ADB_ENABLED = if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.KITKAT)
+            android.provider.Settings.Secure.ADB_ENABLED
+        else
+            android.provider.Settings.Global.ADB_ENABLED
+
+        return 1 == Settings.Secure.getInt(this.contentResolver, ADB_ENABLED, 0)
+    }

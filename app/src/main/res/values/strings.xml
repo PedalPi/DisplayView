@@ -1,3 +1,6 @@
 <resources>
-    <string name="app_name">Pedal Pi - Display</string>
+    <string name="app_name" translatable="false">Pedal Pi - Display View</string>
+    <string name="configureHelperTitle">We are almost there!</string>
+    <string name="configureHelperJustification">For this device to receive data from a Pedal Pi via USB, it is necessary that the USB debugging mode in developer tools is enabled.</string>
+    <string name="configureHelperWarning">Warning: This configuration is a tool used in application development, so it allows you to access broadly the data and settings of your equipment. Make sure you do not connect this equipment to an unknown computer with the option enabled.</string>
 </resources>

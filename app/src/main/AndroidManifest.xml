@@ -27,6 +27,7 @@
         <activity android:name=".activity.params.ParamsActivity" />
         <!--<activity android:name=".resume.ResumeActivity" />-->
         <activity android:name=".activity.MainActivity" />
+        <activity android:name=".activity.ConfigureInformationActivity" />
     </application>
 
 </manifest>
