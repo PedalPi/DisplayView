@@ -1,7 +1,7 @@
 package io.github.pedalpi.pedalpi_display.communication;
 
 public class MessageProcessor {
-
+    //https://github.com/SalomonBrys/Kotson#accessing-object-fields-via-property-delegates
 }
 
 /*
