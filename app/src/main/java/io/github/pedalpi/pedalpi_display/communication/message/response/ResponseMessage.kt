@@ -1,11 +1,15 @@
 package io.github.pedalpi.pedalpi_display.communication.message.response
 
-import org.json.JSONObject
+import com.google.gson.JsonElement
+import com.google.gson.JsonParser
+import io.github.pedalpi.pedalpi_display.communication.message.request.RequestMessage
 import java.io.Serializable
 
-class ResponseMessage(val type: ResponseVerb, val content: JSONObject) : Serializable {
+class ResponseMessage(val type: ResponseVerb, val content: JsonElement) : Serializable {
 
-    constructor(type: ResponseVerb, content: String) : this(type, JSONObject(content))
+    var request : RequestMessage? = null
+
+    constructor(type: ResponseVerb, content: String) : this(type, JsonParser().parse(content))
 
     override fun toString(): String {
         return type.toString() + " " + content.toString()
