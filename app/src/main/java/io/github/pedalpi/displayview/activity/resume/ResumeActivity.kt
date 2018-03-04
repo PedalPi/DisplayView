@@ -37,6 +37,8 @@ class ResumeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_resume)
 
+        progress = ProgressDialog(this)
+
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         supportActionBar?.hide()
@@ -52,10 +54,11 @@ class ResumeActivity : AppCompatActivity() {
 
         Server.setOnMessageListener { onMessage(it) }
         Server.setOnConnectedListener { runOnUiThread { progress.setMessage("Reading plugins data") } }
+        Server.setOnDisconnectedListener { runOnUiThread { showLoading("Trying to reconnect") } }
         this.update()
 
         if (!Data.isDataLoaded())
-            showLoading()
+            showLoading("Waiting connection")
     }
 
     private fun update() {
@@ -67,10 +70,9 @@ class ResumeActivity : AppCompatActivity() {
         })
     }
 
-    private fun showLoading() {
-        progress = ProgressDialog(this)
+    private fun showLoading(message: String) {
         progress.setTitle("Connecting")
-        progress.setMessage("Waiting connection")
+        progress.setMessage(message)
         progress.setCancelable(false)
         progress.show()
     }

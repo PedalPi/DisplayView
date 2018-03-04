@@ -9,11 +9,12 @@ import io.github.pedalpi.displayview.communication.message.response.EventMessage
 import io.github.pedalpi.displayview.communication.message.response.EventType
 import io.github.pedalpi.displayview.communication.message.response.ResponseMessage
 import io.github.pedalpi.displayview.communication.message.response.ResponseVerb
+import io.github.pedalpi.displayview.communication.server.Server
 import io.github.pedalpi.displayview.model.Data
 import io.github.pedalpi.displayview.model.Pedalboard
 
-class ResponseMessageProcessor : Client.OnMessageListener {
-    var listener : Client.OnMessageListener = Client.OnMessageListener {}
+class ResponseMessageProcessor : Server.OnMessageListener {
+    var listener : Server.OnMessageListener = Server.OnMessageListener { }
 
     override fun onMessage(message: ResponseMessage) {
         Log.i("Response", "${message.request.identifier} - ${message.verb}")
