@@ -1,23 +1,29 @@
-package io.github.pedalpi.displayview
+package io.github.pedalpi.displayview.model
 
 import com.google.gson.JsonElement
 import com.google.gson.JsonParser
 
 object Data {
-    private val VOID_PLUGIN: JsonElement = JsonParser().parse("""
+    private val VOID_PLUGIN = JsonParser().parse("""
         {
-            "label": "Plugin not found",
+            "name": "Plugin not found",
             "ports": {
                 "audio": [],
                 "midi": [],
-                "control": []
+                "control": {"input": []}
             }
         }
     """)
 
-    lateinit var currentPedalboard: JsonElement
+    var currentPedalboard = Pedalboard(0, JsonParser().parse("""
+        {
+            "name": "Connecting",
+            "connections": [],
+            "data": {},
+            "effects": []
+        }
+    """))
 
-    var pedalboardIndex: Int = 0
     var bankIndex: Int = 0
 
     var plugins: Map<String, JsonElement>? = null

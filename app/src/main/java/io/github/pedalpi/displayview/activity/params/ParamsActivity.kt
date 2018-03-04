@@ -1,31 +1,30 @@
-package io.github.pedalpi.displayview.params
+package io.github.pedalpi.displayview.activity.params
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.WindowManager
 import android.widget.ListView
 import android.widget.Toast
-import com.github.salomonbrys.kotson.array
 import com.github.salomonbrys.kotson.get
 import com.github.salomonbrys.kotson.int
 import com.github.salomonbrys.kotson.string
-import com.google.gson.JsonElement
-import io.github.pedalpi.displayview.Data
 import io.github.pedalpi.displayview.R
+import io.github.pedalpi.displayview.activity.effects.EffectsActivity
 import io.github.pedalpi.displayview.communication.message.request.Messages
 import io.github.pedalpi.displayview.communication.message.response.EventMessage
 import io.github.pedalpi.displayview.communication.message.response.EventType
 import io.github.pedalpi.displayview.communication.message.response.ResponseMessage
 import io.github.pedalpi.displayview.communication.message.response.ResponseVerb
 import io.github.pedalpi.displayview.communication.server.Server
-import io.github.pedalpi.displayview.effects.EffectsActivity
-import io.github.pedalpi.displayview.popToRoot
+import io.github.pedalpi.displayview.model.Data
+import io.github.pedalpi.displayview.model.Effect
+import io.github.pedalpi.displayview.model.Param
+import io.github.pedalpi.displayview.util.popToRoot
 
 
 class ParamsActivity : AppCompatActivity() {
     private var index: Int = 0
-    private lateinit var effect: JsonElement
-    private lateinit var plugin: JsonElement
+    private lateinit var effect: Effect
 
     private lateinit var listView: ListView
     private lateinit var adapter: ParamsListItemAdapter
@@ -38,40 +37,27 @@ class ParamsActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         this.index = intent.getIntExtra(EffectsActivity.EFFECT_INDEX, 0)
-        this.effect = Data.currentPedalboard["effects"][index]
-        this.plugin = Data.plugin(effect["plugin"].string)
+        this.effect = Data.currentPedalboard.effects[index]
 
-        title = title(this.plugin)
+        title = this.effect.name
 
         populateViews()
 
-        Server.setListener({ onMessage(it) })
-    }
-
-    private fun title(plugin: JsonElement): String {
-        return plugin["name"].string
+        Server.setOnMessageListener({ onMessage(it) })
     }
 
     private fun populateViews() {
         this.listView = findViewById(R.id.paramsList) as ListView
-        this.adapter = ParamsListItemAdapter(this, generateData(this.effect, this.plugin))
+        this.adapter = ParamsListItemAdapter(this, generateData(this.effect))
 
-        this.adapter.valueChangeListener = { requestChangeParamValue(it) }
+        this.adapter.onParamValueChange = { requestChangeParamValue(it) }
 
         this.listView.adapter = adapter
         this.adapter.notifyDataSetChanged()
     }
 
-    private fun generateData(effect: JsonElement, plugin: JsonElement): List<ParamsListItemDTO> {
-        val data = ArrayList<ParamsListItemDTO>()
-
-        val params = effect["params"].array
-        val pluginControls = plugin["ports"]["control"]["input"].array
-
-        for (i in (0 until params.array.size()))
-            data.add(ParamsListItemDTO(i, params[i], pluginControls[i]))
-
-        return data
+    private fun generateData(effect: Effect): List<ParamListItemDTO> {
+        return effect.params.map { ParamListItemDTO(it) }
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -79,8 +65,8 @@ class ParamsActivity : AppCompatActivity() {
         return true
     }
 
-    private fun requestChangeParamValue(param: ParamsListItemDTO) {
-        Server.sendBroadcast(Messages.Companion.PARAM_VALUE_CHANGE(this.index, param.index, param.value))
+    private fun requestChangeParamValue(param: Param) {
+        Server.sendBroadcast(Messages.Companion.PARAM_VALUE_CHANGE(this.index, param))
     }
 
     private fun onMessage(message: ResponseMessage) {
@@ -104,7 +90,7 @@ class ParamsActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateParamValue(dto: ParamsListItemDTO) {
+    private fun updateParamValue(dto: ParamListItemDTO) {
         runOnUiThread {
             dto.viewHolder.update(applicationContext)
         }

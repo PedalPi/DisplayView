@@ -1,4 +1,4 @@
-package io.github.pedalpi.displayview.effects
+package io.github.pedalpi.displayview.activity.effects
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,20 +6,18 @@ import android.support.v7.app.AppCompatActivity
 import android.view.WindowManager
 import android.widget.ListView
 import android.widget.Toast
-import com.github.salomonbrys.kotson.array
 import com.github.salomonbrys.kotson.get
 import com.github.salomonbrys.kotson.int
 import com.github.salomonbrys.kotson.string
-import io.github.pedalpi.displayview.Data
 import io.github.pedalpi.displayview.R
+import io.github.pedalpi.displayview.activity.params.ParamsActivity
 import io.github.pedalpi.displayview.communication.message.request.Messages
 import io.github.pedalpi.displayview.communication.message.response.EventMessage
 import io.github.pedalpi.displayview.communication.message.response.EventType
 import io.github.pedalpi.displayview.communication.message.response.ResponseMessage
 import io.github.pedalpi.displayview.communication.message.response.ResponseVerb
 import io.github.pedalpi.displayview.communication.server.Server
-import io.github.pedalpi.displayview.params.ParamsActivity
-import java.util.*
+import io.github.pedalpi.displayview.model.Data
 
 
 class EffectsActivity : AppCompatActivity() {
@@ -44,7 +42,7 @@ class EffectsActivity : AppCompatActivity() {
     }
 
     private fun title(): String {
-        return "%02d - %s".format(Data.pedalboardIndex, Data.currentPedalboard["name"].string)
+        return "%02d - %s".format(Data.currentPedalboard.index, Data.currentPedalboard.name)
     }
 
     private fun populateViews() {
@@ -59,21 +57,15 @@ class EffectsActivity : AppCompatActivity() {
     }
 
     private fun generateData(): List<EffectsListItemDTO> {
-        val elements = ArrayList<EffectsListItemDTO>()
-
         val pedalboard = Data.currentPedalboard
 
-        pedalboard["effects"].array.mapIndexedTo(elements) {
-            index, effectData -> EffectsListItemDTO(index, effectData, Data.plugin(effectData["plugin"].string))
-        }
-
-        return elements
+        return pedalboard.effects.map(::EffectsListItemDTO)
     }
 
     public override fun onResume() {
         super.onResume()
 
-        Server.setListener({ onMessage(it) })
+        Server.setOnMessageListener({ onMessage(it) })
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -81,16 +73,16 @@ class EffectsActivity : AppCompatActivity() {
         return true
     }
 
-    private fun goToParamsList(effect : EffectsListItemDTO) {
+    private fun goToParamsList(dto: EffectsListItemDTO) {
         val intent = Intent(baseContext, ParamsActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-        intent.putExtra(EffectsActivity.EFFECT_INDEX, effect.index)
+        intent.putExtra(EffectsActivity.EFFECT_INDEX, dto.effect.index)
 
         startActivityForResult(intent, 0)
     }
 
-    private fun requestToggleStatusEffect(effect: EffectsListItemDTO) {
-        Server.sendBroadcast(Messages.CURRENT_PEDALBOARD_TOGGLE_EFFECT(effect.index))
+    private fun requestToggleStatusEffect(dto: EffectsListItemDTO) {
+        Server.sendBroadcast(Messages.CURRENT_PEDALBOARD_TOGGLE_EFFECT(dto.effect))
     }
 
     private fun onMessage(message: ResponseMessage) {
