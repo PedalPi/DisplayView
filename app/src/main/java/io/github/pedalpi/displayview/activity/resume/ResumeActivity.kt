@@ -3,7 +3,9 @@ package io.github.pedalpi.displayview.activity.resume
 import android.app.ProgressDialog
 import android.content.Context
 import android.os.Bundle
+import android.provider.Settings.Secure
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.WindowManager
 import android.widget.Toast
 import com.github.salomonbrys.kotson.get
@@ -57,8 +59,12 @@ class ResumeActivity : AppCompatActivity() {
         Server.setOnDisconnectedListener { runOnUiThread { showLoading("Trying to reconnect") } }
         this.update()
 
-        if (!Data.isDataLoaded())
-            showLoading("Waiting connection")
+        //if (!Data.isDataLoaded())
+        //    showLoading("Waiting connection")
+
+        val adb = Secure.getInt(this.contentResolver, android.provider.Settings.Secure.ADB_ENABLED, 0)
+        Toast.makeText(this, adb.toString(), Toast.LENGTH_LONG).show()
+        Log.i("ADB", adb.toString())
     }
 
     private fun update() {
@@ -71,6 +77,7 @@ class ResumeActivity : AppCompatActivity() {
     }
 
     private fun showLoading(message: String) {
+        progress = ProgressDialog(this)
         progress.setTitle("Connecting")
         progress.setMessage(message)
         progress.setCancelable(false)
