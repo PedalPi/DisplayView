@@ -1,16 +1,17 @@
-package io.github.pedalpi.pedalpi_display.communication;
+package io.github.pedalpi.displayview.communication;
+
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
-import java.util.Stack;
 
-import io.github.pedalpi.pedalpi_display.communication.message.request.RequestMessage;
-import io.github.pedalpi.pedalpi_display.communication.message.request.RequestVerb;
-import io.github.pedalpi.pedalpi_display.communication.message.response.ResponseMessage;
-import io.github.pedalpi.pedalpi_display.communication.message.response.ResponseVerb;
+import io.github.pedalpi.displayview.communication.message.Identifier;
+import io.github.pedalpi.displayview.communication.message.request.RequestMessage;
+import io.github.pedalpi.displayview.communication.message.request.RequestVerb;
+import io.github.pedalpi.displayview.communication.message.response.ResponseMessage;
 
 public class Client {
 
@@ -25,7 +26,6 @@ public class Client {
     private BufferedReader in;
 
     private OnMessageListener onMessageListener = message -> {};
-    private Stack<RequestMessage> requestMessages = new Stack<>();
 
     public Client(Socket connection) {
         try {
@@ -56,14 +56,11 @@ public class Client {
             if (data == null)
                 return null;
 
-            ResponseMessage message = MessageBuilder.INSTANCE.generate(data);
-            if (message.getType() == ResponseVerb.RESPONSE)
-                message.setRequest(requestMessages.pop());
+            return MessageBuilder.INSTANCE.generate(data);
 
-            return message;
         } catch (IOException e) {
             e.printStackTrace();
-            return new ResponseMessage(ResponseVerb.ERROR, "{'message': 'error: " +e.getMessage()+ "'}");
+            return ResponseMessage.error(e.getMessage());
         }
     }
 
@@ -76,9 +73,10 @@ public class Client {
     }
 
     public void send(RequestMessage message) {
-        if (message.getType() != RequestVerb.SYSTEM)
-            requestMessages.push(message);
+        if (message.getType() != RequestVerb.SYSTEM && message.getType() != RequestVerb.NIL)
+            Identifier.instance.register(message);
 
+        Log.i("Request", message.toString());
         out.print(message.toString());
     }
 

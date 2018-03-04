@@ -1,4 +1,4 @@
-package io.github.pedalpi.pedalpi_display.communication.message.request
+package io.github.pedalpi.displayview.communication.message.request
 
 import org.json.JSONObject
 

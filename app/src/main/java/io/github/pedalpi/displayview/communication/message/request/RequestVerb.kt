@@ -1,4 +1,4 @@
-package io.github.pedalpi.pedalpi_display.communication.message.request
+package io.github.pedalpi.displayview.communication.message.request
 
 
 enum class RequestVerb(private val type: String) {
@@ -7,7 +7,9 @@ enum class RequestVerb(private val type: String) {
     GET("GET"),
     POST("POST"),
     PUT("PUT"),
-    DELETE("DELETE");
+    DELETE("DELETE"),
+
+    NIL("NIL");
 
     override fun toString(): String {
         return type

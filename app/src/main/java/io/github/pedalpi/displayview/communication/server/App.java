@@ -1,10 +1,10 @@
-package io.github.pedalpi.pedalpi_display.communication.server;
+package io.github.pedalpi.displayview.communication.server;
 
 import android.app.Application;
 
 import java.io.IOException;
 
-public class ServerApplication extends Application {
+public class App extends Application {
 
     @Override
     public void onCreate() {

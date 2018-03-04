@@ -1,4 +1,4 @@
-package io.github.pedalpi.pedalpi_display
+package io.github.pedalpi.displayview
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
