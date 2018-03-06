@@ -2,7 +2,7 @@
 
 Manage the current pedalboard with **Pedal Pi - Display View**
 
-[![Get it on Google Play](docs/google-play-badge.png)](https://play.google.com/store/apps/details?id=io.github.com.pedalpi.displayview)
+[![Get it on Google Play](docs/google-play-badge.png)](https://play.google.com/store/apps/details?id=io.github.com.pedalpi.displayview | width=250)
 
 ## Screenshots
 
