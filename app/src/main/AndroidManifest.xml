@@ -15,7 +15,7 @@
         android:name="io.github.pedalpi.displayview.communication.server.App">
         <!--<activity android:naio.github.pedalpi.displayview.activity.MainActivity">-->
 
-        <uses-library android:name="com.android.future.usb.accessory" />
+        <!--<uses-library android:name="com.android.future.usb.accessory" />-->
 
         <activity android:name="io.github.pedalpi.displayview.activity.resume.ResumeActivity"
             android:screenOrientation="sensorLandscape"
