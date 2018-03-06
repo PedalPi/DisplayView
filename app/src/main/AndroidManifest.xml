@@ -3,7 +3,7 @@
     package="io.github.pedalpi.displayview">
 
     <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-feature android:name="android.hardware.usb.host" />
+    <uses-feature android:name="android.hardware.usb.accessory" />
 
     <application
         android:allowBackup="true"
@@ -13,7 +13,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:name="io.github.pedalpi.displayview.communication.server.App">
-        <!--<activity android:naio.github.pedalpi.displayview.activity.MainActivityvity">-->
+        <!--<activity android:naio.github.pedalpi.displayview.activity.MainActivity">-->
+
+        <uses-library android:name="com.android.future.usb.accessory" />
+
         <activity android:name="io.github.pedalpi.displayview.activity.resume.ResumeActivity"
             android:screenOrientation="sensorLandscape"
             android:configChanges="orientation|keyboardHidden">
@@ -22,6 +25,13 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED" />
+            </intent-filter>
+
+            <meta-data android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED"
+                android:resource="@xml/accessory_filter" />
         </activity>
         <activity android:name="io.github.pedalpi.displayview.activity.effects.EffectsActivity" />
         <activity android:name=".activity.params.ParamsActivity" />
