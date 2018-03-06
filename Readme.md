@@ -6,7 +6,7 @@ Manage the current pedalboard with **Pedal Pi - Display View**
 
 ## Screenshots
 
-![Connecting device show a simple modal](docs/connecting.png | width=500)
+![Connecting device show a simple modal](docs/connecting.png?v=4&s=500)
 ![Current pedalboard view](docs/current-pedalboard.png | width=500)
 ![Change a param value of a effect](docs/param-value.png | width=500)
 
