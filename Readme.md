@@ -2,13 +2,13 @@
 
 Manage the current pedalboard with **Pedal Pi - Display View**
 
-[![Get it on Google Play](docs/google-play-badge.png | width=250)](https://play.google.com/store/apps/details?id=io.github.com.pedalpi.displayview)
+[<img alt="Get it on Google Play" src="docs/google-play-badge.png" width="250">](https://play.google.com/store/apps/details?id=io.github.com.pedalpi.displayview)
 
 ## Screenshots
 
-![Connecting device show a simple modal](docs/connecting.png?v=4&s=500)
-![Current pedalboard view](docs/current-pedalboard.png | width=500)
-![Change a param value of a effect](docs/param-value.png | width=500)
+<img alt="Connecting device show a simple modal" src="docs/connecting.png" width="500">
+<img alt="Current pedalboard view" src="docs/current-pedalboard.png" width="500">
+<img alt="Change a param value of a effect" src="docs/param-value.png" width="500">
 
 ## Legal attribution
 
