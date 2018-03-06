@@ -40,8 +40,7 @@ class ResumeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_resume)
 
-        //TODO - Not
-        if (this.isDebugActive) {
+        if (!this.isDebugActive) {
             this.goToConfigureInformation()
             return
         }
