@@ -1,6 +1,7 @@
 package io.github.pedalpi.displayview.communication.base
 
 import io.github.pedalpi.displayview.communication.base.message.RequestMessage
+import io.github.pedalpi.displayview.communication.base.message.ResponseMessageProcessor
 
 
 object Communicator {
@@ -15,7 +16,12 @@ object Communicator {
     }
 
     fun setOnMessageListener(listener: OnMessageListener) {
-        communication?.onMessageListener = listener
+        communication?.onMessageListener = {
+            val notifyNext = ResponseMessageProcessor.process(it)
+
+            if (notifyNext)
+                listener(it)
+        }
     }
 
     fun setOnConnectedListener(listener: OnConnectedListener) {

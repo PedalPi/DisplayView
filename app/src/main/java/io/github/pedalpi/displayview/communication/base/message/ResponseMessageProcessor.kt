@@ -1,26 +1,20 @@
-package io.github.pedalpi.displayview.communication.adb
+package io.github.pedalpi.displayview.communication.base.message
 
 import android.app.Instrumentation
 import android.util.Log
 import com.github.salomonbrys.kotson.*
 import com.google.gson.JsonElement
-import io.github.pedalpi.displayview.communication.base.message.ResponseMessage
-import io.github.pedalpi.displayview.communication.adb.server.Server
-import io.github.pedalpi.displayview.communication.base.message.Messages
 import io.github.pedalpi.displayview.communication.adb.message.EventMessage
 import io.github.pedalpi.displayview.communication.adb.message.EventType
-import io.github.pedalpi.displayview.communication.base.message.ResponseVerb
 import io.github.pedalpi.displayview.model.Data
 import io.github.pedalpi.displayview.model.Pedalboard
 
 
-class ResponseMessageProcessor : Server.OnMessageListener {
-    var listener : Server.OnMessageListener = Server.OnMessageListener { }
+object ResponseMessageProcessor {
 
-    override fun onMessage(message: ResponseMessage) {
-        Log.i("Response", "${message.request.identifier} - ${message.verb}")
+    fun process(message: ResponseMessage): Boolean {
 
-        val callback = if (message.verb == ResponseVerb.KEYBOARD_EVENT
+        return if (message.verb == ResponseVerb.KEYBOARD_EVENT
          && message.content["code"].string == "DOWN")
             onKeyboardEvent(message)
 
@@ -35,9 +29,6 @@ class ResponseMessageProcessor : Server.OnMessageListener {
 
         else
             false
-
-        if (callback)
-            listener.onMessage(message)
     }
 
     private fun onKeyboardEvent(message: ResponseMessage): Boolean {

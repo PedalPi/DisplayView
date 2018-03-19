@@ -1,8 +1,8 @@
 package io.github.pedalpi.displayview.communication.adb
 
 import com.google.gson.JsonParser
-import io.github.pedalpi.displayview.communication.adb.message.SerialRequestMessage
 import io.github.pedalpi.displayview.communication.adb.message.Identifier
+import io.github.pedalpi.displayview.communication.adb.message.SerialRequestMessage
 import io.github.pedalpi.displayview.communication.adb.message.SerialResponseMessage
 import io.github.pedalpi.displayview.communication.base.message.ResponseMessage
 import io.github.pedalpi.displayview.communication.base.message.ResponseVerb
@@ -10,7 +10,7 @@ import org.json.JSONException
 
 
 object MessageBuilder {
-    fun generate(message: String): SerialResponseMessage {
+    fun generate(message: String): ResponseMessage {
         val strings = message.split(" ".toRegex(), 3).toTypedArray()
 
         val request = getRequestMessage(strings[0].toInt())

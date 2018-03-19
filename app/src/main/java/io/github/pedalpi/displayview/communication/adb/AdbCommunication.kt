@@ -13,6 +13,10 @@ class AdbCommunication: Communication() {
     private var running = false
 
     override fun initialize() {
+        server.onConnectedListener = { onConnectedListener() }
+        server.onDisconnectedListener = { onDisconnectedListener() }
+        server.onMessageListener = { onMessageListener(it) }
+
         val runnable = Runnable { this.runServer() }
         Thread(runnable).start()
     }

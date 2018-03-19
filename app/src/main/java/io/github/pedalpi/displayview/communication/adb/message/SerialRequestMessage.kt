@@ -8,16 +8,14 @@ class SerialRequestMessage(
         path: String,
         content: Any = "") : RequestMessage(type, path, content) {
 
-    companion object {
-        @JvmStatic
-        fun from(requestMessage: RequestMessage): SerialRequestMessage {
-            return SerialRequestMessage(requestMessage.type, requestMessage.path, requestMessage.content)
-        }
-    }
-
     var identifier: Int = Identifier.instance.next()
 
     override fun toString(): String {
         return "$identifier $type $path\n$content\nEOF\n"
     }
+}
+
+
+fun RequestMessage.toSerial(): SerialRequestMessage {
+    return SerialRequestMessage(this.type, this.path, this.content)
 }

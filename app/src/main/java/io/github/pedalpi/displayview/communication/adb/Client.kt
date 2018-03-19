@@ -2,9 +2,10 @@ package io.github.pedalpi.displayview.communication.adb
 
 import android.util.Log
 import io.github.pedalpi.displayview.communication.adb.message.Identifier
-import io.github.pedalpi.displayview.communication.base.message.RequestMessage
+import io.github.pedalpi.displayview.communication.adb.message.SerialRequestMessage
+import io.github.pedalpi.displayview.communication.base.OnDisconnectedListener
+import io.github.pedalpi.displayview.communication.base.OnMessageListener
 import io.github.pedalpi.displayview.communication.base.message.RequestVerb
-import io.github.pedalpi.displayview.communication.adb.server.Server
 import io.github.pedalpi.displayview.communication.base.message.ResponseMessage
 import java.io.BufferedReader
 import java.io.IOException
@@ -20,8 +21,8 @@ class Client(private val connection: Socket) {
     private val ioOutput = PrintStream(connection.getOutputStream())
     private val ioInput = BufferedReader(InputStreamReader(connection.getInputStream()))
 
-    var onMessageListener: Server.OnMessageListener = Server.OnMessageListener { }
-    var onDisconnectedListener: Server.OnDisconnectedListener = Server.OnDisconnectedListener { }
+    var onMessageListener: OnMessageListener = { }
+    var onDisconnectedListener: OnDisconnectedListener = { }
 
     private val message: ResponseMessage?
         get() {
@@ -45,7 +46,7 @@ class Client(private val connection: Socket) {
             while (open) {
                 val message = message
                 if (message != null)
-                    onMessageListener.onMessage(message)
+                    onMessageListener(message)
                 else {
                     disconnect()
                 }
@@ -61,10 +62,10 @@ class Client(private val connection: Socket) {
         ioOutput.close()
         ioInput.close()
 
-        onDisconnectedListener.onDisconnected()
+        onDisconnectedListener()
     }
 
-    fun send(message: RequestMessage) {
+    fun send(message: SerialRequestMessage) {
         if (message.type !== RequestVerb.SYSTEM && message.type !== RequestVerb.NIL)
             Identifier.instance.register(message)
 
