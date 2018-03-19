@@ -1,4 +1,4 @@
-package io.github.pedalpi.displayview.communication.message.response
+package io.github.pedalpi.displayview.communication.base.message
 
 enum class ResponseVerb(private val type: String) {
     RESPONSE("RESPONSE"),

@@ -10,12 +10,12 @@ import android.widget.Button
 import android.widget.TextView
 import io.github.pedalpi.displayview.R
 import io.github.pedalpi.displayview.activity.effects.EffectsActivity
-import io.github.pedalpi.displayview.communication.message.request.Messages
-import io.github.pedalpi.displayview.communication.message.response.EventMessage
-import io.github.pedalpi.displayview.communication.message.response.EventType
-import io.github.pedalpi.displayview.communication.message.response.ResponseMessage
-import io.github.pedalpi.displayview.communication.message.response.ResponseVerb
-import io.github.pedalpi.displayview.communication.server.Server
+import io.github.pedalpi.displayview.communication.adb.message.EventMessage
+import io.github.pedalpi.displayview.communication.adb.message.EventType
+import io.github.pedalpi.displayview.communication.base.Communicator
+import io.github.pedalpi.displayview.communication.base.message.Messages
+import io.github.pedalpi.displayview.communication.base.message.ResponseMessage
+import io.github.pedalpi.displayview.communication.base.message.ResponseVerb
 import io.github.pedalpi.displayview.model.Data
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 
@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         number.text = "--"
         name.text = "CONNECTING"
 
-        Server.setOnMessageListener({ onMessage(it) })
+        Communicator.setOnMessageListener({ onMessage(it) })
 
         val button = findViewById(R.id.button) as Button
         button.setOnClickListener({ goToEffectsList() })
@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity() {
             val pedalboard = Data.currentPedalboard
 
             runOnUiThread({
-                number.text = if (id < 10) "0"+id else id.toString()
+                number.text = if (id < 10) "0$id" else id.toString()
                 name.text = pedalboard.name
             })
         }
@@ -88,7 +88,7 @@ class MainActivity : AppCompatActivity() {
     public override fun onResume() {
         super.onResume()
 
-        Server.setOnMessageListener({ onMessage(it) })
-        Server.sendBroadcast(Messages.CURRENT_PEDALBOARD_DATA)
+        Communicator.setOnMessageListener({ onMessage(it) })
+        Communicator.send(Messages.CURRENT_PEDALBOARD_DATA)
     }
 }

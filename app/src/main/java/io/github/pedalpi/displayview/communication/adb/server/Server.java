@@ -1,4 +1,4 @@
-package io.github.pedalpi.displayview.communication.server;
+package io.github.pedalpi.displayview.communication.adb.server;
 
 import android.util.Log;
 
@@ -8,13 +8,13 @@ import java.net.Socket;
 import java.util.LinkedList;
 import java.util.List;
 
-import io.github.pedalpi.displayview.communication.Client;
-import io.github.pedalpi.displayview.communication.ResponseMessageProcessor;
-import io.github.pedalpi.displayview.communication.message.Identifier;
-import io.github.pedalpi.displayview.communication.message.request.Messages;
-import io.github.pedalpi.displayview.communication.message.request.RequestMessage;
-import io.github.pedalpi.displayview.communication.message.request.SystemMessages;
-import io.github.pedalpi.displayview.communication.message.response.ResponseMessage;
+import io.github.pedalpi.displayview.communication.adb.Client;
+import io.github.pedalpi.displayview.communication.adb.ResponseMessageProcessor;
+import io.github.pedalpi.displayview.communication.adb.message.SerialRequestMessage;
+import io.github.pedalpi.displayview.communication.adb.message.Identifier;
+import io.github.pedalpi.displayview.communication.base.message.Messages;
+import io.github.pedalpi.displayview.communication.base.message.RequestMessage;
+import io.github.pedalpi.displayview.communication.adb.message.response.ResponseMessage;
 
 
 public class Server {
@@ -31,8 +31,6 @@ public class Server {
         void onDisconnected();
     }
 
-    private static final Server instance = new Server();
-
     private ServerSocket connection;
     private List<Client> clients = new LinkedList<>();
 
@@ -40,13 +38,9 @@ public class Server {
     private Server.OnConnectedListener onConnectedListener = () -> {};
     private Server.OnDisconnectedListener onDisconnectedListener = () -> {};
 
-    public static Server getInstance() {
-        return instance;
-    }
-
     public void start(int port) {
         try {
-            instance.connection = new ServerSocket(port);
+            connection = new ServerSocket(port);
         } catch (IOException e) {
             Log.e("ERROR", e.getMessage());
             throw new RuntimeException(e);//e.printStackTrace();
@@ -80,7 +74,6 @@ public class Server {
 
         new Thread(client.listen()).start();
 
-        client.send(SystemMessages.CONNECTED);
         client.send(Messages.PLUGINS);
 
         this.clients.add(client);
@@ -89,24 +82,24 @@ public class Server {
         onConnectedListener.onConnected();
     }
 
-    public static void sendBroadcast(RequestMessage message) {
-        for (Client clients : instance.clients) {
-            RequestMessage message_clone = message.clone();
+    public void sendBroadcast(RequestMessage message) {
+        for (Client clients : clients) {
+            SerialRequestMessage message_clone = SerialRequestMessage.from(message);
             message_clone.setIdentifier(Identifier.instance.next());
 
             clients.send(message_clone);
         }
     }
 
-    public static void setOnMessageListener(Server.OnMessageListener listener) {
-        instance.listener.setListener(listener);
+    public void setOnMessageListener(Server.OnMessageListener listener) {
+        this.listener.setListener(listener);
     }
 
-    public static void setOnConnectedListener(Server.OnConnectedListener onConnectedListener) {
-        instance.onConnectedListener = onConnectedListener;
+    public void setOnConnectedListener(Server.OnConnectedListener onConnectedListener) {
+        this.onConnectedListener = onConnectedListener;
     }
 
-    public static void setOnDisconnectedListener(OnDisconnectedListener onDisconnectedListener) {
-        instance.onDisconnectedListener = onDisconnectedListener;
+    public void setOnDisconnectedListener(OnDisconnectedListener onDisconnectedListener) {
+        this.onDisconnectedListener = onDisconnectedListener;
     }
 }

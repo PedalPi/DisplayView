@@ -1,4 +1,4 @@
-package io.github.pedalpi.displayview.communication.message.response
+package io.github.pedalpi.displayview.communication.adb.message
 
 import com.github.salomonbrys.kotson.get
 import com.github.salomonbrys.kotson.string

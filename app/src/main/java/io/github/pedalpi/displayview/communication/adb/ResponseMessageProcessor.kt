@@ -1,17 +1,18 @@
-package io.github.pedalpi.displayview.communication
+package io.github.pedalpi.displayview.communication.adb
 
 import android.app.Instrumentation
 import android.util.Log
 import com.github.salomonbrys.kotson.*
 import com.google.gson.JsonElement
-import io.github.pedalpi.displayview.communication.message.request.Messages
-import io.github.pedalpi.displayview.communication.message.response.EventMessage
-import io.github.pedalpi.displayview.communication.message.response.EventType
-import io.github.pedalpi.displayview.communication.message.response.ResponseMessage
-import io.github.pedalpi.displayview.communication.message.response.ResponseVerb
-import io.github.pedalpi.displayview.communication.server.Server
+import io.github.pedalpi.displayview.communication.base.message.ResponseMessage
+import io.github.pedalpi.displayview.communication.adb.server.Server
+import io.github.pedalpi.displayview.communication.base.message.Messages
+import io.github.pedalpi.displayview.communication.adb.message.EventMessage
+import io.github.pedalpi.displayview.communication.adb.message.EventType
+import io.github.pedalpi.displayview.communication.base.message.ResponseVerb
 import io.github.pedalpi.displayview.model.Data
 import io.github.pedalpi.displayview.model.Pedalboard
+
 
 class ResponseMessageProcessor : Server.OnMessageListener {
     var listener : Server.OnMessageListener = Server.OnMessageListener { }

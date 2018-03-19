@@ -1,11 +1,11 @@
-package io.github.pedalpi.displayview.communication
+package io.github.pedalpi.displayview.communication.adb
 
 import android.util.Log
-import io.github.pedalpi.displayview.communication.message.Identifier
-import io.github.pedalpi.displayview.communication.message.request.RequestMessage
-import io.github.pedalpi.displayview.communication.message.request.RequestVerb
-import io.github.pedalpi.displayview.communication.message.response.ResponseMessage
-import io.github.pedalpi.displayview.communication.server.Server
+import io.github.pedalpi.displayview.communication.adb.message.Identifier
+import io.github.pedalpi.displayview.communication.base.message.RequestMessage
+import io.github.pedalpi.displayview.communication.base.message.RequestVerb
+import io.github.pedalpi.displayview.communication.adb.server.Server
+import io.github.pedalpi.displayview.communication.base.message.ResponseMessage
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader

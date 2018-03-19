@@ -1,4 +1,4 @@
-package io.github.pedalpi.displayview.communication.message.request
+package io.github.pedalpi.displayview.communication.base.message
 
 
 enum class RequestVerb(private val type: String) {
