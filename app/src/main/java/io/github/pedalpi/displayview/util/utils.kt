@@ -1,3 +1,19 @@
+/*
+Copyright 2018 SrMouraSilva
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 package io.github.pedalpi.displayview.util
 
 import android.app.Activity
@@ -6,6 +22,9 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Drawable
+import android.os.Build
+import android.os.Handler
+import android.os.StrictMode
 import android.provider.Settings
 import android.support.annotation.ColorInt
 import android.support.annotation.ColorRes
@@ -91,3 +110,16 @@ val Activity.isDebugActive: Boolean
 
         return 1 == Settings.Secure.getInt(this.contentResolver, ADB_ENABLED, 0)
     }
+
+
+fun strictModePermitAll() {
+    val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
+    StrictMode.setThreadPolicy(policy)
+
+    if (Build.VERSION.SDK_INT >= 16) {
+        //restore strict mode after onCreate() returns. https://issuetracker.google.com/issues/36951662
+        Handler().postAtFrontOfQueue({
+            StrictMode.setThreadPolicy(policy)
+        })
+    }
+}

@@ -5,4 +5,9 @@
     <string name="configureHelperWarning">Aviso: Esta configuração é uma ferramenta utilizada no desenvolvimento de aplicativos, por isso permite acesso amplo aos dados e configurações de seu equipamento. Certifique-se de não conectar este equipamento em algum computador desconhecido com a opção habilitada.</string>
     <string name="go_to_settings">Ir para Configurações</string>
     <string name="how_to_configure">Como habilitar?</string>
+    <string name="reading_plugins_data">Lendo informações dos plugins</string>
+    <string name="trying_reconnect">Tentando reestabelecer conexão</string>
+    <string name="reading_current_pedalboard_data">Lendo informações do pedalboard atual</string>
+    <string name="connecting">Conectando</string>
+    <string name="waiting_connection">Aguardando conexão</string>
 </resources>
