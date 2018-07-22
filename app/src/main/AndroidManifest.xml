@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:name="io.github.pedalpi.displayview.App">
-        <!--<activity android:naio.github.pedalpi.displayview.activity.MainActivity">-->
+        <!--<activity android:"io.github.pedalpi.displayview.activity.MainActivity">-->
 
         <!--<uses-library android:name="com.android.future.usb.accessory" />-->
 
@@ -25,19 +25,21 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
-            <intent-filter>
-                <action android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED" />
-            </intent-filter>
-
-            <meta-data android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED"
-                android:resource="@xml/accessory_filter" />
         </activity>
+
         <activity android:name="io.github.pedalpi.displayview.activity.effects.EffectsActivity" />
         <activity android:name=".activity.params.ParamsActivity" />
         <!--<activity android:name=".resume.ResumeActivity" />-->
         <activity android:name=".activity.MainActivity" />
         <activity android:name=".activity.ConfigureInformationActivity" />
+
+        <activity android:name=".communication.usb.UsbAccessoryActivity">
+            <intent-filter>
+                <action android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED" />
+            </intent-filter>
+            <meta-data android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED"
+                android:resource="@xml/accessory_filter" />
+        </activity>
     </application>
 
 </manifest>

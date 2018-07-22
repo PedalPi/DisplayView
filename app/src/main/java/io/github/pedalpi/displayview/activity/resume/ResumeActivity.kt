@@ -1,3 +1,19 @@
+/*
+Copyright 2018 SrMouraSilva
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 package io.github.pedalpi.displayview.activity.resume
 
 import android.app.ProgressDialog
@@ -16,6 +32,7 @@ import io.github.pedalpi.displayview.activity.resume.effectsview.EffectsView
 import io.github.pedalpi.displayview.activity.resume.effectview.EffectView
 import io.github.pedalpi.displayview.communication.adb.message.EventMessage
 import io.github.pedalpi.displayview.communication.adb.message.EventType
+import io.github.pedalpi.displayview.communication.adb.message.toSerial
 import io.github.pedalpi.displayview.communication.base.Communicator
 import io.github.pedalpi.displayview.communication.base.message.Messages
 import io.github.pedalpi.displayview.communication.base.message.ResponseMessage
@@ -24,6 +41,7 @@ import io.github.pedalpi.displayview.model.Data
 import io.github.pedalpi.displayview.model.Effect
 import io.github.pedalpi.displayview.model.Param
 import io.github.pedalpi.displayview.util.isDebugActive
+import io.github.pedalpi.displayview.util.strictModePermitAll
 import kotlinx.android.synthetic.main.activity_resume.*
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 
@@ -39,6 +57,8 @@ class ResumeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_resume)
+
+        strictModePermitAll()
 
         if (!this.isDebugActive) {
             this.goToConfigureInformation()
@@ -58,13 +78,21 @@ class ResumeActivity : AppCompatActivity() {
         this.effectView.onParamValueChange = { requestChangeParamValue(it) }
         this.effectView.onEffectToggleStatus = { onEffectChangeStatus(it) }
 
+        this.progress = ProgressDialog(this)
+
         Communicator.setOnMessageListener { onMessage(it) }
-        Communicator.setOnConnectedListener { runOnUiThread { progress.setMessage("Reading plugins data") } }
-        Communicator.setOnDisconnectedListener { runOnUiThread { showLoading("Trying to reconnect") } }
+        Communicator.setOnConnectedListener {
+            if (!Data.isDataLoaded()) {
+                Communicator.send(Messages.PLUGINS.toSerial())
+                runOnUiThread { progress.setMessage(getString(R.string.reading_plugins_data)) }
+            } else
+                runOnUiThread { progress.dismiss() }
+        }
+        Communicator.setOnDisconnectedListener { runOnUiThread { showLoading(getString(R.string.trying_reconnect)) } }
         this.update()
 
         if (!Data.isDataLoaded())
-            showLoading("Waiting connection")
+            showLoading(getString(R.string.waiting_connection))
     }
 
     private fun update() {
@@ -77,8 +105,7 @@ class ResumeActivity : AppCompatActivity() {
     }
 
     private fun showLoading(message: String) {
-        progress = ProgressDialog(this)
-        progress.setTitle("Connecting")
+        progress.setTitle(getString(R.string.connecting))
         progress.setMessage(message)
         progress.setCancelable(false)
         progress.show()
@@ -110,7 +137,7 @@ class ResumeActivity : AppCompatActivity() {
         } else if (message.request isEquivalentTo Messages.PLUGINS) {
             Communicator.send(Messages.CURRENT_PEDALBOARD_DATA)
             runOnUiThread({
-                progress.setMessage("Reading current pedalboard data")
+                progress.setMessage(getString(R.string.reading_current_pedalboard_data))
             })
 
         } else if (message.request isEquivalentTo Messages.CURRENT_PEDALBOARD_DATA) {
