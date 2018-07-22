@@ -14,12 +14,12 @@ import io.github.pedalpi.displayview.R
 import io.github.pedalpi.displayview.activity.ConfigureInformationActivity
 import io.github.pedalpi.displayview.activity.resume.effectsview.EffectsView
 import io.github.pedalpi.displayview.activity.resume.effectview.EffectView
-import io.github.pedalpi.displayview.communication.message.request.Messages
-import io.github.pedalpi.displayview.communication.message.response.EventMessage
-import io.github.pedalpi.displayview.communication.message.response.EventType
-import io.github.pedalpi.displayview.communication.message.response.ResponseMessage
-import io.github.pedalpi.displayview.communication.message.response.ResponseVerb
-import io.github.pedalpi.displayview.communication.server.Server
+import io.github.pedalpi.displayview.communication.adb.message.EventMessage
+import io.github.pedalpi.displayview.communication.adb.message.EventType
+import io.github.pedalpi.displayview.communication.base.Communicator
+import io.github.pedalpi.displayview.communication.base.message.Messages
+import io.github.pedalpi.displayview.communication.base.message.ResponseMessage
+import io.github.pedalpi.displayview.communication.base.message.ResponseVerb
 import io.github.pedalpi.displayview.model.Data
 import io.github.pedalpi.displayview.model.Effect
 import io.github.pedalpi.displayview.model.Param
@@ -58,9 +58,9 @@ class ResumeActivity : AppCompatActivity() {
         this.effectView.onParamValueChange = { requestChangeParamValue(it) }
         this.effectView.onEffectToggleStatus = { onEffectChangeStatus(it) }
 
-        Server.setOnMessageListener { onMessage(it) }
-        Server.setOnConnectedListener { runOnUiThread { progress.setMessage("Reading plugins data") } }
-        Server.setOnDisconnectedListener { runOnUiThread { showLoading("Trying to reconnect") } }
+        Communicator.setOnMessageListener { onMessage(it) }
+        Communicator.setOnConnectedListener { runOnUiThread { progress.setMessage("Reading plugins data") } }
+        Communicator.setOnDisconnectedListener { runOnUiThread { showLoading("Trying to reconnect") } }
         this.update()
 
         if (!Data.isDataLoaded())
@@ -94,11 +94,11 @@ class ResumeActivity : AppCompatActivity() {
     }
 
     private fun requestToggleEffectStatus(effect: Effect) {
-        Server.sendBroadcast(Messages.CURRENT_PEDALBOARD_TOGGLE_EFFECT(effect))
+        Communicator.send(Messages.CURRENT_PEDALBOARD_TOGGLE_EFFECT(effect))
     }
 
     private fun requestChangeParamValue(param: Param) {
-        Server.sendBroadcast(Messages.PARAM_VALUE_CHANGE(param.effect.index, param))
+        Communicator.send(Messages.PARAM_VALUE_CHANGE(param.effect.index, param))
     }
 
     private fun onMessage(message : ResponseMessage) {
@@ -108,7 +108,7 @@ class ResumeActivity : AppCompatActivity() {
             })
 
         } else if (message.request isEquivalentTo Messages.PLUGINS) {
-            Server.sendBroadcast(Messages.CURRENT_PEDALBOARD_DATA)
+            Communicator.send(Messages.CURRENT_PEDALBOARD_DATA)
             runOnUiThread({
                 progress.setMessage("Reading current pedalboard data")
             })
@@ -126,13 +126,13 @@ class ResumeActivity : AppCompatActivity() {
                 update()
 
             } else if (event.type == EventType.BANK) {
-                Server.sendBroadcast(Messages.CURRENT_PEDALBOARD_DATA)
+                Communicator.send(Messages.CURRENT_PEDALBOARD_DATA)
 
             } else if (event.type == EventType.PEDALBOARD) {
-                Server.sendBroadcast(Messages.CURRENT_PEDALBOARD_DATA)
+                Communicator.send(Messages.CURRENT_PEDALBOARD_DATA)
 
             } else if (event.type == EventType.EFFECT) {
-                Server.sendBroadcast(Messages.CURRENT_PEDALBOARD_DATA)
+                Communicator.send(Messages.CURRENT_PEDALBOARD_DATA)
 
             } else if (event.type == EventType.EFFECT_TOGGLE) {
                 this.updateEffectStatus(event.content["effect"].int)

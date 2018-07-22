@@ -33,6 +33,6 @@ class EffectListItemViewHolder(private val adapter : EffectsListItemAdapter): Ge
 
     fun update() {
         name.text = dto.name
-        status.isChecked = !dto.status
+        status.isChecked = !dto.effect.active
     }
 }

@@ -1,4 +1,4 @@
-package io.github.pedalpi.displayview.communication.message.request
+package io.github.pedalpi.displayview.communication.base.message
 
 import io.github.pedalpi.displayview.model.Data
 import io.github.pedalpi.displayview.model.Effect
@@ -6,6 +6,13 @@ import io.github.pedalpi.displayview.model.Param
 
 class Messages {
     companion object {
+        @JvmStatic
+        fun AUTH(username: String, password: String) = RequestMessage(
+            RequestVerb.PUT,
+            "/v1/auth",
+            "{'username': '$username', 'password': '$password'}"
+        )
+
         @JvmField val PLUGINS = RequestMessage(RequestVerb.GET, "/v1/plugins")
 
         @JvmField val CURRENT_PEDALBOARD = RequestMessage(RequestVerb.GET, "/v1/current")

@@ -11,12 +11,12 @@ import com.github.salomonbrys.kotson.int
 import com.github.salomonbrys.kotson.string
 import io.github.pedalpi.displayview.R
 import io.github.pedalpi.displayview.activity.params.ParamsActivity
-import io.github.pedalpi.displayview.communication.message.request.Messages
-import io.github.pedalpi.displayview.communication.message.response.EventMessage
-import io.github.pedalpi.displayview.communication.message.response.EventType
-import io.github.pedalpi.displayview.communication.message.response.ResponseMessage
-import io.github.pedalpi.displayview.communication.message.response.ResponseVerb
-import io.github.pedalpi.displayview.communication.server.Server
+import io.github.pedalpi.displayview.communication.adb.message.EventMessage
+import io.github.pedalpi.displayview.communication.adb.message.EventType
+import io.github.pedalpi.displayview.communication.base.Communicator
+import io.github.pedalpi.displayview.communication.base.message.Messages
+import io.github.pedalpi.displayview.communication.base.message.ResponseMessage
+import io.github.pedalpi.displayview.communication.base.message.ResponseVerb
 import io.github.pedalpi.displayview.model.Data
 
 
@@ -65,7 +65,7 @@ class EffectsActivity : AppCompatActivity() {
     public override fun onResume() {
         super.onResume()
 
-        Server.setOnMessageListener({ onMessage(it) })
+        Communicator.setOnMessageListener({ onMessage(it) })
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -82,7 +82,7 @@ class EffectsActivity : AppCompatActivity() {
     }
 
     private fun requestToggleStatusEffect(dto: EffectsListItemDTO) {
-        Server.sendBroadcast(Messages.CURRENT_PEDALBOARD_TOGGLE_EFFECT(dto.effect))
+        Communicator.send(Messages.CURRENT_PEDALBOARD_TOGGLE_EFFECT(dto.effect))
     }
 
     private fun onMessage(message: ResponseMessage) {
