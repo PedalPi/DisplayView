@@ -1,19 +1,28 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat">
         <!-- Customize your theme here. -->
         <item name="android:windowNoTitle">true</item>
         <!--<item name="android:windowActionBar">false</item>-->
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
 
-        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimary">@color/textColorLight</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <!--
         <item name="android:background">@color/colorBackgroundDark</item>
+        <item name="android:textColor">@color/textColorLight</item>
+        -->
         <item name="android:textColor">@color/textColorDark</item>
+        <item name="android:textColorPrimary">@color/textColorDark</item>
+    </style>
 
+    <!-- http://manuel-ohlendorf.de/blog/2015/09/03/material-design-buttons-with-appcompat/ -->
+    <style name="AppTheme.Button.Dark" parent="Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">#555</item>
+        <item name="android:textColor">@color/textColorDark</item>
     </style>
 
 </resources>

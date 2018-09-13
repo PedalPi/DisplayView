@@ -8,4 +8,10 @@
     <color name="textColorDark">#FFF</color>
     <color name="colorBackgroundLight">#ECF0F1</color>
     <color name="colorBackgroundDark">#000</color>
+
+    <color name="yellow">#FFEE58</color>
+
+    <!-- https://material.io/color -->
+    <color name="buttonGreen">#1B5E20</color>
+    <color name="buttonRed">#B71C1C</color>
 </resources>

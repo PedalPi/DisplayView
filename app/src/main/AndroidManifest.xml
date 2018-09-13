@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="io.github.pedalpi.pedalpi_display">
+    package="io.github.pedalpi.displayview">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-feature android:name="android.hardware.usb.accessory" />
 
     <application
         android:allowBackup="true"
@@ -11,13 +12,33 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:name=".communication.server.ServerApplication">
-        <activity android:name=".MainActivity">
+        android:name="io.github.pedalpi.displayview.App">
+        <!--<activity android:"io.github.pedalpi.displayview.activity.MainActivity">-->
+
+        <!--<uses-library android:name="com.android.future.usb.accessory" />-->
+
+        <activity android:name="io.github.pedalpi.displayview.activity.resume.ResumeActivity"
+            android:screenOrientation="sensorLandscape"
+            android:configChanges="orientation|keyboardHidden">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity android:name="io.github.pedalpi.displayview.activity.effects.EffectsActivity" />
+        <activity android:name=".activity.params.ParamsActivity" />
+        <!--<activity android:name=".resume.ResumeActivity" />-->
+        <activity android:name=".activity.MainActivity" />
+        <activity android:name=".activity.ConfigureInformationActivity" />
+
+        <activity android:name=".communication.usb.UsbAccessoryActivity">
+            <intent-filter>
+                <action android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED" />
+            </intent-filter>
+            <meta-data android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED"
+                android:resource="@xml/accessory_filter" />
         </activity>
     </application>
 
